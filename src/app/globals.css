@@ -1,26 +1,75 @@
 @import "tailwindcss";
 
+@theme {
+  --color-primary: #173D32;
+  --color-primary-dark: #00271D;
+  --color-primary-hover: #285C49;
+  --color-secondary: #285C49;
+  --color-gold: #C6A66B;
+  --color-gold-light: #F7F1E5;
+  --color-gold-dark: #9A7C43;
+  --color-cream: #F1E9DA;
+  --color-alabaster: #FAF8F4;
+  --color-surface: #FAF8F4;
+  --color-surface-dim: #EFECE6;
+  --color-surface-container: #F1E9DA;
+  --color-surface-container-high: #EAE4D7;
+  --color-surface-card: #FFFFFF;
+  --color-ink: #252923;
+  --color-ink-muted: #77766F;
+  --color-border: #E8E2D8;
+  --color-border-gold: rgba(198, 166, 107, 0.4);
+
+  --font-serif: var(--font-playfair), var(--font-noto-serif-bengali), var(--font-hind-siliguri), 'Noto Serif Bengali', 'Tiro Bangla', serif;
+  --font-sans: var(--font-dm-sans), var(--font-hind-siliguri), 'Hind Siliguri', 'SolaimanLipi', 'Kalpurush', sans-serif;
+  --font-bengali-serif: var(--font-noto-serif-bengali), 'Noto Serif Bengali', 'Tiro Bangla', 'SolaimanLipi', serif;
+  --font-bengali-sans: var(--font-hind-siliguri), 'Hind Siliguri', 'SolaimanLipi', 'Kalpurush', sans-serif;
+  --font-bengali: var(--font-hind-siliguri), var(--font-noto-serif-bengali), 'Hind Siliguri', 'SolaimanLipi', sans-serif;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #FAF8F4;
+  --foreground: #252923;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-dm-sans), var(--font-hind-siliguri), 'Hind Siliguri', 'Noto Serif Bengali', 'SolaimanLipi', 'Kalpurush', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Bengali typography safety rules: prevent breaking ligatures and distorted matras */
+.bn-text, [lang="bn"], :lang(bn) {
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  font-style: normal !important;
+  line-height: 1.4;
+}
+
+/* Custom scrollbar for preview and canvas */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #FAF8F4;
+}
+::-webkit-scrollbar-thumb {
+  background: #D8D2C6;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C6A66B;
+}
+
+/* Print styles for export */
+@media print {
+  body {
+    background: transparent !important;
+  }
+  .no-print {
+    display: none !important;
+  }
 }
