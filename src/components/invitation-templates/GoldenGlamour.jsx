@@ -2,60 +2,96 @@
 
 import React from "react";
 import { ArtDecoFan, WaxSeal } from "./Decorations";
-import { hasBengali, getSafeTextStyle } from "@/lib/typography";
+import { hasBengali, getSafeTextStyle, isDarkBg } from "@/lib/typography";
 
 export default function GoldenGlamour({ design }) {
   const { content, palette, decorations, language } = design;
   const isBangla = language === "bn";
   const isBilingual = language === "bilingual";
 
-  const primaryColor = palette?.primary || "#1C1D1F"; // Sleek Obsidian
+  const cardBg = palette?.cardBg || "#FAF8F4";
+  const isDark = isDarkBg(cardBg);
+
+  const primaryColor = palette?.primary || (isDark ? "#FFFDF8" : "#1C1D1F");
+  const textColor = palette?.textPrimary || (isDark ? "#FFFDF8" : primaryColor);
   const accentColor = palette?.accent || "#C89D46"; // Art Deco Champagne Gold
-  const cardBg = palette?.cardBg || "#FFFFFF"; // Pure Silk Alabaster
-  const textMuted = palette?.textMuted || "#707379";
+  const textMuted = palette?.textMuted || (isDark ? "#C0C5CE" : "#707379");
 
   const brideName = content?.brideName || "Vivienne Vance";
   const groomName = content?.groomName || "Dominic Sterling";
 
   return (
     <div
-      className="relative w-full h-full flex flex-col justify-between p-6 sm:p-9 select-none overflow-hidden transition-all duration-300"
+      className="relative w-full h-full flex flex-col justify-between p-6 sm:p-8 select-none overflow-hidden transition-all duration-300"
       style={{
         backgroundColor: cardBg,
-        boxShadow:
-          "0 24px 60px -15px rgba(28, 29, 31, 0.22), inset 0 0 0 1px rgba(200, 157, 70, 0.35), inset 0 0 40px rgba(200, 157, 70, 0.05)",
+        backgroundImage: isDark
+          ? `
+            radial-gradient(ellipse at 50% 15%, ${accentColor}28 0%, transparent 60%),
+            radial-gradient(ellipse at 50% 85%, rgba(0,0,0,0.5) 0%, transparent 60%)
+          `
+          : `
+            radial-gradient(ellipse at 50% 15%, ${accentColor}20 0%, transparent 60%),
+            radial-gradient(ellipse at 50% 85%, ${accentColor}12 0%, transparent 60%)
+          `,
+        boxShadow: `
+          0 28px 65px -15px rgba(0,0,0,0.4),
+          inset 0 0 0 1px ${accentColor}50,
+          inset 0 0 50px ${accentColor}0a
+        `,
       }}
     >
-      {/* Art Deco Triple Geometric Outer Border */}
+      {/* Art Deco Geometric Sunburst Watermark */}
       <div
-        className="absolute inset-2.5 sm:inset-3.5 pointer-events-none rounded-[1px]"
+        className="absolute inset-0 pointer-events-none opacity-[0.04]"
         style={{
-          border: `1.5px solid ${accentColor}80`,
-        }}
-      />
-      <div
-        className="absolute inset-4 sm:inset-5 pointer-events-none rounded-[1px]"
-        style={{
-          border: `0.75px solid ${accentColor}40`,
+          backgroundImage: `
+            repeating-conic-gradient(from 0deg at 50% 0%, ${accentColor} 0deg 10deg, transparent 10deg 20deg)
+          `,
         }}
       />
 
-      {/* Art Deco Corner Stepped Accents */}
-      <div className="absolute top-3 left-3 w-4 h-4 border-t-2 border-l-2 pointer-events-none" style={{ borderColor: accentColor }} />
-      <div className="absolute top-3 right-3 w-4 h-4 border-t-2 border-r-2 pointer-events-none" style={{ borderColor: accentColor }} />
-      <div className="absolute bottom-3 left-3 w-4 h-4 border-b-2 border-l-2 pointer-events-none" style={{ borderColor: accentColor }} />
-      <div className="absolute bottom-3 right-3 w-4 h-4 border-b-2 border-r-2 pointer-events-none" style={{ borderColor: accentColor }} />
+      {/* Art Deco Triple Stepped Geometric Outer Border */}
+      <div
+        className="absolute inset-2 sm:inset-3 pointer-events-none rounded-[1px]"
+        style={{
+          border: `1.5px solid ${accentColor}85`,
+        }}
+      />
+      <div
+        className="absolute inset-3.5 sm:inset-4.5 pointer-events-none rounded-[1px]"
+        style={{
+          border: `0.75px solid ${accentColor}45`,
+        }}
+      />
+      <div
+        className="absolute inset-5 sm:inset-6 pointer-events-none rounded-[1px]"
+        style={{
+          border: `1px dashed ${accentColor}60`,
+        }}
+      />
+
+      {/* Art Deco Stepped Corner Brackets */}
+      <div className="absolute top-2 left-2 w-5 h-5 border-t-2 border-l-2 pointer-events-none" style={{ borderColor: accentColor }} />
+      <div className="absolute top-2 right-2 w-5 h-5 border-t-2 border-r-2 pointer-events-none" style={{ borderColor: accentColor }} />
+      <div className="absolute bottom-2 left-2 w-5 h-5 border-b-2 border-l-2 pointer-events-none" style={{ borderColor: accentColor }} />
+      <div className="absolute bottom-2 right-2 w-5 h-5 border-b-2 border-r-2 pointer-events-none" style={{ borderColor: accentColor }} />
+
+      <div className="absolute top-3.5 left-3.5 w-3 h-3 border-t border-l pointer-events-none" style={{ borderColor: accentColor }} />
+      <div className="absolute top-3.5 right-3.5 w-3 h-3 border-t border-r pointer-events-none" style={{ borderColor: accentColor }} />
+      <div className="absolute bottom-3.5 left-3.5 w-3 h-3 border-b border-l pointer-events-none" style={{ borderColor: accentColor }} />
+      <div className="absolute bottom-3.5 right-3.5 w-3 h-3 border-b border-r pointer-events-none" style={{ borderColor: accentColor }} />
 
       {/* TOP HEADER: ART DECO FAN MOTIF */}
       <div className="relative z-10 flex flex-col items-center text-center pt-1.5 space-y-1">
-        <ArtDecoFan color={accentColor} size={42} className="mb-0.5 opacity-90" />
+        <ArtDecoFan color={accentColor} size={44} className="mb-0.5 opacity-95 drop-shadow-xs" />
 
         <span
           className="text-[10px] sm:text-[11px] font-semibold"
           style={getSafeTextStyle(content?.title || "CORDIALLY REQUESTS", {
             isSerif: false,
             color: accentColor,
-            tracking: "0.26em",
+            tracking: "0.28em",
             uppercase: true,
           })}
         >
@@ -64,7 +100,7 @@ export default function GoldenGlamour({ design }) {
 
         {content?.subtitle && (
           <p
-            className="text-[11px] sm:text-[12px]"
+            className="text-[11px] sm:text-[12px] max-w-xs"
             style={getSafeTextStyle(content.subtitle, {
               isSerif: true,
               color: textMuted,
@@ -81,10 +117,10 @@ export default function GoldenGlamour({ design }) {
         {groomName ? (
           <div className="w-full flex flex-col items-center">
             <h1
-              className="text-3xl sm:text-4xl md:text-[40px] leading-tight font-medium"
+              className="text-3xl sm:text-4xl md:text-[42px] leading-[1.15] font-medium drop-shadow-xs"
               style={getSafeTextStyle(brideName, {
                 isSerif: true,
-                color: primaryColor,
+                color: textColor,
                 fontWeight: hasBengali(brideName) ? 600 : 500,
                 uppercase: !hasBengali(brideName),
                 tracking: hasBengali(brideName) ? "0px" : "0.08em",
@@ -94,9 +130,9 @@ export default function GoldenGlamour({ design }) {
             </h1>
 
             {/* Stepped Deco Diamond Divider */}
-            <div className="flex items-center justify-center gap-2 my-2 w-full max-w-[170px]">
-              <span className="h-[1px] flex-1" style={{ backgroundColor: `${accentColor}70` }} />
-              <div className="w-2 h-2 rotate-45 border" style={{ borderColor: accentColor, backgroundColor: `${accentColor}30` }} />
+            <div className="flex items-center justify-center gap-2.5 my-2 w-full max-w-[190px]">
+              <span className="h-[1px] flex-1" style={{ background: `linear-gradient(90deg, transparent, ${accentColor})` }} />
+              <div className="w-2.5 h-2.5 rotate-45 border" style={{ borderColor: accentColor, backgroundColor: `${accentColor}35` }} />
               <span
                 className="text-base sm:text-lg font-light px-1"
                 style={getSafeTextStyle(hasBengali(brideName) || isBangla ? "ও" : "&", {
@@ -106,15 +142,15 @@ export default function GoldenGlamour({ design }) {
               >
                 {hasBengali(brideName) || isBangla ? "ও" : "&"}
               </span>
-              <div className="w-2 h-2 rotate-45 border" style={{ borderColor: accentColor, backgroundColor: `${accentColor}30` }} />
-              <span className="h-[1px] flex-1" style={{ backgroundColor: `${accentColor}70` }} />
+              <div className="w-2.5 h-2.5 rotate-45 border" style={{ borderColor: accentColor, backgroundColor: `${accentColor}35` }} />
+              <span className="h-[1px] flex-1" style={{ background: `linear-gradient(90deg, ${accentColor}, transparent)` }} />
             </div>
 
             <h1
-              className="text-3xl sm:text-4xl md:text-[40px] leading-tight font-medium"
+              className="text-3xl sm:text-4xl md:text-[42px] leading-[1.15] font-medium drop-shadow-xs"
               style={getSafeTextStyle(groomName, {
                 isSerif: true,
-                color: primaryColor,
+                color: textColor,
                 fontWeight: hasBengali(groomName) ? 600 : 500,
                 uppercase: !hasBengali(groomName),
                 tracking: hasBengali(groomName) ? "0px" : "0.08em",
@@ -126,10 +162,10 @@ export default function GoldenGlamour({ design }) {
         ) : (
           <div className="w-full flex flex-col items-center">
             <h1
-              className="text-3xl sm:text-4xl md:text-[38px] leading-tight font-medium"
+              className="text-3xl sm:text-4xl md:text-[40px] leading-[1.15] font-medium drop-shadow-xs"
               style={getSafeTextStyle(brideName, {
                 isSerif: true,
-                color: primaryColor,
+                color: textColor,
                 fontWeight: hasBengali(brideName) ? 600 : 500,
                 uppercase: !hasBengali(brideName),
                 tracking: hasBengali(brideName) ? "0px" : "0.08em",
@@ -159,7 +195,7 @@ export default function GoldenGlamour({ design }) {
             className="mt-2 text-sm font-medium"
             style={getSafeTextStyle(content.bilingualBrideName, {
               isSerif: true,
-              color: primaryColor,
+              color: isDark ? accentColor : primaryColor,
             })}
           >
             {content.bilingualBrideName}
@@ -187,18 +223,21 @@ export default function GoldenGlamour({ design }) {
       {/* BOTTOM LOGISTICS */}
       <div className="relative z-10 flex flex-col items-center text-center space-y-2 pb-1">
         <div
-          className="inline-flex items-center px-4 py-1.5 rounded-sm text-[11px] sm:text-[12px] font-medium"
+          className="inline-flex items-center px-4 py-1.5 rounded-sm text-[11px] sm:text-[12px] font-medium shadow-xs"
           style={{
-            backgroundColor: `${accentColor}12`,
-            border: `1px solid ${accentColor}60`,
-            color: primaryColor,
+            background: isDark
+              ? `linear-gradient(135deg, ${accentColor}25 0%, rgba(255,255,255,0.06) 50%, ${accentColor}25 100%)`
+              : `linear-gradient(135deg, ${accentColor}20 0%, ${cardBg} 50%, ${accentColor}20 100%)`,
+            border: `1px solid ${accentColor}75`,
+            boxShadow: `0 2px 10px ${accentColor}20`,
+            color: isDark ? "#FFFFFF" : textColor,
           }}
         >
           <span
             style={getSafeTextStyle(content?.weddingDate || "Saturday • November 20, 2027", {
               isSerif: false,
-              color: primaryColor,
-              tracking: hasBengali(content?.weddingDate) ? "0px" : "0.12em",
+              color: isDark ? "#FFFFFF" : textColor,
+              tracking: hasBengali(content?.weddingDate) ? "0px" : "0.14em",
               uppercase: !hasBengali(content?.weddingDate),
             })}
           >
@@ -210,7 +249,7 @@ export default function GoldenGlamour({ design }) {
               <span
                 style={getSafeTextStyle(content.weddingTime, {
                   isSerif: false,
-                  color: primaryColor,
+                  color: isDark ? accentColor : textColor,
                 })}
               >
                 {content.weddingTime}
@@ -220,12 +259,12 @@ export default function GoldenGlamour({ design }) {
         </div>
 
         {/* Venue */}
-        <div className="space-y-0.5">
+        <div className="space-y-0.5 pt-0.5">
           <p
-            className="text-base sm:text-lg font-medium leading-snug"
+            className="text-base sm:text-lg font-medium leading-snug drop-shadow-xs"
             style={getSafeTextStyle(content?.venue || "The Grand Chrysler Ballroom", {
               isSerif: true,
-              color: primaryColor,
+              color: textColor,
             })}
           >
             {content?.venue || "The Grand Chrysler Ballroom"}
@@ -246,11 +285,11 @@ export default function GoldenGlamour({ design }) {
         </div>
 
         {/* Wax Seal */}
-        {decorations?.hasWaxSeal && (
+        {decorations?.hasWaxSeal !== false && (
           <div className="pt-1">
             <WaxSeal
               monogram={
-                decorations.monogram ||
+                decorations?.monogram ||
                 `${brideName?.[0] || "V"}&${groomName?.[0] || "D"}`
               }
               color={accentColor}
@@ -262,7 +301,7 @@ export default function GoldenGlamour({ design }) {
         {/* RSVP */}
         {content?.rsvpDetails && (
           <p
-            className="text-[10px] sm:text-[11px] pt-1"
+            className="text-[10px] sm:text-[11px] pt-0.5"
             style={getSafeTextStyle(content.rsvpDetails, {
               isSerif: false,
               color: textMuted,

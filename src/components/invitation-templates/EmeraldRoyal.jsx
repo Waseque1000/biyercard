@@ -1,82 +1,123 @@
+"use client";
+
 import React from "react";
 import { CornerFlourish, WaxSeal } from "./Decorations";
-import { hasBengali, getSafeTextStyle } from "@/lib/typography";
+import { hasBengali, getSafeTextStyle, isDarkBg } from "@/lib/typography";
 
 export default function EmeraldRoyal({ design }) {
   const { content, palette, decorations, language } = design;
   const isBangla = language === "bn";
   const isBilingual = language === "bilingual";
 
-  const primaryColor = palette?.primary || "#173D32";
+  const cardBg = palette?.cardBg || "#FAF8F5";
+  const isDark = isDarkBg(cardBg);
+
+  const primaryColor = palette?.primary || (isDark ? "#F5EEDB" : "#173D32");
+  const textColor = palette?.textPrimary || (isDark ? "#FFFDF8" : primaryColor);
   const accentColor = palette?.accent || "#C6A66B";
-  const cardBg = palette?.cardBg || "#FFFFFF";
-  const textMuted = palette?.textMuted || "#6B756E";
+  const textMuted = palette?.textMuted || (isDark ? "#CAD7CF" : "#6B756E");
 
   const brideName = content?.brideName || "Eleanor Vance";
   const groomName = content?.groomName || "Arthur Pendelton";
 
   return (
     <div
-      className="relative w-full h-full flex flex-col justify-between p-7 sm:p-10 select-none overflow-hidden transition-all duration-300"
+      className="relative w-full h-full flex flex-col justify-between p-6 sm:p-8 select-none overflow-hidden transition-all duration-300"
       style={{
         backgroundColor: cardBg,
-        boxShadow:
-          "0 22px 50px -12px rgba(23, 61, 50, 0.22), 0 0 0 1px rgba(198, 166, 107, 0.35) inset, inset 0 0 45px rgba(198, 166, 107, 0.05)",
+        backgroundImage: isDark
+          ? `
+            radial-gradient(ellipse at 50% 12%, ${accentColor}30 0%, transparent 65%),
+            radial-gradient(ellipse at 50% 88%, rgba(0,0,0,0.4) 0%, transparent 60%)
+          `
+          : `
+            radial-gradient(ellipse at 50% 12%, ${accentColor}18 0%, transparent 65%),
+            radial-gradient(ellipse at 50% 88%, ${primaryColor}12 0%, transparent 60%)
+          `,
+        boxShadow: `
+          0 28px 65px -15px rgba(0,0,0,0.4),
+          0 0 0 1px ${accentColor}50 inset,
+          inset 0 0 60px ${accentColor}10
+        `,
       }}
     >
-      {/* Outer & Inner Gilded Framing */}
-      {decorations?.hasInnerFrame && (
+      {/* Subtle Luxury Linen Texture Overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.035]"
+        style={{
+          backgroundImage: `radial-gradient(${isDark ? "#FFF" : primaryColor} 1px, transparent 1px)`,
+          backgroundSize: "8px 8px",
+        }}
+      />
+
+      {/* Triple Gilded Framing */}
+      <div
+        className="absolute inset-2 sm:inset-2.5 pointer-events-none rounded-[2px]"
+        style={{
+          border: `1px solid ${accentColor}45`,
+        }}
+      />
+      <div
+        className="absolute inset-3.5 sm:inset-4 pointer-events-none rounded-[2px]"
+        style={{
+          border: `1.5px solid ${accentColor}85`,
+          boxShadow: `inset 0 0 12px ${accentColor}20, 0 0 8px ${accentColor}20`,
+        }}
+      />
+      <div
+        className="absolute inset-5 sm:inset-[22px] pointer-events-none rounded-[1px]"
+        style={{
+          border: `0.5px dashed ${accentColor}60`,
+        }}
+      />
+
+      {/* Ornate Corner Flourishes */}
+      {decorations?.hasFloralCorners !== false && (
         <>
-          <div
-            className="absolute inset-2.5 sm:inset-3 pointer-events-none rounded-[2px]"
-            style={{
-              border: `1px solid ${accentColor}35`,
-            }}
+          <CornerFlourish
+            className="absolute top-4 left-4 pointer-events-none drop-shadow-xs"
+            color={accentColor}
+            size={40}
           />
-          <div
-            className="absolute inset-4 sm:inset-5 pointer-events-none rounded-[2px]"
-            style={{
-              border: `1.5px solid ${accentColor}65`,
-              boxShadow: `inset 0 0 0 1px ${accentColor}20`,
-            }}
+          <CornerFlourish
+            className="absolute top-4 right-4 pointer-events-none drop-shadow-xs -scale-x-100"
+            color={accentColor}
+            size={40}
+          />
+          <CornerFlourish
+            className="absolute bottom-4 left-4 pointer-events-none drop-shadow-xs -scale-y-100"
+            color={accentColor}
+            size={40}
+          />
+          <CornerFlourish
+            className="absolute bottom-4 right-4 pointer-events-none drop-shadow-xs -scale-100"
+            color={accentColor}
+            size={40}
           />
         </>
       )}
 
-      {/* 4 Corner Flourishes */}
-      {decorations?.hasFloralCorners && (
-        <>
-          <CornerFlourish
-            className="absolute top-5 left-5 pointer-events-none opacity-85"
-            color={accentColor}
-            size={36}
-          />
-          <CornerFlourish
-            className="absolute top-5 right-5 pointer-events-none opacity-85 -scale-x-100"
-            color={accentColor}
-            size={36}
-          />
-          <CornerFlourish
-            className="absolute bottom-5 left-5 pointer-events-none opacity-85 -scale-y-100"
-            color={accentColor}
-            size={36}
-          />
-          <CornerFlourish
-            className="absolute bottom-5 right-5 pointer-events-none opacity-85 -scale-100"
-            color={accentColor}
-            size={36}
-          />
-        </>
-      )}
+      {/* Corner Gem Insets */}
+      <div className="absolute top-2.5 left-2.5 w-1.5 h-1.5 rotate-45 pointer-events-none" style={{ backgroundColor: accentColor }} />
+      <div className="absolute top-2.5 right-2.5 w-1.5 h-1.5 rotate-45 pointer-events-none" style={{ backgroundColor: accentColor }} />
+      <div className="absolute bottom-2.5 left-2.5 w-1.5 h-1.5 rotate-45 pointer-events-none" style={{ backgroundColor: accentColor }} />
+      <div className="absolute bottom-2.5 right-2.5 w-1.5 h-1.5 rotate-45 pointer-events-none" style={{ backgroundColor: accentColor }} />
 
       {/* TOP HEADER */}
-      <div className="relative z-10 flex flex-col items-center text-center pt-2 space-y-1.5">
+      <div className="relative z-10 flex flex-col items-center text-center pt-2 sm:pt-3 space-y-1">
+        {/* Crown / Crest accent line */}
+        <div className="flex items-center gap-2 mb-0.5">
+          <span className="w-6 h-[1px]" style={{ background: `linear-gradient(90deg, transparent, ${accentColor})` }} />
+          <div className="w-1.5 h-1.5 rotate-45" style={{ backgroundColor: accentColor }} />
+          <span className="w-6 h-[1px]" style={{ background: `linear-gradient(90deg, ${accentColor}, transparent)` }} />
+        </div>
+
         <span
-          className="text-[10px] sm:text-[11px] font-semibold"
+          className="text-[10px] sm:text-[11px] font-semibold tracking-wider"
           style={getSafeTextStyle(content?.title || "THE HONOUR OF YOUR PRESENCE", {
             isSerif: false,
             color: accentColor,
-            tracking: "0.22em",
+            tracking: "0.26em",
             uppercase: true,
           })}
         >
@@ -85,7 +126,7 @@ export default function EmeraldRoyal({ design }) {
 
         {content?.subtitle && (
           <p
-            className="text-[12px] sm:text-[13px]"
+            className="text-[11px] sm:text-[12px] max-w-xs"
             style={getSafeTextStyle(content.subtitle, {
               isSerif: true,
               color: textMuted,
@@ -97,42 +138,61 @@ export default function EmeraldRoyal({ design }) {
         )}
       </div>
 
-      {/* EVENT NAMES (COUPLE OR SINGLE CELEBRANT) */}
-      <div className="relative z-10 flex flex-col items-center text-center my-3 sm:my-5">
+      {/* EVENT NAMES: COUPLE OR CELEBRANT */}
+      <div className="relative z-10 flex flex-col items-center text-center my-auto py-2">
         {groomName ? (
           <div className="w-full flex flex-col items-center">
             <h1
-              className="text-3xl sm:text-4xl md:text-[42px] leading-tight font-normal"
+              className="text-3xl sm:text-4xl md:text-[42px] leading-[1.15] font-normal tracking-wide drop-shadow-xs"
               style={getSafeTextStyle(brideName, {
                 isSerif: true,
-                color: primaryColor,
+                color: textColor,
                 fontWeight: hasBengali(brideName) ? 600 : 400,
               })}
             >
               {brideName}
             </h1>
 
-            <div className="flex items-center justify-center gap-3 my-1.5 sm:my-2.5 w-full max-w-[200px]">
-              <span className="h-[1px] flex-1" style={{ backgroundColor: `${accentColor}50` }} />
+            {/* Gilded Filigree Knot */}
+            <div className="flex items-center justify-center gap-3 my-2 sm:my-3 w-full max-w-[210px]">
               <span
-                className="text-xl sm:text-2xl leading-none"
-                style={getSafeTextStyle(hasBengali(brideName) || isBangla ? "ও" : "&", {
-                  isSerif: true,
-                  color: accentColor,
-                  italic: !hasBengali(brideName) && !isBangla,
-                  fontWeight: hasBengali(brideName) || isBangla ? 600 : 400,
-                })}
+                className="h-[1px] flex-1"
+                style={{
+                  background: `linear-gradient(90deg, transparent, ${accentColor})`,
+                }}
+              />
+              <div
+                className="w-7 h-7 rounded-full flex items-center justify-center"
+                style={{
+                  border: `1px solid ${accentColor}80`,
+                  background: `radial-gradient(circle, ${accentColor}25 0%, transparent 70%)`,
+                }}
               >
-                {hasBengali(brideName) || isBangla ? "ও" : "&"}
-              </span>
-              <span className="h-[1px] flex-1" style={{ backgroundColor: `${accentColor}50` }} />
+                <span
+                  className="text-lg sm:text-xl leading-none"
+                  style={getSafeTextStyle(hasBengali(brideName) || isBangla ? "ও" : "&", {
+                    isSerif: true,
+                    color: accentColor,
+                    italic: !hasBengali(brideName) && !isBangla,
+                    fontWeight: hasBengali(brideName) || isBangla ? 600 : 400,
+                  })}
+                >
+                  {hasBengali(brideName) || isBangla ? "ও" : "&"}
+                </span>
+              </div>
+              <span
+                className="h-[1px] flex-1"
+                style={{
+                  background: `linear-gradient(90deg, ${accentColor}, transparent)`,
+                }}
+              />
             </div>
 
             <h1
-              className="text-3xl sm:text-4xl md:text-[42px] leading-tight font-normal"
+              className="text-3xl sm:text-4xl md:text-[42px] leading-[1.15] font-normal tracking-wide drop-shadow-xs"
               style={getSafeTextStyle(groomName, {
                 isSerif: true,
-                color: primaryColor,
+                color: textColor,
                 fontWeight: hasBengali(groomName) ? 600 : 400,
               })}
             >
@@ -142,10 +202,10 @@ export default function EmeraldRoyal({ design }) {
         ) : (
           <div className="w-full flex flex-col items-center">
             <h1
-              className="text-3xl sm:text-4xl md:text-[40px] leading-tight font-normal"
+              className="text-3xl sm:text-4xl md:text-[42px] leading-[1.15] font-normal tracking-wide drop-shadow-xs"
               style={getSafeTextStyle(brideName, {
                 isSerif: true,
-                color: primaryColor,
+                color: textColor,
                 fontWeight: hasBengali(brideName) ? 600 : 400,
               })}
             >
@@ -157,7 +217,7 @@ export default function EmeraldRoyal({ design }) {
                 style={getSafeTextStyle(content.eventMilestone, {
                   isSerif: false,
                   color: accentColor,
-                  tracking: "0.2em",
+                  tracking: "0.22em",
                   uppercase: true,
                 })}
               >
@@ -167,13 +227,13 @@ export default function EmeraldRoyal({ design }) {
           </div>
         )}
 
-        {/* Bilingual Bengali Names (if bilingual) */}
+        {/* Bilingual Sub-Names (if bilingual) */}
         {isBilingual && content?.bilingualBrideName && (
           <div
             className="mt-2 text-sm font-medium"
             style={getSafeTextStyle(content.bilingualBrideName, {
               isSerif: true,
-              color: "#285C49",
+              color: isDark ? accentColor : primaryColor,
             })}
           >
             {content.bilingualBrideName}
@@ -183,7 +243,7 @@ export default function EmeraldRoyal({ design }) {
 
         {/* Invitation Message */}
         <p
-          className="mt-3 sm:mt-4 text-[12px] sm:text-[13px] max-w-xs leading-relaxed text-center px-2"
+          className="mt-3.5 text-[11px] sm:text-[12px] max-w-xs leading-relaxed text-center px-2"
           style={getSafeTextStyle(
             content?.message ||
               "Invite you to celebrate their union amidst the waters and olive terraces.",
@@ -199,10 +259,10 @@ export default function EmeraldRoyal({ design }) {
 
         {isBilingual && content?.bilingualMessage && (
           <p
-            className="mt-1.5 text-[11px] sm:text-[12px] max-w-xs leading-relaxed text-center"
+            className="mt-1.5 text-[11px] sm:text-[12px] max-w-xs leading-relaxed text-center font-medium"
             style={getSafeTextStyle(content.bilingualMessage, {
               isSerif: false,
-              color: primaryColor,
+              color: isDark ? accentColor : primaryColor,
               italic: !hasBengali(content.bilingualMessage),
             })}
           >
@@ -212,21 +272,24 @@ export default function EmeraldRoyal({ design }) {
       </div>
 
       {/* DATE, TIME & VENUE BLOCK */}
-      <div className="relative z-10 flex flex-col items-center text-center space-y-2 sm:space-y-3">
-        {/* Date & Time pill */}
+      <div className="relative z-10 flex flex-col items-center text-center space-y-2 pb-1">
+        {/* Date & Time Gilded Pill */}
         <div
-          className="inline-flex items-center px-4 py-1.5 rounded-full text-[11px] sm:text-[12px] font-medium"
+          className="inline-flex items-center px-4 py-1.5 rounded-full text-[11px] sm:text-[12px] font-medium shadow-xs"
           style={{
-            backgroundColor: `${primaryColor}08`,
-            border: `1px solid ${accentColor}40`,
-            color: primaryColor,
+            background: isDark
+              ? `linear-gradient(135deg, ${accentColor}25 0%, rgba(255,255,255,0.06) 50%, ${accentColor}25 100%)`
+              : `linear-gradient(135deg, ${accentColor}18 0%, ${cardBg} 50%, ${accentColor}18 100%)`,
+            border: `1px solid ${accentColor}75`,
+            boxShadow: `0 2px 8px ${accentColor}25`,
+            color: isDark ? "#FFFFFF" : textColor,
           }}
         >
           <span
             style={getSafeTextStyle(content?.weddingDate || "Saturday • June 21, 2027", {
               isSerif: false,
-              color: primaryColor,
-              tracking: hasBengali(content?.weddingDate) ? "0px" : "0.08em",
+              color: isDark ? "#FFFFFF" : textColor,
+              tracking: hasBengali(content?.weddingDate) ? "0px" : "0.1em",
               uppercase: !hasBengali(content?.weddingDate),
             })}
           >
@@ -234,11 +297,11 @@ export default function EmeraldRoyal({ design }) {
           </span>
           {content?.weddingTime && (
             <>
-              <span className="mx-2 opacity-40">•</span>
+              <span className="mx-2 opacity-50" style={{ color: accentColor }}>•</span>
               <span
                 style={getSafeTextStyle(content.weddingTime, {
                   isSerif: false,
-                  color: primaryColor,
+                  color: isDark ? accentColor : textColor,
                 })}
               >
                 {content.weddingTime}
@@ -248,23 +311,23 @@ export default function EmeraldRoyal({ design }) {
         </div>
 
         {/* Venue */}
-        <div className="space-y-0.5">
+        <div className="space-y-0.5 pt-0.5">
           <p
-            className="text-base sm:text-lg font-medium leading-snug"
+            className="text-base sm:text-lg font-medium leading-snug drop-shadow-xs"
             style={getSafeTextStyle(content?.venue || "Villa Balbiano", {
               isSerif: true,
-              color: primaryColor,
+              color: textColor,
             })}
           >
             {content?.venue || "Villa Balbiano"}
           </p>
           {content?.city && (
             <p
-              className="text-[11px] sm:text-[12px]"
+              className="text-[10px] sm:text-[11px] font-medium"
               style={getSafeTextStyle(content.city, {
                 isSerif: false,
                 color: textMuted,
-                tracking: hasBengali(content.city) ? "0px" : "0.15em",
+                tracking: hasBengali(content.city) ? "0px" : "0.16em",
                 uppercase: !hasBengali(content.city),
               })}
             >
@@ -274,15 +337,15 @@ export default function EmeraldRoyal({ design }) {
         </div>
 
         {/* Wax Seal Monogram */}
-        {decorations?.hasWaxSeal && (
-          <div className="pt-2">
+        {decorations?.hasWaxSeal !== false && (
+          <div className="pt-1">
             <WaxSeal
               monogram={
-                decorations.monogram ||
-                `${content?.brideName?.[0] || "A"}&${content?.groomName?.[0] || "R"}`
+                decorations?.monogram ||
+                `${brideName?.[0] || "A"}&${groomName?.[0] || "R"}`
               }
               color={accentColor}
-              size={48}
+              size={46}
             />
           </div>
         )}
@@ -290,7 +353,7 @@ export default function EmeraldRoyal({ design }) {
         {/* RSVP Details */}
         {content?.rsvpDetails && (
           <p
-            className="text-[10px] sm:text-[11px] pt-1"
+            className="text-[10px] sm:text-[11px] pt-0.5"
             style={getSafeTextStyle(content.rsvpDetails, {
               isSerif: false,
               color: textMuted,
@@ -304,4 +367,3 @@ export default function EmeraldRoyal({ design }) {
     </div>
   );
 }
-

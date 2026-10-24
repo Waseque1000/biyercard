@@ -41,14 +41,14 @@ const InvitationRenderer = forwardRef(function InvitationRenderer(
     <div
       ref={ref}
       id="wedly-invitation-card"
-      className={`relative select-none transition-transform duration-300 origin-center ${className}`}
+      className={`relative select-none transition-transform duration-300 origin-center rounded-[3px] overflow-hidden ${className}`}
       style={{
         width: `${baseWidth}px`,
         height: `${baseHeight}px`,
         transform: scale !== 1 ? `scale(${scale})` : undefined,
         transformOrigin: "center center",
         boxShadow: showShadow
-          ? "0 24px 60px -15px rgba(23, 61, 50, 0.18), 0 0 0 1px rgba(198, 166, 107, 0.25)"
+          ? "0 30px 70px -15px rgba(15, 23, 42, 0.32), 0 10px 25px -8px rgba(15, 23, 42, 0.15), 0 0 0 1px rgba(198, 166, 107, 0.35)"
           : undefined,
       }}
     >

@@ -126,3 +126,24 @@ export function toBengaliNumerals(str) {
   };
   return String(str).replace(/[0-9]/g, (digit) => enToBn[digit] || digit);
 }
+
+/**
+ * Checks whether a hex color is dark (returns true if dark, false if light).
+ */
+export function isDarkBg(hex) {
+  if (!hex || typeof hex !== "string") return false;
+  const clean = hex.replace("#", "").trim();
+  if (clean.length === 3) {
+    const r = parseInt(clean[0] + clean[0], 16);
+    const g = parseInt(clean[1] + clean[1], 16);
+    const b = parseInt(clean[2] + clean[2], 16);
+    return (r * 299 + g * 587 + b * 114) / 1000 < 145;
+  }
+  if (clean.length >= 6) {
+    const r = parseInt(clean.substring(0, 2), 16);
+    const g = parseInt(clean.substring(2, 4), 16);
+    const b = parseInt(clean.substring(4, 6), 16);
+    return (r * 299 + g * 587 + b * 114) / 1000 < 145;
+  }
+  return false;
+}

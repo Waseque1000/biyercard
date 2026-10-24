@@ -40,8 +40,8 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="#featured-collection" className="hover:text-[#173D32] transition-colors">
-                Templates & Styles
+              <Link href="/templates" className="hover:text-[#173D32] transition-colors font-medium text-[#173D32]">
+                108+ Templates Atelier
               </Link>
             </li>
             <li>
@@ -50,7 +50,7 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="#how-it-works" className="hover:text-[#173D32] transition-colors">
+              <Link href="/#how-it-works" className="hover:text-[#173D32] transition-colors">
                 How It Works
               </Link>
             </li>

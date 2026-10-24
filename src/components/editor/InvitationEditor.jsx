@@ -33,12 +33,18 @@ import { READY_TEMPLATES, TEMPLATE_CATEGORIES } from "@/data/readyTemplates";
 import { toast } from "sonner";
 
 const PALETTES = [
-  { id: "emerald-gold", name: "Emerald & Gold", primary: "#173D32", accent: "#C6A66B", cardBg: "#FFFFFF", bg: "#FAF8F4" },
-  { id: "burgundy-champagne", name: "Burgundy & Champagne", primary: "#5A1827", accent: "#D4AF37", cardBg: "#FAF7F5", bg: "#FAF7F5" },
-  { id: "ivory-sage", name: "Ivory & Sage", primary: "#2C402E", accent: "#B8A375", cardBg: "#FAF8F4", bg: "#F9F8F5" },
-  { id: "blush-cream", name: "Blush Pink & Cream", primary: "#6B3B48", accent: "#C6A66B", cardBg: "#FCF8F7", bg: "#FCF8F7" },
-  { id: "navy-gold", name: "Navy & Gold", primary: "#12233C", accent: "#CFA758", cardBg: "#FFFFFF", bg: "#F6F8FB" },
-  { id: "terracotta-beige", name: "Terracotta & Beige", primary: "#8B4731", accent: "#C89D66", cardBg: "#FFFFFF", bg: "#FAF7F4" },
+  { id: "emerald-gold", name: "Imperial Emerald & Gold", primary: "#F5EEDB", accent: "#E0BE68", cardBg: "#09261C", bg: "#082218", textPrimary: "#FFFDF8", textMuted: "#CBD8CE", borderColor: "#C6A66B" },
+  { id: "mughal-ruby", name: "Mughal Ruby Velvet", primary: "#FDE68A", accent: "#E5C158", cardBg: "#420B13", bg: "#3A070E", textPrimary: "#FFFDF5", textMuted: "#E2D3BE", borderColor: "#D4AF37" },
+  { id: "walima-sapphire", name: "Royal Walima Sapphire", primary: "#FEF3C7", accent: "#E8C26E", cardBg: "#0B1A33", bg: "#071326", textPrimary: "#FFFDF9", textMuted: "#B4C8DF", borderColor: "#30568B" },
+  { id: "mustard-marigold", name: "Gaye Holud Marigold", primary: "#853609", accent: "#E09A16", cardBg: "#FFF9E6", bg: "#FFF9E6", textPrimary: "#702A05", textMuted: "#9A501F", borderColor: "#E5A93C" },
+  { id: "basanti-yellow", name: "Basanti Saffron Holud", primary: "#78350F", accent: "#D97706", cardBg: "#FEF3C7", bg: "#FEF3C7", textPrimary: "#5B2207", textMuted: "#8C4A19", borderColor: "#D97706" },
+  { id: "henna-forest", name: "Henna Mehendi Forest", primary: "#FEF08A", accent: "#F59E0B", cardBg: "#0D2E1E", bg: "#082014", textPrimary: "#FFFDF7", textMuted: "#CFDDD3", borderColor: "#E5B942" },
+  { id: "peacock-teal", name: "Peacock Teal & Gold", primary: "#FEF08A", accent: "#E2BF65", cardBg: "#042B28", bg: "#031F1D", textPrimary: "#FFFDF9", textMuted: "#A3D1CE", borderColor: "#19635C" },
+  { id: "royal-amethyst", name: "Imperial Amethyst Violet", primary: "#FDE68A", accent: "#E5C158", cardBg: "#2B0B3E", bg: "#1F072D", textPrimary: "#FFFDFB", textMuted: "#D3BDDF", borderColor: "#58237A" },
+  { id: "blush-cream", name: "Romantic Rose Blush", primary: "#881337", accent: "#D97706", cardBg: "#FFF1F2", bg: "#FFF1F2", textPrimary: "#6B0D28", textMuted: "#9F4D63", borderColor: "#FECDD3" },
+  { id: "art-deco-noir", name: "24K Gold & Obsidian Noir", primary: "#FDE68A", accent: "#F5CE66", cardBg: "#0D0F14", bg: "#0A0B0E", textPrimary: "#FFFFFF", textMuted: "#A3ACB8", borderColor: "#C89D46" },
+  { id: "terracotta-beige", name: "Terracotta Bronze", primary: "#FED7AA", accent: "#E29D4E", cardBg: "#541D10", bg: "#3F130A", textPrimary: "#FFFBF7", textMuted: "#DFB5A8", borderColor: "#B85532" },
+  { id: "ivory-sage", name: "Ivory & Botanical Sage", primary: "#1C3825", accent: "#B89F60", cardBg: "#F6F8F5", bg: "#FAF8F4", textPrimary: "#152F1E", textMuted: "#536B5B", borderColor: "#D2DDD4" },
 ];
 
 const TEMPLATES = [
