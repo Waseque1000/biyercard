@@ -27,6 +27,7 @@ import {
   Gift,
 } from "lucide-react";
 import InvitationRenderer from "@/components/invitation-templates/InvitationRenderer";
+import { saveLocalInvitation } from "@/lib/localInvitations";
 import { toast } from "sonner";
 import confetti from "canvas-confetti";
 
@@ -237,57 +238,99 @@ const ENGLISH_DEFAULTS = {
 const PALETTE_OPTIONS = [
   {
     id: "emerald-gold",
-    name: "Emerald & Gold",
-    primary: "#173D32",
-    accent: "#C6A66B",
-    cardBg: "#FFFFFF",
-    bg: "#FAF8F4",
-    desc: "Imperial Forest & Antique Champagne Foil",
+    name: "Imperial Emerald & 24K Gold",
+    primary: "#F5EEDB",
+    secondary: "#34D399",
+    accent: "#E0BE68",
+    cardBg: "#09261C",
+    textPrimary: "#FFFDF8",
+    textMuted: "#CBD8CE",
+    bg: "#082218",
+    desc: "Rich Royal Emerald Velvet & Champagne Gold Foil",
   },
   {
     id: "burgundy-champagne",
-    name: "Burgundy & Champagne",
-    primary: "#5A1827",
-    accent: "#D4AF37",
-    cardBg: "#FAF7F5",
-    bg: "#FAF7F5",
-    desc: "Imperial Bordeaux Wine & 24K Gold Foil",
-  },
-  {
-    id: "ivory-sage",
-    name: "Ivory & Sage",
-    primary: "#2C402E",
-    accent: "#B8A375",
-    cardBg: "#FAF8F4",
-    bg: "#F9F8F5",
-    desc: "Cotton Rag Ground & Muted Botanical Sage",
-  },
-  {
-    id: "blush-cream",
-    name: "Blush Pink & Cream",
-    primary: "#6B3B48",
-    accent: "#C6A66B",
-    cardBg: "#FCF8F7",
-    bg: "#FCF8F7",
-    desc: "Pressed Peony Rose & Translucent Cream",
+    name: "Mughal Ruby & Shahi Gold",
+    primary: "#FDE68A",
+    secondary: "#F59E0B",
+    accent: "#E5C158",
+    cardBg: "#420B13",
+    textPrimary: "#FFFDF5",
+    textMuted: "#E2D3BE",
+    bg: "#3A070E",
+    desc: "Imperial Bordeaux Ruby Velvet & 24K Gold Foil",
   },
   {
     id: "navy-gold",
-    name: "Navy & Gold",
-    primary: "#12233C",
-    accent: "#CFA758",
-    cardBg: "#FFFFFF",
-    bg: "#F6F8FB",
-    desc: "Midnight Indigo & Starlit Gold Inks",
+    name: "Midnight Sapphire & Starlight",
+    primary: "#F8EBD4",
+    secondary: "#38BDF8",
+    accent: "#E5C072",
+    cardBg: "#0A1526",
+    textPrimary: "#FFFFFF",
+    textMuted: "#B0C4DE",
+    bg: "#060E1C",
+    desc: "Deep Midnight Cosmos & Starlit Gold Inks",
+  },
+  {
+    id: "holud-saffron",
+    name: "Gaye Holud Marigold & Saffron",
+    primary: "#7C2D12",
+    secondary: "#D97706",
+    accent: "#D97706",
+    cardBg: "#FFF9E6",
+    textPrimary: "#6B210B",
+    textMuted: "#9A4A1A",
+    bg: "#FFF9E6",
+    desc: "Vibrant Festive Marigold, Turmeric & Crimson",
+  },
+  {
+    id: "ivory-sage",
+    name: "Ivory Linen & Sage Botanical",
+    primary: "#1C3825",
+    secondary: "#3E6B4B",
+    accent: "#B89B5E",
+    cardBg: "#FAF8F4",
+    textPrimary: "#152F1E",
+    textMuted: "#5A6E5F",
+    bg: "#FAF8F4",
+    desc: "Warm Cotton Rag Ground & Botanical Eucalyptus",
+  },
+  {
+    id: "blush-cream",
+    name: "Romantic Rose Blush & Berry",
+    primary: "#7A1230",
+    secondary: "#BE185D",
+    accent: "#D97706",
+    cardBg: "#FFF1F2",
+    textPrimary: "#6B0D28",
+    textMuted: "#8E455B",
+    bg: "#FFF1F2",
+    desc: "Pressed Peony Rose, Silk Vellum & Rose Gold",
+  },
+  {
+    id: "art-deco-noir",
+    name: "Art Deco Obsidian & 24K Gold",
+    primary: "#FDE68A",
+    secondary: "#E5C158",
+    accent: "#E5C158",
+    cardBg: "#0D0F14",
+    textPrimary: "#FFFFFF",
+    textMuted: "#B5BDC9",
+    bg: "#0A0B0E",
+    desc: "1920s Great Gatsby Noir & Fine Champagne Foil",
   },
   {
     id: "terracotta-beige",
-    name: "Terracotta & Beige",
-    primary: "#8B4731",
-    accent: "#C89D66",
-    cardBg: "#FFFFFF",
-    bg: "#FAF7F4",
-    desc: "Warm Mediterranean Clay & Sunlit Linen",
+    name: "Vintage Olive & Antique Gold",
+    primary: "#FEF9C3",
+    secondary: "#84CC16",
+    accent: "#D4AF37",
+    cardBg: "#1C2619",
+    textPrimary: "#FFFDF6",
+    textMuted: "#BDCAB4",
+    bg: "#141C12",
+    desc: "Old-Money Estate Olive & Engraved Gold Leaf",
   },
 ];
 
@@ -676,11 +719,11 @@ export default function CreationWizard() {
       name: selectedPaletteObj.name,
       background: selectedPaletteObj.bg,
       primary: selectedPaletteObj.primary,
-      secondary: "#285C49",
+      secondary: selectedPaletteObj.secondary || "#285C49",
       accent: selectedPaletteObj.accent,
       cardBg: selectedPaletteObj.cardBg,
-      textPrimary: selectedPaletteObj.primary,
-      textMuted: "#77766F",
+      textPrimary: selectedPaletteObj.textPrimary || selectedPaletteObj.primary,
+      textMuted: selectedPaletteObj.textMuted || "#77766F",
       borderColor: "#E8E2D8",
     },
     typography: {
@@ -789,10 +832,16 @@ export default function CreationWizard() {
 
       // Cache draft locally for instant, flawless studio loading
       try {
+        const localRecord = {
+          ...invitationPayload,
+          id: newId,
+          design_json: generatedDesign,
+        };
         sessionStorage.setItem(
           `wedly_draft_${newId}`,
-          JSON.stringify({ ...invitationPayload, id: newId, design_json: generatedDesign })
+          JSON.stringify(localRecord)
         );
+        saveLocalInvitation(localRecord);
       } catch (e) {
         // storage quota fallback
       }
@@ -1733,19 +1782,85 @@ export default function CreationWizard() {
           </div>
 
           {/* Right Column: Fluid Live Stationery Stage */}
-          <div className="lg:col-span-6 bg-white rounded-xl p-6 sm:p-8 border border-[#E8E2D8] shadow-sm flex flex-col items-center justify-center min-h-[560px]">
-            <div className="w-full flex items-center justify-between mb-4 pb-3 border-b border-[#FAF8F4]">
-              <span className="font-sans text-[11px] font-bold uppercase tracking-wider text-[#9A7C43]">
-                Live Atelier Proof
-              </span>
-              <span className="font-sans text-[10px] uppercase tracking-widest text-[#77766F]">
-                Updates in real-time
+          <div className="lg:col-span-6 bg-white rounded-xl p-6 sm:p-8 border border-[#E8E2D8] shadow-sm flex flex-col items-center justify-between min-h-[560px]">
+            <div className="w-full flex items-center justify-between mb-3 pb-3 border-b border-[#FAF8F4]">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#285C49]" />
+                <span className="font-sans text-[11px] font-bold uppercase tracking-wider text-[#173D32]">
+                  Live Interactive Card Preview
+                </span>
+              </div>
+              <span className="font-sans text-[10px] font-semibold uppercase tracking-widest text-[#9A7C43]">
+                {selectedStyleObj.name} • {selectedPaletteObj.name.split("&")[0]}
               </span>
             </div>
 
-            <div className="w-full flex items-center justify-center py-4 overflow-hidden">
-              <div className="transform scale-[0.80] sm:scale-[0.95] origin-center">
+            <div
+              className="w-full flex items-center justify-center py-5 px-2 rounded-2xl overflow-hidden transition-colors duration-500"
+              style={{
+                background: `radial-gradient(ellipse at 50% 42%, ${selectedPaletteObj.accent}25 0%, #F4EFE6 100%)`,
+              }}
+            >
+              <div className="transform scale-[0.82] sm:scale-[0.95] origin-center">
                 <InvitationRenderer design={currentPreviewDesign} />
+              </div>
+            </div>
+
+            {/* Quick Interactive Template & Color Bar right under the Live Card */}
+            <div className="w-full mt-4 pt-3 border-t border-[#E8E2D8] space-y-2.5">
+              {/* Quick Template Pills */}
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#77766F] shrink-0 mr-1">
+                  Card Style:
+                </span>
+                {STYLE_OPTIONS.map((st) => {
+                  const isActive = formData.designStyle === st.id;
+                  return (
+                    <button
+                      key={st.id}
+                      type="button"
+                      onClick={() => {
+                        handleChange("designStyle", st.id);
+                        if (st.defaultPalette) {
+                          handleChange("colorPalette", st.defaultPalette);
+                        }
+                      }}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-medium whitespace-nowrap transition-all cursor-pointer ${
+                        isActive
+                          ? "bg-[#173D32] text-white shadow-2xs font-semibold"
+                          : "bg-[#FAF8F4] text-[#555E57] hover:bg-[#F1E9DA] border border-[#E8E2D8]"
+                      }`}
+                    >
+                      {st.name}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Quick Color Swatches */}
+              <div className="flex items-center justify-between bg-[#FAF8F4] px-3 py-2 rounded-xl border border-[#E8E2D8]">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#77766F]">
+                  Quick Color Theme:
+                </span>
+                <div className="flex items-center gap-2">
+                  {PALETTE_OPTIONS.map((pal) => {
+                    const isSelected = formData.colorPalette === pal.id;
+                    return (
+                      <button
+                        key={pal.id}
+                        type="button"
+                        onClick={() => handleChange("colorPalette", pal.id)}
+                        title={pal.name}
+                        className={`w-5 h-5 rounded-full border transition-transform cursor-pointer ${
+                          isSelected
+                            ? "ring-2 ring-[#C6A66B] scale-120 border-white shadow-xs"
+                            : "border-black/20 hover:scale-110 opacity-85 hover:opacity-100"
+                        }`}
+                        style={{ backgroundColor: pal.cardBg }}
+                      />
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>

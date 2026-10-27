@@ -17,8 +17,16 @@ import {
   Sparkles,
   FileDown,
   Calendar,
+  Download,
+  Lock,
 } from "lucide-react";
 import InvitationRenderer from "@/components/invitation-templates/InvitationRenderer";
+import {
+  getLocalInvitations,
+  deleteLocalInvitation,
+  saveLocalInvitation,
+  mergeInvitationsLists,
+} from "@/lib/localInvitations";
 import { toast } from "sonner";
 
 export default function MyInvitationsView() {
@@ -33,6 +41,7 @@ export default function MyInvitationsView() {
   const [viewMode, setViewMode] = useState("grid"); // 'grid' | 'list'
 
   const fetchInvitations = async () => {
+    const localCards = getLocalInvitations(user?.uid || null);
     try {
       const token = await getIdToken();
       const res = await fetch("/api/invitations", {
@@ -40,63 +49,78 @@ export default function MyInvitationsView() {
       });
       if (res.ok) {
         const json = await res.json();
-        setInvitations(json.data || []);
+        setInvitations(mergeInvitationsLists(json.data || [], localCards));
+        return;
       }
     } catch (e) {
       console.warn("My invitations fetch error:", e);
     } finally {
       setLoading(false);
     }
+    setInvitations(localCards);
   };
 
   useEffect(() => {
     fetchInvitations();
-  }, []);
+  }, [user]);
 
   const handleDelete = async (id, e) => {
     e.stopPropagation();
     if (!confirm("Are you sure you want to delete this invitation?")) return;
 
+    deleteLocalInvitation(id);
     try {
       const token = await getIdToken();
-      const res = await fetch(`/api/invitations/${id}`, {
+      await fetch(`/api/invitations/${id}`, {
         method: "DELETE",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
-      if (res.ok) {
-        toast.success("Invitation removed.");
-        fetchInvitations();
-      }
     } catch (err) {
-      toast.error("Failed to delete");
+      // ignore
     }
+    toast.success("Invitation removed.");
+    fetchInvitations();
   };
 
   const handleDuplicate = async (inv, e) => {
     e.stopPropagation();
+    const copyId = crypto.randomUUID();
+    const copyPayload = {
+      ...inv,
+      id: copyId,
+      title: `${inv.title} (Copy)`,
+      status: "draft",
+    };
+    saveLocalInvitation(copyPayload, user?.uid || null);
     try {
       const token = await getIdToken();
-      const res = await fetch("/api/invitations", {
+      await fetch("/api/invitations", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          ...inv,
-          id: undefined,
-          title: `${inv.title} (Copy)`,
-          status: "draft",
-        }),
+        body: JSON.stringify(copyPayload),
       });
-
-      if (res.ok) {
-        toast.success("Invitation duplicated.");
-        fetchInvitations();
-      }
     } catch (err) {
-      toast.error("Failed to duplicate");
+      // saved locally
     }
+    toast.success("Invitation duplicated.");
+    fetchInvitations();
+  };
+
+  const handleDownloadCard = (inv, e) => {
+    e.stopPropagation();
+    if (!user) {
+      toast.info("Please Log In or Register to download your final card.");
+      router.push(
+        `/login?redirect=${encodeURIComponent(
+          `/editor/${inv.id}?download=pdf`
+        )}&reason=download`
+      );
+      return;
+    }
+    router.push(`/editor/${inv.id}?download=pdf`);
   };
 
   const handleCopyLink = (id, e) => {
@@ -276,15 +300,29 @@ export default function MyInvitationsView() {
                 </p>
               </div>
 
-              <div className="pt-4 mt-3 border-t border-[#FAF8F4] flex items-center justify-between">
-                <Link
-                  href={`/editor/${inv.id}`}
-                  onClick={(e) => e.stopPropagation()}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded bg-[#173D32] hover:bg-[#285C49] text-white font-sans text-xs font-semibold uppercase tracking-wider"
-                >
-                  <Edit className="w-3 h-3 text-[#C6A66B]" />
-                  <span>Edit</span>
-                </Link>
+              <div className="pt-4 mt-3 border-t border-[#FAF8F4] flex items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5">
+                  <Link
+                    href={`/editor/${inv.id}`}
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded bg-[#173D32] hover:bg-[#285C49] text-white font-sans text-xs font-semibold uppercase tracking-wider"
+                  >
+                    <Edit className="w-3 h-3 text-[#C6A66B]" />
+                    <span>Edit</span>
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={(e) => handleDownloadCard(inv, e)}
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded bg-[#FAF8F4] hover:bg-[#F1E9DA] text-[#173D32] border border-[#E8E2D8] font-sans text-xs font-semibold uppercase tracking-wider"
+                  >
+                    {!user ? (
+                      <Lock className="w-3 h-3 text-[#C6A66B]" />
+                    ) : (
+                      <Download className="w-3 h-3 text-[#C6A66B]" />
+                    )}
+                    <span>Download</span>
+                  </button>
+                </div>
 
                 <div className="flex items-center gap-1 text-[#77766F]">
                   <button
@@ -356,6 +394,18 @@ export default function MyInvitationsView() {
                 >
                   Edit
                 </Link>
+                <button
+                  type="button"
+                  onClick={(e) => handleDownloadCard(inv, e)}
+                  className="px-3 py-1.5 rounded bg-[#FAF8F4] border border-[#E8E2D8] text-[#173D32] text-xs font-semibold uppercase tracking-wider hover:bg-[#F1E9DA] flex items-center gap-1"
+                >
+                  {!user ? (
+                    <Lock className="w-3 h-3 text-[#C6A66B]" />
+                  ) : (
+                    <Download className="w-3 h-3 text-[#C6A66B]" />
+                  )}
+                  <span>Download</span>
+                </button>
                 <button
                   onClick={(e) => handleCopyLink(inv.id, e)}
                   title="Copy Link"

@@ -81,7 +81,9 @@ export async function getUserInvitations(uid) {
   // Development fallback
   const list = [];
   devStore.invitations.forEach((inv) => {
-    if (inv.user_id === uid) list.push(inv);
+    if (inv.user_id === uid || inv.user_id === "demo-user-guest") {
+      list.push(inv);
+    }
   });
   return list.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
 }
@@ -154,7 +156,12 @@ export async function saveInvitation(uid, invitationData) {
         .eq("id", invitationData.id)
         .single();
 
-      if (existing && existing.user_id !== uid) {
+      if (
+        existing &&
+        existing.user_id !== uid &&
+        existing.user_id !== "demo-user-guest" &&
+        !existing.user_id?.startsWith("demo-")
+      ) {
         throw new Error("Unauthorized: You do not own this invitation");
       }
     }
@@ -189,7 +196,12 @@ export async function deleteInvitation(uid, id) {
   }
 
   const existing = devStore.invitations.get(id);
-  if (existing && existing.user_id === uid) {
+  if (
+    existing &&
+    (existing.user_id === uid ||
+      existing.user_id === "demo-user-guest" ||
+      existing.user_id?.startsWith("demo-"))
+  ) {
     devStore.invitations.delete(id);
     return true;
   }

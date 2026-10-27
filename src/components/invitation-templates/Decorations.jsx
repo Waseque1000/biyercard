@@ -1,91 +1,174 @@
 import React from "react";
 
-export function CornerFlourish({ className = "", color = "#C6A66B", size = 48 }) {
+export function CornerFlourish({ className = "", color = "#C6A66B", size = 52 }) {
   return (
     <svg
       width={size}
       height={size}
-      viewBox="0 0 60 60"
+      viewBox="0 0 64 64"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
-      {/* Primary ornate scroll */}
+      {/* Outer royal corner bracket */}
       <path
-        d="M4 4C12 4 22 8 28 16C30 20 32 26 28 32C24 38 18 38 14 34C10 30 10 24 14 18C18 12 24 10 30 14"
+        d="M3 22V6C3 4.34315 4.34315 3 6 3H22"
+        stroke={color}
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      {/* Primary baroque acanthus scroll */}
+      <path
+        d="M5 5C14 5 25 9 32 18C35 22 36 29 31 35C26 40 19 39 15 35C11 31 12 24 17 19C21 15 28 15 30 20"
         stroke={color}
         strokeWidth="1.5"
         strokeLinecap="round"
       />
-      {/* Mirror scroll */}
       <path
-        d="M4 4C4 12 8 22 16 28C20 30 26 32 32 28C38 24 38 18 34 14C30 10 24 10 18 14C12 18 10 24 14 30"
+        d="M5 5C5 14 9 25 18 32C22 35 29 36 35 31C40 26 39 19 35 15C31 11 24 12 19 17C15 21 15 28 20 30"
         stroke={color}
         strokeWidth="1.5"
         strokeLinecap="round"
       />
-      {/* Inner filigree details */}
+      {/* Secondary sweeping tendrils */}
       <path
-        d="M6 6C10 6 16 10 18 14"
+        d="M6 14C14 14 20 10 26 4C32 4 38 6 44 4"
         stroke={color}
-        strokeWidth="0.6"
+        strokeWidth="1"
         strokeLinecap="round"
-        opacity="0.6"
+        opacity="0.85"
       />
       <path
-        d="M6 6C6 10 10 16 14 18"
+        d="M14 6C14 14 10 20 4 26C4 32 6 38 4 44"
         stroke={color}
-        strokeWidth="0.6"
+        strokeWidth="1"
         strokeLinecap="round"
-        opacity="0.6"
+        opacity="0.85"
       />
-      {/* Accent beads */}
-      <circle cx="4" cy="4" r="2.5" fill={color} />
-      <circle cx="4" cy="4" r="1.5" fill="white" opacity="0.3" />
-      {/* Tiny leaf accents */}
-      <ellipse cx="20" cy="10" rx="2.5" ry="1" transform="rotate(-30 20 10)" fill={color} opacity="0.4" />
-      <ellipse cx="10" cy="20" rx="2.5" ry="1" transform="rotate(60 10 20)" fill={color} opacity="0.4" />
-      {/* Dotted trail */}
-      <circle cx="12" cy="8" r="0.8" fill={color} opacity="0.5" />
-      <circle cx="8" cy="12" r="0.8" fill={color} opacity="0.5" />
-      <circle cx="16" cy="12" r="0.6" fill={color} opacity="0.35" />
-      <circle cx="12" cy="16" r="0.6" fill={color} opacity="0.35" />
+      {/* Petal & leaf flourishes */}
+      <path
+        d="M7 7C13 9 17 13 19 19C13 17 9 13 7 7Z"
+        fill={color}
+        fillOpacity="0.45"
+      />
+      <path
+        d="M24 9C28 7 33 8 36 12C31 13 27 12 24 9Z"
+        fill={color}
+        fillOpacity="0.55"
+      />
+      <path
+        d="M9 24C7 28 8 33 12 36C13 31 12 27 9 24Z"
+        fill={color}
+        fillOpacity="0.55"
+      />
+      {/* Jewel studs */}
+      <circle cx="5" cy="5" r="3" fill={color} />
+      <circle cx="5" cy="5" r="1.4" fill="#FFFFFF" opacity="0.5" />
+      <circle cx="23" cy="23" r="2" fill={color} opacity="0.8" />
+      <circle cx="38" cy="8" r="1.3" fill={color} opacity="0.65" />
+      <circle cx="8" cy="38" r="1.3" fill={color} opacity="0.65" />
+      <circle cx="14" cy="14" r="1.2" fill={color} opacity="0.7" />
     </svg>
   );
 }
 
-export function WaxSeal({ monogram = "W", color = "#C6A66B", size = 52, className = "" }) {
+export function RoyalCrownCrest({ color = "#C6A66B", className = "" }) {
+  return (
+    <svg
+      viewBox="0 0 180 46"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={`w-36 sm:w-44 h-auto ${className}`}
+    >
+      {/* Left & right filigree wings */}
+      <path
+        d="M10 34C28 34 38 26 52 26C62 26 68 32 76 32"
+        stroke={color}
+        strokeWidth="1.3"
+        strokeLinecap="round"
+      />
+      <path
+        d="M170 34C152 34 142 26 128 26C118 26 112 32 104 32"
+        stroke={color}
+        strokeWidth="1.3"
+        strokeLinecap="round"
+      />
+      <path
+        d="M24 38C38 38 46 31 58 31"
+        stroke={color}
+        strokeWidth="0.8"
+        strokeLinecap="round"
+        opacity="0.65"
+      />
+      <path
+        d="M156 38C142 38 134 31 122 31"
+        stroke={color}
+        strokeWidth="0.8"
+        strokeLinecap="round"
+        opacity="0.65"
+      />
+      {/* Central crown silhouette */}
+      <path
+        d="M72 30L66 16L78 22L90 8L102 22L114 16L108 30H72Z"
+        fill={color}
+        fillOpacity="0.22"
+        stroke={color}
+        strokeWidth="1.4"
+        strokeLinejoin="round"
+      />
+      {/* Crown base band */}
+      <rect x="72" y="31" width="36" height="4" rx="2" fill={color} />
+      {/* Crown jewels */}
+      <circle cx="90" cy="6" r="2.5" fill={color} />
+      <circle cx="90" cy="6" r="1.2" fill="#FFFFFF" opacity="0.6" />
+      <circle cx="65" cy="14" r="1.8" fill={color} />
+      <circle cx="115" cy="14" r="1.8" fill={color} />
+      <circle cx="78" cy="19" r="1.3" fill={color} opacity="0.8" />
+      <circle cx="102" cy="19" r="1.3" fill={color} opacity="0.8" />
+      {/* Center diamond drop */}
+      <path d="M90 37L93 41L90 45L87 41L90 37Z" fill={color} opacity="0.85" />
+      {/* Side pearls */}
+      <circle cx="44" cy="29" r="1.5" fill={color} opacity="0.7" />
+      <circle cx="136" cy="29" r="1.5" fill={color} opacity="0.7" />
+      <circle cx="18" cy="34" r="1.2" fill={color} opacity="0.5" />
+      <circle cx="162" cy="34" r="1.2" fill={color} opacity="0.5" />
+    </svg>
+  );
+}
+
+export function WaxSeal({ monogram = "W", color = "#C6A66B", size = 50, className = "" }) {
   return (
     <div
       className={`relative rounded-full flex items-center justify-center select-none ${className}`}
       style={{
         width: size,
         height: size,
-        background: `conic-gradient(from 0deg, #F0D9A8, ${color}, #8A682B, ${color}, #F0D9A8)`,
-        boxShadow: `0 6px 20px rgba(138, 104, 43, 0.45), 0 2px 6px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255, 255, 255, 0.5), inset 0 -2px 4px rgba(0,0,0,0.15)`,
+        background: `conic-gradient(from 25deg, #F7E5B8, ${color}, #856224, ${color}, #F7E5B8, ${color}, #7C5A1E, #F7E5B8)`,
+        boxShadow: `0 8px 22px rgba(0, 0, 0, 0.32), 0 2px 6px rgba(0,0,0,0.22), inset 0 2px 4px rgba(255, 255, 255, 0.65), inset 0 -2px 5px rgba(0,0,0,0.28)`,
       }}
     >
-      {/* Serrated / notched outer ring */}
+      {/* Serrated / fluted outer coin edge */}
       <div
-        className="absolute inset-0 rounded-full pointer-events-none"
+        className="absolute inset-[1.5px] rounded-full pointer-events-none"
         style={{
-          background: `repeating-conic-gradient(from 0deg, transparent 0deg 8deg, rgba(255,255,255,0.1) 8deg 10deg)`,
+          background: `repeating-conic-gradient(from 0deg, transparent 0deg 6deg, rgba(255,255,255,0.18) 6deg 9deg)`,
+          border: "1px dashed rgba(255,255,255,0.35)",
         }}
       />
-      {/* Inner embossed circle */}
+      {/* Inner embossed sanctuary */}
       <div
-        className="w-[78%] h-[78%] rounded-full flex items-center justify-center"
+        className="w-[76%] h-[76%] rounded-full flex items-center justify-center relative"
         style={{
-          background: `radial-gradient(circle at 40% 35%, rgba(255,255,255,0.25), transparent 60%)`,
-          border: `1.5px solid rgba(255,255,255,0.3)`,
-          boxShadow: "inset 0 2px 6px rgba(0,0,0,0.35), inset 0 -1px 3px rgba(255,255,255,0.2)",
+          background: `radial-gradient(circle at 35% 30%, rgba(255,255,255,0.32), rgba(0,0,0,0.12) 70%)`,
+          border: `1.5px solid rgba(255,255,255,0.45)`,
+          boxShadow: "inset 0 3px 6px rgba(0,0,0,0.38), inset 0 -1px 3px rgba(255,255,255,0.3)",
         }}
       >
         <span
-          className="font-serif italic text-white font-bold leading-none"
+          className="font-serif italic text-white font-bold leading-none tracking-tighter"
           style={{
-            fontSize: size * 0.32,
-            textShadow: "0 2px 4px rgba(0,0,0,0.5), 0 0 8px rgba(255,255,255,0.15)",
+            fontSize: size * 0.31,
+            textShadow: "0 1px 3px rgba(0,0,0,0.55), 0 0 8px rgba(255,255,255,0.25)",
           }}
         >
           {monogram}
@@ -95,100 +178,141 @@ export function WaxSeal({ monogram = "W", color = "#C6A66B", size = 52, classNam
   );
 }
 
-export function BotanicalBranch({ color = "#285C49", className = "" }) {
+export function BotanicalBranch({ color = "#285C49", accent = "#C6A66B", className = "" }) {
   return (
     <svg
-      width="160"
-      height="36"
-      viewBox="0 0 160 36"
+      width="200"
+      height="46"
+      viewBox="0 0 200 46"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
-      {/* Main vine stem */}
+      {/* Sweeping organic branches */}
       <path
-        d="M8 18C30 17 50 18 80 18C110 18 130 17 152 18"
+        d="M12 28C42 22 68 23 100 23C132 23 158 22 188 28"
         stroke={color}
-        strokeWidth="1.2"
+        strokeWidth="1.4"
         strokeLinecap="round"
       />
-      {/* Left leaves - pair 1 */}
-      <path d="M25 18C27 11 36 10 40 16C34 17 30 20 25 18Z" fill={color} fillOpacity="0.8" />
-      <path d="M28 18C26 24 34 26 38 20C33 19 30 16 28 18Z" fill={color} fillOpacity="0.65" />
-      {/* Left leaves - pair 2 */}
-      <path d="M48 18C50 12 58 11 62 17C56 18 52 20 48 18Z" fill={color} fillOpacity="0.75" />
-      <path d="M52 18C50 24 58 25 62 19C57 18 53 16 52 18Z" fill={color} fillOpacity="0.6" />
-      {/* Center feature leaf */}
-      <path d="M72 18C74 9 84 9 86 17C82 18 76 20 72 18Z" fill={color} fillOpacity="0.9" />
-      <path d="M74 18C76 26 84 26 86 19C82 18 78 16 74 18Z" fill={color} fillOpacity="0.7" />
-      {/* Right leaves - pair 1 */}
-      <path d="M98 18C100 12 108 11 112 17C106 18 102 20 98 18Z" fill={color} fillOpacity="0.75" />
-      <path d="M102 18C100 24 108 25 112 19C107 18 103 16 102 18Z" fill={color} fillOpacity="0.6" />
-      {/* Right leaves - pair 2 */}
-      <path d="M120 18C122 11 130 10 134 16C128 17 124 20 120 18Z" fill={color} fillOpacity="0.8" />
-      <path d="M124 18C122 24 130 26 134 20C129 19 126 16 124 18Z" fill={color} fillOpacity="0.65" />
-      {/* Berry accents */}
-      <circle cx="80" cy="18" r="3" fill="#C6A66B" opacity="0.85" />
-      <circle cx="80" cy="18" r="1.5" fill="white" opacity="0.25" />
-      <circle cx="44" cy="14" r="1.5" fill={color} opacity="0.5" />
-      <circle cx="116" cy="14" r="1.5" fill={color} opacity="0.5" />
-      {/* Tiny veins */}
-      <path d="M30 15L35 17" stroke={color} strokeWidth="0.4" opacity="0.5" />
-      <path d="M55 14L59 17" stroke={color} strokeWidth="0.4" opacity="0.5" />
-      <path d="M105 14L109 17" stroke={color} strokeWidth="0.4" opacity="0.5" />
-      <path d="M125 15L130 17" stroke={color} strokeWidth="0.4" opacity="0.5" />
+      <path
+        d="M32 25C50 16 74 18 100 23C126 18 150 16 168 25"
+        stroke={accent}
+        strokeWidth="0.9"
+        strokeLinecap="round"
+        opacity="0.7"
+      />
+      {/* Left eucalyptus & olive foliage */}
+      <path d="M26 26C28 16 39 14 44 22C37 24 32 27 26 26Z" fill={color} fillOpacity="0.75" />
+      <path d="M32 26C30 34 40 37 45 29C39 27 35 24 32 26Z" fill={color} fillOpacity="0.55" />
+      <path d="M52 23C55 12 66 11 71 20C63 22 58 25 52 23Z" fill={color} fillOpacity="0.85" />
+      <path d="M58 24C56 33 66 35 71 26C65 25 60 22 58 24Z" fill={color} fillOpacity="0.65" />
+      <path d="M76 22C79 12 88 12 92 20C85 21 81 23 76 22Z" fill={color} fillOpacity="0.9" />
+      {/* Right mirrored foliage */}
+      <path d="M174 26C172 16 161 14 156 22C163 24 168 27 174 26Z" fill={color} fillOpacity="0.75" />
+      <path d="M168 26C170 34 160 37 155 29C161 27 165 24 168 26Z" fill={color} fillOpacity="0.55" />
+      <path d="M148 23C145 12 134 11 129 20C137 22 142 25 148 23Z" fill={color} fillOpacity="0.85" />
+      <path d="M142 24C144 33 134 35 129 26C135 25 140 22 142 24Z" fill={color} fillOpacity="0.65" />
+      <path d="M124 22C121 12 112 12 108 20C115 21 119 23 124 22Z" fill={color} fillOpacity="0.9" />
+      {/* Central blooming rose / camellia */}
+      <circle cx="100" cy="22" r="8" fill={accent} fillOpacity="0.25" stroke={accent} strokeWidth="1.2" />
+      <circle cx="100" cy="22" r="5" fill={accent} fillOpacity="0.5" />
+      <circle cx="100" cy="22" r="2.2" fill="#FFFFFF" opacity="0.85" />
+      {/* Golden berry buds */}
+      <circle cx="48" cy="15" r="2" fill={accent} opacity="0.85" />
+      <circle cx="152" cy="15" r="2" fill={accent} opacity="0.85" />
+      <circle cx="72" cy="31" r="1.6" fill={accent} opacity="0.75" />
+      <circle cx="128" cy="31" r="1.6" fill={accent} opacity="0.75" />
+      <circle cx="20" cy="23" r="1.4" fill={accent} opacity="0.6" />
+      <circle cx="180" cy="23" r="1.4" fill={accent} opacity="0.6" />
     </svg>
   );
 }
 
-export function TraditionalMandala({ color = "#C6A66B", size = 64, className = "" }) {
+export function TraditionalMandala({ color = "#C6A66B", size = 60, className = "" }) {
   return (
     <svg
       width={size}
       height={size}
-      viewBox="0 0 80 80"
+      viewBox="0 0 88 88"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
-      {/* Outer ring with dash pattern */}
-      <circle cx="40" cy="40" r="38" stroke={color} strokeWidth="0.5" strokeDasharray="1 2.5" />
-      <circle cx="40" cy="40" r="35" stroke={color} strokeWidth="0.75" />
-      {/* Mid ring */}
-      <circle cx="40" cy="40" r="28" stroke={color} strokeWidth="1" />
-      <circle cx="40" cy="40" r="25" stroke={color} strokeWidth="0.5" strokeDasharray="2 2" />
-      {/* Inner ring */}
-      <circle cx="40" cy="40" r="18" stroke={color} strokeWidth="0.75" />
-      {/* Core */}
-      <circle cx="40" cy="40" r="5" fill={color} />
-      <circle cx="40" cy="40" r="3" fill="white" opacity="0.15" />
-      {/* 12 Petals (lotus pattern) */}
+      {/* Outer beaded alpona circle */}
+      <circle cx="44" cy="44" r="41" stroke={color} strokeWidth="0.8" strokeDasharray="1.5 3" />
+      <circle cx="44" cy="44" r="37" stroke={color} strokeWidth="1.2" />
+      <circle cx="44" cy="44" r="29" stroke={color} strokeWidth="0.9" strokeOpacity="0.7" />
+      <circle cx="44" cy="44" r="20" stroke={color} strokeWidth="1" fill={color} fillOpacity="0.08" />
+      {/* 12 Ornate Lotus Petals */}
       {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((angle) => (
-        <g key={angle} transform={`rotate(${angle} 40 40)`}>
+        <g key={angle} transform={`rotate(${angle} 44 44)`}>
           <path
-            d="M40 8 C43 20 43 26 40 28 C37 26 37 20 40 8 Z"
+            d="M44 7C48 18 48 26 44 30C40 26 40 18 44 7Z"
             fill={color}
-            fillOpacity="0.45"
+            fillOpacity="0.4"
+            stroke={color}
+            strokeWidth="0.7"
           />
           <path
-            d="M40 16 C41 22 41 25 40 27 C39 25 39 22 40 16 Z"
+            d="M44 15C46 21 46 26 44 28C42 26 42 21 44 15Z"
             fill={color}
-            fillOpacity="0.25"
+            fillOpacity="0.65"
+          />
+          <circle cx="44" cy="5" r="1.1" fill={color} />
+        </g>
+      ))}
+      {/* Inner 8-petal sanctuary */}
+      {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => (
+        <g key={`in-${angle}`} transform={`rotate(${angle} 44 44)`}>
+          <path
+            d="M44 25C46.5 31 46.5 36 44 39C41.5 36 41.5 31 44 25Z"
+            fill={color}
+            fillOpacity="0.75"
           />
         </g>
       ))}
-      {/* 8 diamond accents between petals */}
-      {[15, 75, 135, 195, 255, 315].map((angle) => (
-        <circle
-          key={`d-${angle}`}
-          cx="40"
-          cy="12"
-          r="1"
-          fill={color}
-          opacity="0.6"
-          transform={`rotate(${angle} 40 40)`}
-        />
-      ))}
+      {/* Center bindu */}
+      <circle cx="44" cy="44" r="6" fill={color} />
+      <circle cx="44" cy="44" r="2.5" fill="#FFFFFF" opacity="0.65" />
+    </svg>
+  );
+}
+
+export function KolkaCornerMotif({ color = "#D4AF37", size = 48, className = "" }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 64 64"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
+      {/* Bengali Paisley / Kolka droplet in corner */}
+      <path
+        d="M6 6C22 6 36 14 40 28C43 38 37 46 28 46C19 46 14 39 17 31C19 25 26 24 30 28"
+        stroke={color}
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        fill={color}
+        fillOpacity="0.12"
+      />
+      <path
+        d="M10 10C22 11 32 17 35 28C37 35 33 41 27 41C21 41 18 36 20 31"
+        stroke={color}
+        strokeWidth="0.9"
+        strokeDasharray="2 2"
+      />
+      {/* Outer alpona scallops */}
+      <path d="M4 22C4 12 12 4 22 4" stroke={color} strokeWidth="1.8" strokeLinecap="round" />
+      <circle cx="8" cy="8" r="2.5" fill={color} />
+      <circle cx="26" cy="33" r="2.2" fill={color} opacity="0.85" />
+      <circle cx="45" cy="18" r="1.5" fill={color} opacity="0.7" />
+      <circle cx="18" cy="45" r="1.5" fill={color} opacity="0.7" />
+      <circle cx="45" cy="28" r="1.3" fill={color} opacity="0.6" />
+      <circle cx="28" cy="45" r="1.3" fill={color} opacity="0.6" />
+      <circle cx="42" cy="40" r="1.5" fill={color} opacity="0.75" />
     </svg>
   );
 }
@@ -196,39 +320,35 @@ export function TraditionalMandala({ color = "#C6A66B", size = 64, className = "
 export function IslamicArchBorder({ color = "#C6A66B", className = "" }) {
   return (
     <svg
-      viewBox="0 0 400 70"
+      viewBox="0 0 400 76"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={`w-full ${className}`}
       preserveAspectRatio="none"
     >
-      {/* Main arch */}
       <path
-        d="M0 60 C100 60 145 15 200 6 C255 15 300 60 400 60"
+        d="M0 66 C95 66 145 18 200 7 C255 18 305 66 400 66"
         stroke={color}
-        strokeWidth="1.5"
+        strokeWidth="1.8"
       />
-      {/* Shadow arch */}
       <path
-        d="M0 64 C105 64 148 20 200 11 C252 20 295 64 400 64"
+        d="M0 71 C100 71 148 24 200 13 C252 24 300 71 400 71"
         stroke={color}
-        strokeWidth="0.6"
+        strokeWidth="0.9"
         strokeDasharray="3 3"
       />
-      {/* Inner arch */}
       <path
-        d="M30 58 C110 58 152 22 200 14 C248 22 290 58 370 58"
+        d="M24 64 C105 64 152 25 200 17 C248 25 295 64 376 64"
         stroke={color}
-        strokeWidth="0.4"
-        opacity="0.5"
+        strokeWidth="0.6"
+        opacity="0.65"
       />
-      {/* Finial */}
-      <circle cx="200" cy="5" r="3.5" fill={color} />
-      <circle cx="200" cy="5" r="2" fill="white" opacity="0.2" />
-      <path d="M200 1.5 V0" stroke={color} strokeWidth="1.5" />
-      {/* Side accents */}
-      <circle cx="120" cy="42" r="1.5" fill={color} opacity="0.5" />
-      <circle cx="280" cy="42" r="1.5" fill={color} opacity="0.5" />
+      {/* Hanging central lantern from arch apex */}
+      <line x1="200" y1="13" x2="200" y2="28" stroke={color} strokeWidth="1" />
+      <path d="M195 28L200 23L205 28L203 38H197L195 28Z" fill={color} fillOpacity="0.45" stroke={color} strokeWidth="1" />
+      <circle cx="200" cy="6" r="3.5" fill={color} />
+      <circle cx="115" cy="44" r="2" fill={color} opacity="0.6" />
+      <circle cx="285" cy="44" r="2" fill={color} opacity="0.6" />
     </svg>
   );
 }
@@ -236,44 +356,45 @@ export function IslamicArchBorder({ color = "#C6A66B", className = "" }) {
 export function MughalArchMotif({ color = "#D4AF37", className = "" }) {
   return (
     <svg
-      viewBox="0 0 240 80"
+      viewBox="0 0 280 86"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`w-44 sm:w-52 h-auto ${className}`}
+      className={`w-52 sm:w-60 h-auto ${className}`}
     >
-      {/* Main cusped multi-foil arch with more detail */}
+      {/* Multi-foil Shahi Darbar cusped arch */}
       <path
-        d="M10 65 C25 65 35 52 48 48 C58 44 68 30 80 22 C90 15 105 8 120 4 C135 8 150 15 160 22 C172 30 182 44 192 48 C205 52 215 65 230 65"
+        d="M8 74 C24 74 32 60 46 56 C56 53 64 38 78 32 C90 27 98 15 114 12 C124 10 132 4 140 2 C148 4 156 10 166 12 C182 15 190 27 202 32 C216 38 224 53 234 56 C248 60 256 74 272 74"
         stroke={color}
-        strokeWidth="1.8"
+        strokeWidth="2"
         strokeLinecap="round"
       />
-      {/* Inner cusped echo */}
+      {/* Shaded inner arch spandrel */}
       <path
-        d="M20 70 C32 70 42 58 55 54 C65 50 75 38 87 30 C97 23 108 14 120 10 C132 14 143 23 153 30 C165 38 175 50 185 54 C198 58 208 70 220 70"
+        d="M16 78 C30 78 38 65 52 61 C62 58 70 44 84 38 C96 33 104 22 118 18 C128 16 134 10 140 8 C146 10 152 16 162 18 C176 22 184 33 196 38 C210 44 218 58 228 61 C242 65 250 78 264 78"
         stroke={color}
-        strokeWidth="0.8"
-        strokeDasharray="2 2.5"
+        strokeWidth="1"
+        strokeDasharray="2.5 2.5"
       />
-      {/* Delicate outer echo */}
-      <path
-        d="M5 68 C20 68 32 56 44 50 C55 45 65 32 78 24 C88 17 102 10 120 6 C138 10 152 17 162 24 C175 32 185 45 196 50 C208 56 220 68 235 68"
-        stroke={color}
-        strokeWidth="0.4"
-        opacity="0.4"
-      />
-      {/* Finial / Kalash with crescent */}
-      <circle cx="120" cy="4" r="3" fill={color} />
-      <circle cx="120" cy="4" r="1.5" fill="white" opacity="0.2" />
-      <path d="M120 1 V-2" stroke={color} strokeWidth="1.2" strokeLinecap="round" />
-      {/* Drop ornaments along the cusps */}
-      <circle cx="48" cy="52" r="2" fill={color} opacity="0.7" />
-      <circle cx="192" cy="52" r="2" fill={color} opacity="0.7" />
-      <circle cx="80" cy="26" r="1.5" fill={color} opacity="0.5" />
-      <circle cx="160" cy="26" r="1.5" fill={color} opacity="0.5" />
-      {/* Jaali lattice pattern in the arch */}
-      <path d="M100 20 L110 30 L120 20 L130 30 L140 20" stroke={color} strokeWidth="0.5" opacity="0.3" />
-      <path d="M105 24 L115 14 L125 24 L135 14" stroke={color} strokeWidth="0.4" opacity="0.2" />
+      {/* Hanging Shahi Jhumka / Lanterns on left & right cusps */}
+      <line x1="78" y1="32" x2="78" y2="50" stroke={color} strokeWidth="0.9" />
+      <path d="M74 50L78 46L82 50L80 57H76L74 50Z" fill={color} fillOpacity="0.6" />
+      <circle cx="78" cy="60" r="1.4" fill={color} />
+
+      <line x1="202" y1="32" x2="202" y2="50" stroke={color} strokeWidth="0.9" />
+      <path d="M198 50L202 46L206 50L204 57H200L198 50Z" fill={color} fillOpacity="0.6" />
+      <circle cx="202" cy="60" r="1.4" fill={color} />
+
+      {/* Center Kalash / Royal Finial */}
+      <circle cx="140" cy="18" r="4.5" fill={color} fillOpacity="0.3" stroke={color} strokeWidth="1.2" />
+      <circle cx="140" cy="18" r="2" fill={color} />
+      <path d="M140 22V30" stroke={color} strokeWidth="1" />
+      <path d="M137 28L140 33L143 28" fill={color} />
+
+      {/* Spandrel lotus rosettes */}
+      <circle cx="42" cy="30" r="5" stroke={color} strokeWidth="0.9" fill={color} fillOpacity="0.15" />
+      <circle cx="42" cy="30" r="2" fill={color} />
+      <circle cx="238" cy="30" r="5" stroke={color} strokeWidth="0.9" fill={color} fillOpacity="0.15" />
+      <circle cx="238" cy="30" r="2" fill={color} />
     </svg>
   );
 }
@@ -281,128 +402,156 @@ export function MughalArchMotif({ color = "#D4AF37", className = "" }) {
 export function StarlightCluster({ color = "#C6A66B", className = "" }) {
   return (
     <svg
-      viewBox="0 0 140 40"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={`w-32 sm:w-36 h-auto ${className}`}
-    >
-      {/* Central 4-point starburst (larger, more dramatic) */}
-      <path
-        d="M70 2 C70 14 58 20 46 20 C58 20 70 26 70 38 C70 26 82 20 94 20 C82 20 70 14 70 2 Z"
-        fill={color}
-      />
-      {/* Bright white center glow */}
-      <circle cx="70" cy="20" r="2.5" fill="#FFFFFF" opacity="0.8" />
-      <circle cx="70" cy="20" r="5" fill="#FFFFFF" opacity="0.1" />
-      {/* Left secondary star */}
-      <path
-        d="M28 12 C28 17 23 20 18 20 C23 20 28 23 28 28 C28 23 33 20 38 20 C33 20 28 17 28 12 Z"
-        fill={color}
-        opacity="0.85"
-      />
-      <circle cx="28" cy="20" r="1" fill="#FFFFFF" opacity="0.5" />
-      {/* Right secondary star */}
-      <path
-        d="M112 12 C112 17 107 20 102 20 C107 20 112 23 112 28 C112 23 117 20 122 20 C117 20 112 17 112 12 Z"
-        fill={color}
-        opacity="0.85"
-      />
-      <circle cx="112" cy="20" r="1" fill="#FFFFFF" opacity="0.5" />
-      {/* Tiny stardust constellation */}
-      <circle cx="8" cy="20" r="1.2" fill={color} opacity="0.7" />
-      <circle cx="15" cy="12" r="0.8" fill={color} opacity="0.45" />
-      <circle cx="50" cy="10" r="0.9" fill={color} opacity="0.5" />
-      <circle cx="55" cy="30" r="0.7" fill={color} opacity="0.4" />
-      <circle cx="85" cy="10" r="0.7" fill={color} opacity="0.4" />
-      <circle cx="90" cy="30" r="0.9" fill={color} opacity="0.5" />
-      <circle cx="125" cy="12" r="0.8" fill={color} opacity="0.45" />
-      <circle cx="132" cy="20" r="1.2" fill={color} opacity="0.7" />
-      {/* Radial glow lines from center */}
-      <path d="M70 10 L70 6" stroke={color} strokeWidth="0.5" opacity="0.3" />
-      <path d="M70 34 L70 30" stroke={color} strokeWidth="0.5" opacity="0.3" />
-      <path d="M58 20 L54 20" stroke={color} strokeWidth="0.5" opacity="0.3" />
-      <path d="M86 20 L82 20" stroke={color} strokeWidth="0.5" opacity="0.3" />
-    </svg>
-  );
-}
-
-export function OliveWreathMedallion({ color = "#7A8471", className = "" }) {
-  return (
-    <svg
-      viewBox="0 0 180 44"
+      viewBox="0 0 180 54"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={`w-40 sm:w-48 h-auto ${className}`}
     >
-      {/* Left branch stem */}
+      {/* Hanging star threads */}
+      <line x1="45" y1="0" x2="45" y2="20" stroke={color} strokeWidth="0.7" strokeDasharray="1.5 1.5" opacity="0.7" />
+      <line x1="90" y1="0" x2="90" y2="12" stroke={color} strokeWidth="0.8" opacity="0.8" />
+      <line x1="135" y1="0" x2="135" y2="20" stroke={color} strokeWidth="0.7" strokeDasharray="1.5 1.5" opacity="0.7" />
+
+      {/* Golden Crescent Moon cradling central star */}
       <path
-        d="M78 22 C60 20 40 22 15 28"
-        stroke={color}
-        strokeWidth="1.2"
-        strokeLinecap="round"
+        d="M98 16C91 18 87 25 89 33C91 40 98 44 105 42C98 47 88 45 83 38C78 31 80 20 88 15C91 13 95 14 98 16Z"
+        fill={color}
+        fillOpacity="0.85"
       />
-      {/* Left leaves */}
-      <path d="M65 20 C62 12 52 13 50 20 C55 21 61 23 65 20Z" fill={color} opacity="0.85" />
-      <path d="M50 21 C48 28 38 28 36 21 C40 20 47 19 50 21Z" fill={color} opacity="0.8" />
-      <path d="M35 23 C33 16 24 17 22 23 C26 24 32 25 35 23Z" fill={color} opacity="0.85" />
-      <path d="M57 21 C55 26 48 26 46 22 C49 21 54 20 57 21Z" fill={color} opacity="0.55" />
-
-      {/* Right branch stem */}
+      {/* Central 4-point Polaris Star */}
       <path
-        d="M102 22 C120 20 140 22 165 28"
-        stroke={color}
-        strokeWidth="1.2"
-        strokeLinecap="round"
+        d="M98 14 C98 22 92 26 84 26 C92 26 98 30 98 38 C98 30 104 26 112 26 C104 26 98 22 98 14 Z"
+        fill={color}
       />
-      {/* Right leaves */}
-      <path d="M115 20 C118 12 128 13 130 20 C125 21 119 23 115 20Z" fill={color} opacity="0.85" />
-      <path d="M130 21 C132 28 142 28 144 21 C140 20 133 19 130 21Z" fill={color} opacity="0.8" />
-      <path d="M145 23 C147 16 156 17 158 23 C154 24 148 25 145 23Z" fill={color} opacity="0.85" />
-      <path d="M123 21 C125 26 132 26 134 22 C131 21 126 20 123 21Z" fill={color} opacity="0.55" />
+      <circle cx="98" cy="26" r="2.2" fill="#FFFFFF" opacity="0.9" />
 
-      {/* Olive berries */}
-      <circle cx="42" cy="18" r="2" fill={color} opacity="0.6" />
-      <circle cx="138" cy="18" r="2" fill={color} opacity="0.6" />
-      <circle cx="27" cy="22" r="1.5" fill={color} opacity="0.4" />
-      <circle cx="153" cy="22" r="1.5" fill={color} opacity="0.4" />
+      {/* Left & Right Hanging Stars */}
+      <path
+        d="M45 18 C45 24 40 27 34 27 C40 27 45 30 45 36 C45 30 50 27 56 27 C50 27 45 24 45 18 Z"
+        fill={color}
+        opacity="0.85"
+      />
+      <circle cx="45" cy="27" r="1.3" fill="#FFFFFF" opacity="0.7" />
 
-      {/* Center ornamental seal */}
-      <circle cx="90" cy="22" r="7" stroke={color} strokeWidth="1.2" fill="none" />
-      <circle cx="90" cy="22" r="4.5" stroke={color} strokeWidth="0.6" fill="none" />
-      <circle cx="90" cy="22" r="2" fill={color} />
+      <path
+        d="M135 18 C135 24 130 27 124 27 C130 27 135 30 135 36 C135 30 140 27 146 27 C140 27 135 24 135 18 Z"
+        fill={color}
+        opacity="0.85"
+      />
+      <circle cx="135" cy="27" r="1.3" fill="#FFFFFF" opacity="0.7" />
+
+      {/* Constellation lines & stardust */}
+      <path d="M16 32 L34 27 M146 27 L164 32" stroke={color} strokeWidth="0.6" opacity="0.45" />
+      <circle cx="16" cy="32" r="1.5" fill={color} opacity="0.75" />
+      <circle cx="164" cy="32" r="1.5" fill={color} opacity="0.75" />
+      <circle cx="66" cy="18" r="1.1" fill={color} opacity="0.6" />
+      <circle cx="116" cy="18" r="1.1" fill={color} opacity="0.6" />
+      <circle cx="68" cy="38" r="1" fill={color} opacity="0.5" />
+      <circle cx="118" cy="38" r="1" fill={color} opacity="0.5" />
     </svg>
   );
 }
 
-export function ArtDecoFan({ color = "#C6A66B", size = 48, className = "" }) {
+export function OliveWreathMedallion({ color = "#7A8471", accent = "#BA9B58", className = "" }) {
   return (
     <svg
-      width={size}
+      viewBox="0 0 200 50"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={`w-44 sm:w-52 h-auto ${className}`}
+    >
+      {/* Left laurel branch */}
+      <path
+        d="M84 26 C64 24 42 26 14 33"
+        stroke={color}
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+      <path d="M72 24 C69 14 58 15 55 23 C61 25 67 27 72 24Z" fill={color} opacity="0.88" />
+      <path d="M56 25 C54 34 42 34 40 25 C45 24 52 23 56 25Z" fill={color} opacity="0.78" />
+      <path d="M40 27 C37 18 26 19 24 27 C29 28 36 29 40 27Z" fill={color} opacity="0.85" />
+      <path d="M26 30 C24 37 15 37 13 30 C17 29 22 28 26 30Z" fill={color} opacity="0.65" />
+
+      {/* Right laurel branch */}
+      <path
+        d="M116 26 C136 24 158 26 186 33"
+        stroke={color}
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+      <path d="M128 24 C131 14 142 15 145 23 C139 25 133 27 128 24Z" fill={color} opacity="0.88" />
+      <path d="M144 25 C146 34 158 34 160 25 C155 24 148 23 144 25Z" fill={color} opacity="0.78" />
+      <path d="M160 27 C163 18 174 19 176 27 C171 28 164 29 160 27Z" fill={color} opacity="0.85" />
+      <path d="M174 30 C176 37 185 37 187 30 C183 29 178 28 174 30Z" fill={color} opacity="0.65" />
+
+      {/* Golden olive drupes */}
+      <circle cx="48" cy="20" r="2.2" fill={accent} opacity="0.85" />
+      <circle cx="152" cy="20" r="2.2" fill={accent} opacity="0.85" />
+      <circle cx="32" cy="24" r="1.8" fill={accent} opacity="0.7" />
+      <circle cx="168" cy="24" r="1.8" fill={accent} opacity="0.7" />
+
+      {/* Central antique cameo medallion */}
+      <circle cx="100" cy="25" r="11" stroke={accent} strokeWidth="1.4" fill={accent} fillOpacity="0.12" />
+      <circle cx="100" cy="25" r="8" stroke={color} strokeWidth="0.8" strokeDasharray="2 2" />
+      <path d="M100 18L103 25L100 32L97 25L100 18Z" fill={accent} opacity="0.85" />
+      <circle cx="100" cy="25" r="2" fill="#FFFFFF" opacity="0.7" />
+    </svg>
+  );
+}
+
+export function ArtDecoFan({ color = "#C6A66B", size = 56, className = "" }) {
+  return (
+    <svg
+      width={size * 2.2}
       height={size}
-      viewBox="0 0 60 60"
+      viewBox="0 0 140 60"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
-      {/* Radial fan rays */}
-      <path d="M30 8 L30 52" stroke={color} strokeWidth="1" />
-      <path d="M30 8 L10 48" stroke={color} strokeWidth="0.8" />
-      <path d="M30 8 L50 48" stroke={color} strokeWidth="0.8" />
-      <path d="M30 8 L16 52" stroke={color} strokeWidth="0.5" />
-      <path d="M30 8 L44 52" stroke={color} strokeWidth="0.5" />
-      <path d="M30 8 L4 44" stroke={color} strokeWidth="0.6" />
-      <path d="M30 8 L56 44" stroke={color} strokeWidth="0.6" />
-      {/* Fan arc tiers */}
-      <path d="M8 42 C18 50 42 50 52 42" stroke={color} strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M12 36 C20 42 40 42 48 36" stroke={color} strokeWidth="0.8" strokeLinecap="round" />
-      <path d="M16 30 C22 34 38 34 44 30" stroke={color} strokeWidth="0.5" strokeLinecap="round" />
-      {/* Top finial gem */}
-      <circle cx="30" cy="8" r="3.5" fill={color} />
-      <circle cx="30" cy="8" r="2" fill="white" opacity="0.2" />
-      {/* Bottom accent beads */}
-      <circle cx="12" cy="44" r="1.2" fill={color} opacity="0.6" />
-      <circle cx="48" cy="44" r="1.2" fill={color} opacity="0.6" />
-      <circle cx="30" cy="50" r="1" fill={color} opacity="0.5" />
+      {/* Sunburst geometric rays */}
+      <path d="M70 52 L70 6" stroke={color} strokeWidth="1.5" />
+      <path d="M70 52 L48 10" stroke={color} strokeWidth="1.1" />
+      <path d="M70 52 L92 10" stroke={color} strokeWidth="1.1" />
+      <path d="M70 52 L28 18" stroke={color} strokeWidth="1" />
+      <path d="M70 52 L112 18" stroke={color} strokeWidth="1" />
+      <path d="M70 52 L12 30" stroke={color} strokeWidth="0.9" />
+      <path d="M70 52 L128 30" stroke={color} strokeWidth="0.9" />
+      <path d="M70 52 L58 14" stroke={color} strokeWidth="0.6" opacity="0.7" />
+      <path d="M70 52 L82 14" stroke={color} strokeWidth="0.6" opacity="0.7" />
+      <path d="M70 52 L38 20" stroke={color} strokeWidth="0.6" opacity="0.7" />
+      <path d="M70 52 L102 20" stroke={color} strokeWidth="0.6" opacity="0.7" />
+
+      {/* Stepped Art Deco arches */}
+      <path d="M22 36 C40 16 100 16 118 36" stroke={color} strokeWidth="1.4" />
+      <path d="M34 42 C48 26 92 26 106 42" stroke={color} strokeWidth="1" />
+      <path d="M46 47 C56 36 84 36 94 47" stroke={color} strokeWidth="0.8" fill={color} fillOpacity="0.18" />
+
+      {/* Central Gatsby diamond */}
+      <path d="M70 2L74 8L70 14L66 8L70 2Z" fill={color} />
+      <circle cx="70" cy="52" r="3.5" fill={color} />
+      <line x1="6" y1="52" x2="134" y2="52" stroke={color} strokeWidth="1.2" />
+      <path d="M6 52L12 48V56L6 52Z" fill={color} />
+      <path d="M134 52L128 48V56L134 52Z" fill={color} />
+    </svg>
+  );
+}
+
+export function OrnamentalDivider({ color = "#C6A66B", className = "" }) {
+  return (
+    <svg
+      viewBox="0 0 220 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={`w-40 sm:w-48 h-auto ${className}`}
+    >
+      <line x1="4" y1="10" x2="88" y2="10" stroke={color} strokeWidth="0.9" strokeOpacity="0.65" />
+      <line x1="132" y1="10" x2="216" y2="10" stroke={color} strokeWidth="0.9" strokeOpacity="0.65" />
+      <path d="M96 10L102 5L108 10L102 15L96 10Z" fill={color} fillOpacity="0.4" stroke={color} strokeWidth="0.9" />
+      <path d="M112 10L118 5L124 10L118 15L112 10Z" fill={color} fillOpacity="0.4" stroke={color} strokeWidth="0.9" />
+      <path d="M105 10L110 3L115 10L110 17L105 10Z" fill={color} />
+      <circle cx="88" cy="10" r="1.5" fill={color} />
+      <circle cx="132" cy="10" r="1.5" fill={color} />
     </svg>
   );
 }

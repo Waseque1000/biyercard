@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { WaxSeal } from "./Decorations";
+import { OrnamentalDivider, WaxSeal } from "./Decorations";
 import { hasBengali, getSafeTextStyle, isDarkBg } from "@/lib/typography";
 
 export default function ModernMinimal({ design }) {
@@ -9,97 +9,95 @@ export default function ModernMinimal({ design }) {
   const isBangla = language === "bn";
   const isBilingual = language === "bilingual";
 
-  const cardBg = palette?.cardBg || "#FAF9F6";
+  const cardBg = palette?.cardBg || "#121316";
   const isDark = isDarkBg(cardBg);
 
   const primaryColor = palette?.primary || palette?.textPrimary || (isDark ? "#FFFDF8" : "#171816");
   const textColor = palette?.textPrimary || (isDark ? "#FFFDF8" : primaryColor);
-  const accentColor = palette?.accent || "#BA9554"; // Architectural Warm Gold
-  const textMuted = palette?.textMuted || (isDark ? "#C2C4BD" : "#70726B");
+  const accentColor = palette?.accent || "#E0BE68";
+  const textMuted = palette?.textMuted || (isDark ? "#B0B5BD" : "#686A63");
 
   const brideName = content?.brideName || "Camilla";
   const groomName = content?.groomName || "Julian";
 
+  const monogramText =
+    decorations?.monogram ||
+    (groomName
+      ? `${brideName?.[0] || "C"}&${groomName?.[0] || "J"}`
+      : `${brideName?.[0] || "W"}`);
+
   return (
     <div
-      className="relative w-full h-full flex flex-col justify-between p-7 sm:p-9 select-none overflow-hidden transition-all duration-300"
+      className="relative w-full h-full flex flex-col justify-between p-6 sm:p-8 select-none overflow-hidden transition-all duration-300"
       style={{
         backgroundColor: cardBg,
         backgroundImage: isDark
           ? `
-            radial-gradient(ellipse at 50% 15%, ${accentColor}25 0%, transparent 60%),
-            radial-gradient(ellipse at 50% 85%, rgba(0,0,0,0.4) 0%, transparent 60%)
+            radial-gradient(ellipse at 50% 10%, ${accentColor}28 0%, transparent 60%),
+            radial-gradient(ellipse at 50% 90%, rgba(0,0,0,0.5) 0%, transparent 65%)
           `
           : `
-            radial-gradient(ellipse at 50% 15%, ${accentColor}12 0%, transparent 60%),
-            radial-gradient(ellipse at 50% 85%, ${primaryColor}0a 0%, transparent 60%)
+            radial-gradient(ellipse at 50% 10%, ${accentColor}18 0%, transparent 60%),
+            radial-gradient(ellipse at 50% 90%, ${primaryColor}0e 0%, transparent 65%)
           `,
         boxShadow: `
-          0 28px 65px -15px rgba(0,0,0,0.35),
-          inset 0 0 0 1px ${accentColor}40,
-          inset 0 0 45px rgba(0, 0, 0, 0.02)
+          0 28px 65px -15px rgba(0,0,0,0.4),
+          inset 0 0 0 1px ${accentColor}50,
+          inset 0 0 45px rgba(0, 0, 0, 0.04)
         `,
       }}
     >
-      {/* Precision Architectural Hairline Outer Border */}
+      {/* Precision Architectural Double Arch & Hairline Grid Frame */}
       <div
-        className="absolute inset-2.5 sm:inset-3 pointer-events-none rounded-[1px]"
+        className="absolute inset-2.5 sm:inset-3 pointer-events-none"
         style={{
-          border: `1px solid ${accentColor}55`,
+          border: `1.2px solid ${accentColor}75`,
         }}
       />
       <div
-        className="absolute inset-4 sm:inset-5 pointer-events-none rounded-[1px]"
+        className="absolute inset-4 sm:inset-5 pointer-events-none rounded-t-[135px]"
         style={{
-          border: `0.5px solid ${accentColor}25`,
+          border: `1px solid ${accentColor}45`,
         }}
       />
 
-      {/* Crosshair Corner Marks */}
-      <div className="absolute top-2.5 left-2.5 w-2.5 h-2.5 pointer-events-none">
-        <div className="w-full h-[1px] absolute top-0 left-0" style={{ backgroundColor: accentColor }} />
-        <div className="h-full w-[1px] absolute top-0 left-0" style={{ backgroundColor: accentColor }} />
-      </div>
-      <div className="absolute top-2.5 right-2.5 w-2.5 h-2.5 pointer-events-none">
-        <div className="w-full h-[1px] absolute top-0 right-0" style={{ backgroundColor: accentColor }} />
-        <div className="h-full w-[1px] absolute top-0 right-0" style={{ backgroundColor: accentColor }} />
-      </div>
-      <div className="absolute bottom-2.5 left-2.5 w-2.5 h-2.5 pointer-events-none">
-        <div className="w-full h-[1px] absolute bottom-0 left-0" style={{ backgroundColor: accentColor }} />
-        <div className="h-full w-[1px] absolute bottom-0 left-0" style={{ backgroundColor: accentColor }} />
-      </div>
-      <div className="absolute bottom-2.5 right-2.5 w-2.5 h-2.5 pointer-events-none">
-        <div className="w-full h-[1px] absolute bottom-0 right-0" style={{ backgroundColor: accentColor }} />
-        <div className="h-full w-[1px] absolute bottom-0 right-0" style={{ backgroundColor: accentColor }} />
-      </div>
-
-      {/* Editorial Hairline Top */}
-      <div className="relative z-10 flex flex-col items-center text-center space-y-1 pt-1">
-        <div className="flex items-center gap-2 mb-0.5">
-          <span className="w-4 h-[1px]" style={{ backgroundColor: accentColor }} />
-          <div className="w-1.5 h-1.5 rotate-45" style={{ backgroundColor: accentColor }} />
-          <span className="w-4 h-[1px]" style={{ backgroundColor: accentColor }} />
+      {/* Editorial Monogram Crest Badge at Top */}
+      <div className="relative z-10 flex flex-col items-center text-center space-y-1.5 pt-2">
+        <div
+          className="w-10 h-10 rounded-full flex items-center justify-center border mb-0.5"
+          style={{
+            borderColor: accentColor,
+            backgroundColor: `${accentColor}15`,
+            boxShadow: `0 0 15px ${accentColor}20`,
+          }}
+        >
+          <span
+            className="font-serif text-xs font-semibold tracking-tighter"
+            style={{ color: accentColor }}
+          >
+            {monogramText}
+          </span>
         </div>
 
         <span
-          className="text-[10px] sm:text-[11px] font-semibold"
+          className="text-[10px] sm:text-[11px] font-bold px-2"
           style={getSafeTextStyle(content?.title || "WEDDING INVITATION", {
             isSerif: false,
-            color: isDark ? accentColor : textColor,
-            tracking: "0.28em",
+            color: accentColor,
+            tracking: "0.26em",
             uppercase: true,
           })}
         >
-          {content?.title || (hasBengali(brideName) ? "মাঙ্গলিক আমন্ত্রণ" : "WEDDING INVITATION")}
+          {content?.title || (hasBengali(brideName) ? "মাঙ্গলিক আমন্ত্রণ" : "THE EDITORIAL EDITION")}
         </span>
 
         {content?.subtitle && (
           <p
-            className="text-[11px] sm:text-[12px] max-w-xs"
+            className="text-[10px] sm:text-[11px] max-w-[240px]"
             style={getSafeTextStyle(content.subtitle, {
               isSerif: false,
               color: textMuted,
-              tracking: hasBengali(content.subtitle) ? "0px" : "0.15em",
+              tracking: hasBengali(content.subtitle) ? "0px" : "0.12em",
               uppercase: !hasBengali(content.subtitle),
             })}
           >
@@ -108,45 +106,46 @@ export default function ModernMinimal({ design }) {
         )}
       </div>
 
-      {/* CENTER NAMES: HIGH-EDITORIAL ASYMMETRIC BALANCE */}
-      <div className="relative z-10 flex flex-col items-center text-center my-auto py-2">
+      {/* CENTER NAMES: VOGUE EDITORIAL TYPOGRAPHY */}
+      <div className="relative z-10 flex flex-col items-center text-center my-auto py-1">
         {groomName ? (
           <div className="w-full flex flex-col items-center">
             <h1
-              className="text-4xl sm:text-5xl md:text-[46px] leading-[1.15] font-light drop-shadow-xs"
+              className="text-3xl sm:text-4xl md:text-[42px] leading-[1.12] font-light drop-shadow-xs"
               style={getSafeTextStyle(brideName, {
                 isSerif: true,
                 color: textColor,
-                fontWeight: hasBengali(brideName) ? 500 : 300,
+                fontWeight: hasBengali(brideName) ? 600 : 400,
                 uppercase: !hasBengali(brideName),
+                tracking: hasBengali(brideName) ? "0px" : "0.04em",
               })}
             >
               {brideName}
             </h1>
 
-            <div className="my-2.5 flex items-center justify-center gap-3 w-full max-w-[180px]">
+            <div className="my-2 flex items-center justify-center gap-3 w-full max-w-[180px]">
               <span className="h-[1px] flex-1" style={{ background: `linear-gradient(90deg, transparent, ${accentColor})` }} />
               <span
-                className="text-xs sm:text-sm font-semibold"
-                style={getSafeTextStyle(hasBengali(brideName) || isBangla ? "ও" : "AND", {
-                  isSerif: false,
+                className="text-xs sm:text-sm font-semibold italic"
+                style={getSafeTextStyle(hasBengali(brideName) || isBangla ? "ও" : "and", {
+                  isSerif: true,
                   color: accentColor,
-                  tracking: hasBengali(brideName) || isBangla ? "0px" : "0.24em",
-                  uppercase: !hasBengali(brideName) && !isBangla,
+                  italic: !hasBengali(brideName) && !isBangla,
                 })}
               >
-                {hasBengali(brideName) || isBangla ? "ও" : "AND"}
+                {hasBengali(brideName) || isBangla ? "ও" : "and"}
               </span>
               <span className="h-[1px] flex-1" style={{ background: `linear-gradient(90deg, ${accentColor}, transparent)` }} />
             </div>
 
             <h1
-              className="text-4xl sm:text-5xl md:text-[46px] leading-[1.15] font-light drop-shadow-xs"
+              className="text-3xl sm:text-4xl md:text-[42px] leading-[1.12] font-light drop-shadow-xs"
               style={getSafeTextStyle(groomName, {
                 isSerif: true,
                 color: textColor,
-                fontWeight: hasBengali(groomName) ? 500 : 300,
+                fontWeight: hasBengali(groomName) ? 600 : 400,
                 uppercase: !hasBengali(groomName),
+                tracking: hasBengali(groomName) ? "0px" : "0.04em",
               })}
             >
               {groomName}
@@ -155,11 +154,11 @@ export default function ModernMinimal({ design }) {
         ) : (
           <div className="w-full flex flex-col items-center">
             <h1
-              className="text-3xl sm:text-4xl md:text-[42px] leading-[1.15] font-light drop-shadow-xs"
+              className="text-3xl sm:text-4xl md:text-[40px] leading-[1.12] font-light drop-shadow-xs"
               style={getSafeTextStyle(brideName, {
                 isSerif: true,
                 color: textColor,
-                fontWeight: hasBengali(brideName) ? 500 : 300,
+                fontWeight: hasBengali(brideName) ? 600 : 400,
                 uppercase: !hasBengali(brideName),
               })}
             >
@@ -167,13 +166,16 @@ export default function ModernMinimal({ design }) {
             </h1>
             {content?.eventMilestone && (
               <div
-                className="mt-2 text-xs sm:text-sm font-semibold"
-                style={getSafeTextStyle(content.eventMilestone, {
-                  isSerif: false,
-                  color: accentColor,
-                  tracking: "0.25em",
-                  uppercase: true,
-                })}
+                className="mt-2 px-3 py-0.5 text-xs font-semibold border"
+                style={{
+                  ...getSafeTextStyle(content.eventMilestone, {
+                    isSerif: false,
+                    color: accentColor,
+                    tracking: "0.22em",
+                    uppercase: true,
+                  }),
+                  borderColor: `${accentColor}65`,
+                }}
               >
                 {content.eventMilestone}
               </div>
@@ -181,21 +183,10 @@ export default function ModernMinimal({ design }) {
           </div>
         )}
 
-        {isBilingual && content?.bilingualBrideName && (
-          <div
-            className="mt-2 text-sm font-medium"
-            style={getSafeTextStyle(content.bilingualBrideName, {
-              isSerif: true,
-              color: isDark ? accentColor : primaryColor,
-            })}
-          >
-            {content.bilingualBrideName}
-            {content?.bilingualGroomName ? ` ও ${content.bilingualGroomName}` : ""}
-          </div>
-        )}
+        <OrnamentalDivider color={accentColor} className="my-2 opacity-75" />
 
         <p
-          className="mt-4 text-[11px] sm:text-[12px] max-w-xs leading-relaxed text-center px-2"
+          className="text-[11px] sm:text-[12px] max-w-[255px] leading-relaxed text-center px-2"
           style={getSafeTextStyle(
             content?.message ||
               "Cordially invite you to celebrate our union as we exchange vows.",
@@ -208,107 +199,91 @@ export default function ModernMinimal({ design }) {
           {content?.message ||
             "Cordially invite you to celebrate our union as we exchange vows."}
         </p>
-
-        {isBilingual && content?.bilingualMessage && (
-          <p
-            className="mt-1.5 text-[11px] sm:text-[12px] max-w-xs leading-relaxed text-center"
-            style={getSafeTextStyle(content.bilingualMessage, {
-              isSerif: false,
-              color: isDark ? accentColor : primaryColor,
-              italic: !hasBengali(content.bilingualMessage),
-            })}
-          >
-            {content.bilingualMessage}
-          </p>
-        )}
       </div>
 
-      {/* BOTTOM LOGISTICS: CRISP MODERN GRID */}
+      {/* BOTTOM LOGISTICS: ARCHITECTURAL EDITORIAL GRID */}
       <div className="relative z-10 flex flex-col items-center text-center space-y-2 pb-1">
-        {/* Date & Time Modern Plaque */}
         <div
-          className="inline-flex items-center px-4 py-1.5 rounded-sm text-[11px] sm:text-[12px] font-medium shadow-xs"
+          className="w-full max-w-[265px] grid grid-cols-1 divide-y text-center"
           style={{
-            background: isDark
-              ? `linear-gradient(135deg, ${accentColor}25 0%, rgba(255,255,255,0.06) 50%, ${accentColor}25 100%)`
-              : `linear-gradient(135deg, ${accentColor}15 0%, ${cardBg} 50%, ${accentColor}15 100%)`,
-            border: `1px solid ${accentColor}70`,
-            color: isDark ? "#FFFFFF" : textColor,
+            border: `1px solid ${accentColor}75`,
+            divideColor: `${accentColor}45`,
+            backgroundColor: isDark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)",
           }}
         >
-          <span
-            style={getSafeTextStyle(content?.weddingDate || "15 • 02 • 2027", {
-              isSerif: false,
-              color: isDark ? "#FFFFFF" : textColor,
-              tracking: hasBengali(content?.weddingDate) ? "0px" : "0.15em",
-              uppercase: !hasBengali(content?.weddingDate),
-            })}
-          >
-            {content?.weddingDate || "15 • 02 • 2027"}
-          </span>
-          {content?.weddingTime && (
-            <>
-              <span className="mx-2 opacity-50" style={{ color: accentColor }}>|</span>
-              <span
-                style={getSafeTextStyle(content.weddingTime, {
-                  isSerif: false,
-                  color: isDark ? accentColor : textColor,
-                  tracking: hasBengali(content?.weddingTime) ? "0px" : "0.15em",
-                  uppercase: !hasBengali(content?.weddingTime),
-                })}
-              >
-                {content.weddingTime}
-              </span>
-            </>
-          )}
-        </div>
-
-        <div className="space-y-0.5 pt-0.5">
-          <p
-            className="text-base sm:text-lg font-normal drop-shadow-xs"
-            style={getSafeTextStyle(content?.venue || "The Glasshouse Pavilion", {
-              isSerif: true,
-              color: textColor,
-            })}
-          >
-            {content?.venue || "The Glasshouse Pavilion"}
-          </p>
-          {content?.city && (
-            <p
-              className="text-[10px] sm:text-[11px] font-medium"
-              style={getSafeTextStyle(content.city, {
+          <div className="py-1.5 px-3 flex items-center justify-center gap-2">
+            <span
+              className="text-[11px] font-semibold"
+              style={getSafeTextStyle(content?.weddingDate || "15 • 02 • 2027", {
                 isSerif: false,
-                color: textMuted,
-                tracking: hasBengali(content.city) ? "0px" : "0.18em",
-                uppercase: !hasBengali(content.city),
+                color: isDark ? "#FFFFFF" : textColor,
+                tracking: hasBengali(content?.weddingDate) ? "0px" : "0.12em",
+                uppercase: !hasBengali(content?.weddingDate),
               })}
             >
-              {content.city}
+              {content?.weddingDate || "15 • 02 • 2027"}
+            </span>
+            {content?.weddingTime && (
+              <>
+                <span className="opacity-50" style={{ color: accentColor }}>|</span>
+                <span
+                  className="text-[11px] font-semibold"
+                  style={getSafeTextStyle(content.weddingTime, {
+                    isSerif: false,
+                    color: accentColor,
+                    tracking: hasBengali(content?.weddingTime) ? "0px" : "0.1em",
+                    uppercase: !hasBengali(content?.weddingTime),
+                  })}
+                >
+                  {content.weddingTime}
+                </span>
+              </>
+            )}
+          </div>
+          <div className="py-1.5 px-3" style={{ borderTop: `1px solid ${accentColor}45` }}>
+            <p
+              className="text-sm sm:text-base font-medium leading-tight"
+              style={getSafeTextStyle(content?.venue || "The Glasshouse Pavilion", {
+                isSerif: true,
+                color: textColor,
+              })}
+            >
+              {content?.venue || "The Glasshouse Pavilion"}
             </p>
-          )}
+            {content?.city && (
+              <p
+                className="text-[9px] sm:text-[10px] font-medium mt-0.5"
+                style={getSafeTextStyle(content.city, {
+                  isSerif: false,
+                  color: textMuted,
+                  tracking: hasBengali(content.city) ? "0px" : "0.16em",
+                  uppercase: !hasBengali(content.city),
+                })}
+              >
+                {content.city}
+              </p>
+            )}
+          </div>
         </div>
 
         {/* Wax Seal */}
         {decorations?.hasWaxSeal && (
-          <div className="pt-1">
+          <div className="pt-0.5">
             <WaxSeal
-              monogram={
-                decorations?.monogram ||
-                `${brideName?.[0] || "C"}&${groomName?.[0] || "J"}`
-              }
+              monogram={monogramText}
               color={accentColor}
-              size={42}
+              size={38}
             />
           </div>
         )}
 
         {content?.rsvpDetails && (
           <p
-            className="text-[10px] sm:text-[11px] pt-0.5"
+            className="text-[10px]"
             style={getSafeTextStyle(content.rsvpDetails, {
               isSerif: false,
               color: textMuted,
-              tracking: hasBengali(content.rsvpDetails) ? "0px" : "0.15em",
+              tracking: hasBengali(content.rsvpDetails) ? "0px" : "0.12em",
               uppercase: !hasBengali(content.rsvpDetails),
             })}
           >

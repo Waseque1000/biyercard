@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import {
   Calendar,
   Clock,
@@ -12,13 +14,20 @@ import {
   ExternalLink,
   CheckCircle2,
   CalendarPlus,
+  Download,
+  Lock,
 } from "lucide-react";
 import InvitationRenderer from "@/components/invitation-templates/InvitationRenderer";
+import { exportInvitationAsPdf } from "@/lib/exportUtils";
+import { getLocalInvitationById } from "@/lib/localInvitations";
 import { toast } from "sonner";
 
 export default function PublicInviteView({ id }) {
+  const router = useRouter();
+  const { user } = useAuth();
   const [invitation, setInvitation] = useState(null);
   const [loading, setLoading] = useState(true);
+  const autoDownloadRef = useRef(false);
   const [rsvpState, setRsvpState] = useState({
     name: "",
     attending: "yes",
@@ -33,6 +42,12 @@ export default function PublicInviteView({ id }) {
   useEffect(() => {
     async function fetchInvitation() {
       try {
+        const localSaved = getLocalInvitationById(id);
+        if (localSaved?.design_json) {
+          setInvitation(localSaved);
+          setLoading(false);
+          return;
+        }
         const res = await fetch(`/api/invitations/${id}`);
         if (res.ok) {
           const json = await res.json();
@@ -124,6 +139,46 @@ export default function PublicInviteView({ id }) {
     }
   };
 
+  const handleDownloadCard = async () => {
+    if (!user) {
+      toast.info("Please Log In or Register to download the final card.");
+      router.push(
+        `/login?redirect=${encodeURIComponent(
+          `/invite/${id}?download=pdf`
+        )}&reason=download`
+      );
+      return;
+    }
+
+    try {
+      toast.loading("Preparing high-resolution PDF card...", { id: "pub-dl" });
+      const el = document.getElementById("wedly-invitation-card");
+      await exportInvitationAsPdf(
+        el,
+        `${(invitation?.title || "wedding-invitation")
+          .replace(/\s+/g, "-")
+          .toLowerCase()}.pdf`,
+        invitation?.design_json?.orientation || "portrait"
+      );
+      toast.success("Final card PDF downloaded!", { id: "pub-dl" });
+    } catch (e) {
+      toast.error("Download failed: " + e.message, { id: "pub-dl" });
+    }
+  };
+
+  useEffect(() => {
+    if (!user || !invitation || autoDownloadRef.current) return;
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("download") === "pdf") {
+      autoDownloadRef.current = true;
+      window.history.replaceState({}, "", window.location.pathname);
+      setTimeout(() => {
+        handleDownloadCard();
+      }, 600);
+    }
+  }, [user, invitation]);
+
   const getGoogleCalendarUrl = () => {
     if (!invitation?.design_json?.content) return "#";
     const c = invitation.design_json.content;
@@ -184,11 +239,24 @@ export default function PublicInviteView({ id }) {
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+          <button
+            type="button"
+            onClick={handleDownloadCard}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded bg-[#173D32] hover:bg-[#285C49] text-white text-xs font-semibold uppercase tracking-wider shadow transition-colors"
+          >
+            {!user ? (
+              <Lock className="w-4 h-4 text-[#C6A66B]" />
+            ) : (
+              <Download className="w-4 h-4 text-[#C6A66B]" />
+            )}
+            <span>Download Final Card</span>
+          </button>
+
           <a
             href={getGoogleCalendarUrl()}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded bg-[#173D32] hover:bg-[#285C49] text-white text-xs font-semibold uppercase tracking-wider shadow transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded bg-white hover:bg-[#F1E9DA] text-[#173D32] border border-[#E8E2D8] text-xs font-semibold uppercase tracking-wider shadow-sm transition-colors"
           >
             <CalendarPlus className="w-4 h-4 text-[#C6A66B]" />
             <span>Add to Calendar</span>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { User, Mail, Shield, Save, LogOut, Trash2, Sparkles, Check } from "lucide-react";
@@ -8,16 +8,23 @@ import { toast } from "sonner";
 
 export default function SettingsView() {
   const router = useRouter();
-  const { user, logout, getIdToken } = useAuth();
+  const { user, logout, getIdToken, updateUserProfile } = useAuth();
 
   const [displayName, setDisplayName] = useState(user?.displayName || "Ayesha & Rafid");
   const [preferredLanguage, setPreferredLanguage] = useState("en");
   const [preferredStyle, setPreferredStyle] = useState("luxury");
   const [saved, setSaved] = useState(false);
 
+  useEffect(() => {
+    if (user?.displayName) {
+      setDisplayName(user.displayName);
+    }
+  }, [user?.displayName]);
+
   const handleSave = async (e) => {
     e.preventDefault();
     try {
+      await updateUserProfile(displayName);
       const token = await getIdToken();
       await fetch("/api/auth/sync-profile", {
         method: "POST",

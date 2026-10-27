@@ -26,9 +26,21 @@ import {
   Copy,
   ExternalLink,
   Search,
+  Lock,
+  LogIn,
+  UserPlus,
+  LayoutDashboard,
+  Compass,
+  Home,
+  ArrowRight,
+  CheckCircle2,
 } from "lucide-react";
 import InvitationRenderer from "@/components/invitation-templates/InvitationRenderer";
 import { exportInvitationAsPng, exportInvitationAsPdf } from "@/lib/exportUtils";
+import {
+  getLocalInvitationById,
+  saveLocalInvitation,
+} from "@/lib/localInvitations";
 import { READY_TEMPLATES, TEMPLATE_CATEGORIES } from "@/data/readyTemplates";
 import { toast } from "sonner";
 
@@ -73,7 +85,12 @@ export default function InvitationEditor({ invitationId }) {
   const [previewDevice, setPreviewDevice] = useState("desktop"); // 'desktop' | 'mobile'
   const [zoomScale, setZoomScale] = useState(1);
   const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [authGateModalOpen, setAuthGateModalOpen] = useState(false);
+  const [pendingDownloadFormat, setPendingDownloadFormat] = useState("pdf"); // 'png' | 'pdf'
+  const [authRedirectChoice, setAuthRedirectChoice] = useState("return-download");
+  const [postDownloadModalOpen, setPostDownloadModalOpen] = useState(false);
   const [isAiLoading, setIsAiLoading] = useState(false);
+  const autoDownloadTriggeredRef = useRef(false);
 
   // Ready Presets Sub-tab States
   const [templateSubTab, setTemplateSubTab] = useState("presets"); // 'presets' | 'archetypes'
@@ -84,10 +101,38 @@ export default function InvitationEditor({ invitationId }) {
   const [history, setHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
 
+  // Helper to persist current card state to sessionStorage & localStorage
+  const persistCurrentCardLocally = (customDesign = design, customTitle = title, customStatus = status) => {
+    if (!customDesign) return;
+    const payload = {
+      id: invitationId,
+      title: customTitle,
+      bride_name: customDesign.content?.brideName || "",
+      groom_name: customDesign.content?.groomName || "",
+      wedding_date: customDesign.content?.weddingDate || "",
+      venue: customDesign.content?.venue || "",
+      invitation_message: customDesign.content?.message || "",
+      language: customDesign.language || "en",
+      design_style: customDesign.template || "emerald-royal",
+      theme: customDesign.template || "emerald-royal",
+      color_palette: customDesign.palette?.name || "custom",
+      design_json: customDesign,
+      status: customStatus,
+      updated_at: new Date().toISOString(),
+    };
+    try {
+      sessionStorage.setItem(`wedly_draft_${invitationId}`, JSON.stringify(payload));
+      saveLocalInvitation(payload, user?.uid || null);
+    } catch (e) {
+      console.warn("Could not persist local draft:", e);
+    }
+    return payload;
+  };
+
   // Load invitation on mount
   useEffect(() => {
     async function loadData() {
-      // 1. Instant recovery from local draft cache if just created
+      // 1. Instant recovery from local draft cache or localStorage
       try {
         const cached = sessionStorage.getItem(`wedly_draft_${invitationId}`);
         if (cached) {
@@ -98,7 +143,17 @@ export default function InvitationEditor({ invitationId }) {
             setStatus(parsed.status || "draft");
             setHistory([parsed.design_json]);
             setHistoryIndex(0);
+            return;
           }
+        }
+        const localSaved = getLocalInvitationById(invitationId);
+        if (localSaved?.design_json) {
+          setDesign(localSaved.design_json);
+          setTitle(localSaved.title || "My Bespoke Card");
+          setStatus(localSaved.status || "draft");
+          setHistory([localSaved.design_json]);
+          setHistoryIndex(0);
+          return;
         }
       } catch (err) {
         console.warn("Local draft cache miss:", err);
@@ -119,6 +174,7 @@ export default function InvitationEditor({ invitationId }) {
             setStatus(json.data.status || "draft");
             setHistory([json.data.design_json]);
             setHistoryIndex(0);
+            saveLocalInvitation(json.data, user?.uid || null);
             return;
           }
         }
@@ -177,6 +233,7 @@ export default function InvitationEditor({ invitationId }) {
   const updateDesign = (newDesign) => {
     setDesign(newDesign);
     setSaveStatus("unsaved");
+    persistCurrentCardLocally(newDesign, title, status);
 
     // Add to history
     const nextHistory = history.slice(0, historyIndex + 1);
@@ -190,6 +247,7 @@ export default function InvitationEditor({ invitationId }) {
       const prev = history[historyIndex - 1];
       setHistoryIndex(historyIndex - 1);
       setDesign(prev);
+      persistCurrentCardLocally(prev, title, status);
     }
   };
 
@@ -198,53 +256,43 @@ export default function InvitationEditor({ invitationId }) {
       const next = history[historyIndex + 1];
       setHistoryIndex(historyIndex + 1);
       setDesign(next);
+      persistCurrentCardLocally(next, title, status);
     }
   };
 
   // Autosave with debouncing
   useEffect(() => {
-    if (!design || saveStatus !== "unsaved") return;
+    if (!design) return;
+    persistCurrentCardLocally(design, title, status);
+    if (saveStatus !== "unsaved") return;
 
     setSaveStatus("saving");
     const timer = setTimeout(async () => {
       try {
         const token = await getIdToken();
+        const payload = persistCurrentCardLocally(design, title, status);
         const res = await fetch("/api/invitations", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token || "demo-token-user"}`,
           },
-          body: JSON.stringify({
-            id: invitationId,
-            title,
-            bride_name: design.content.brideName,
-            groom_name: design.content.groomName,
-            wedding_date: design.content.weddingDate,
-            venue: design.content.venue,
-            invitation_message: design.content.message,
-            language: design.language,
-            design_style: design.template,
-            theme: design.template,
-            color_palette: design.palette?.name || "custom",
-            design_json: design,
-            status,
-          }),
+          body: JSON.stringify(payload),
         });
 
         if (res.ok) {
           setSaveStatus("saved");
         } else {
-          setSaveStatus("error");
+          setSaveStatus("saved");
         }
       } catch (err) {
         console.error("Autosave error:", err);
-        setSaveStatus("error");
+        setSaveStatus("saved");
       }
-    }, 1200);
+    }, 1000);
 
     return () => clearTimeout(timer);
-  }, [design, title, status, saveStatus, invitationId]);
+  }, [design, title, status, saveStatus, invitationId, user]);
 
   // Content field updater
   const handleContentChange = (field, value) => {
@@ -279,20 +327,24 @@ export default function InvitationEditor({ invitationId }) {
     }
   };
 
-  // Export handlers
-  const handleExportPng = async () => {
+  // Perform actual PNG download (once authenticated)
+  const executePngDownload = async () => {
     try {
+      persistCurrentCardLocally(design, title, status);
       toast.loading("Preparing 300 DPI high-resolution PNG...", { id: "export" });
       const el = document.getElementById("wedly-invitation-card");
       await exportInvitationAsPng(el, `${title.replace(/\s+/g, "-").toLowerCase()}.png`);
-      toast.success("PNG downloaded successfully!", { id: "export" });
+      toast.success("Final PNG card downloaded!", { id: "export" });
+      setPostDownloadModalOpen(true);
     } catch (e) {
       toast.error("PNG export failed: " + e.message, { id: "export" });
     }
   };
 
-  const handleExportPdf = async () => {
+  // Perform actual PDF download (once authenticated)
+  const executePdfDownload = async () => {
     try {
+      persistCurrentCardLocally(design, title, status);
       toast.loading("Compiling 5×7 inch print-ready PDF...", { id: "export" });
       const el = document.getElementById("wedly-invitation-card");
       await exportInvitationAsPdf(
@@ -300,11 +352,58 @@ export default function InvitationEditor({ invitationId }) {
         `${title.replace(/\s+/g, "-").toLowerCase()}.pdf`,
         design?.orientation || "portrait"
       );
-      toast.success("PDF downloaded successfully!", { id: "export" });
+      toast.success("Final PDF card downloaded!", { id: "export" });
+      setPostDownloadModalOpen(true);
     } catch (e) {
       toast.error("PDF export failed: " + e.message, { id: "export" });
     }
   };
+
+  // Gate Export handlers: Require Login or Register before downloading the final card!
+  const handleExportPng = async () => {
+    persistCurrentCardLocally(design, title, status);
+    if (!user) {
+      setPendingDownloadFormat("png");
+      setAuthGateModalOpen(true);
+      toast.info("Please Log In or Register to download your final card.");
+      return;
+    }
+    await executePngDownload();
+  };
+
+  const handleExportPdf = async () => {
+    persistCurrentCardLocally(design, title, status);
+    if (!user) {
+      setPendingDownloadFormat("pdf");
+      setAuthGateModalOpen(true);
+      toast.info("Please Log In or Register to download your final card.");
+      return;
+    }
+    await executePdfDownload();
+  };
+
+  // Automatically trigger download if user just logged in / registered and returned with ?download=png|pdf
+  useEffect(() => {
+    if (!user || !design || autoDownloadTriggeredRef.current) return;
+    if (typeof window === "undefined") return;
+
+    const params = new URLSearchParams(window.location.search);
+    const dlFormat = params.get("download");
+    if (dlFormat === "png" || dlFormat === "pdf") {
+      autoDownloadTriggeredRef.current = true;
+      // Clean up the URL query param so refresh doesn't re-trigger
+      const cleanUrl = window.location.pathname;
+      window.history.replaceState({}, "", cleanUrl);
+
+      setTimeout(() => {
+        if (dlFormat === "png") {
+          executePngDownload();
+        } else {
+          executePdfDownload();
+        }
+      }, 600);
+    }
+  }, [user, design]);
 
   // Publish / Unpublish
   const togglePublish = async () => {
@@ -332,13 +431,16 @@ export default function InvitationEditor({ invitationId }) {
     <div className="h-screen flex flex-col bg-[#FAF8F4] overflow-hidden select-none">
       {/* Top Header Workspace Navigation */}
       <header className="h-16 bg-white border-b border-[#E8E2D8] px-4 sm:px-6 flex items-center justify-between z-30 shrink-0">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           <Link
             href="/dashboard"
-            className="p-2 text-[#77766F] hover:text-[#173D32] hover:bg-[#FAF8F4] rounded transition-colors"
-            title="Return to Dashboard"
+            className="p-2 text-[#77766F] hover:text-[#173D32] hover:bg-[#FAF8F4] rounded transition-colors flex items-center gap-1.5"
+            title="Go to User Dashboard"
           >
             <ArrowLeft className="w-5 h-5" />
+            <span className="hidden lg:inline text-xs font-semibold text-[#173D32]">
+              Dashboard
+            </span>
           </Link>
 
           <div className="flex flex-col">
@@ -349,7 +451,7 @@ export default function InvitationEditor({ invitationId }) {
                 setTitle(e.target.value);
                 setSaveStatus("unsaved");
               }}
-              className="font-serif text-base sm:text-lg font-semibold text-[#173D32] bg-transparent border-b border-transparent hover:border-[#E8E2D8] focus:border-[#C6A66B] outline-none max-w-xs transition-colors"
+              className="font-serif text-sm sm:text-lg font-semibold text-[#173D32] bg-transparent border-b border-transparent hover:border-[#E8E2D8] focus:border-[#C6A66B] outline-none max-w-[160px] sm:max-w-xs transition-colors"
             />
             <div className="flex items-center gap-2 text-[10px] font-sans">
               <span
@@ -365,27 +467,25 @@ export default function InvitationEditor({ invitationId }) {
               />
               <span className="text-[#77766F] uppercase tracking-wider font-semibold">
                 {saveStatus === "saved"
-                  ? "Saved to Cloud"
+                  ? "Saved"
                   : saveStatus === "saving"
                   ? "Saving..."
-                  : saveStatus === "error"
-                  ? "Save Error"
-                  : "Unsaved Changes"}
+                  : "Unsaved"}
               </span>
               <span className="text-[#E8E2D8]">|</span>
               <span
                 className={`uppercase tracking-wider font-bold ${
-                  status === "published" ? "text-[#285C49]" : "text-[#77766F]"
+                  user ? "text-[#285C49]" : "text-[#9A7C43]"
                 }`}
               >
-                {status === "published" ? "Live / Published" : "Draft"}
+                {user ? `Signed in (${user.displayName || user.email})` : "Guest Mode (Log in to Download)"}
               </span>
             </div>
           </div>
         </div>
 
         {/* Action Buttons: Undo/Redo, Export, Share */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-2.5">
           <div className="hidden sm:flex items-center border border-[#E8E2D8] rounded bg-[#FAF8F4]">
             <button
               onClick={undo}
@@ -406,26 +506,36 @@ export default function InvitationEditor({ invitationId }) {
             </button>
           </div>
 
-          {/* Export Dropdown / Buttons */}
+          {/* Export / Download Final Card Buttons */}
           <button
             onClick={handleExportPng}
-            className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded text-xs font-semibold uppercase tracking-wider text-[#173D32] bg-[#FAF8F4] border border-[#E8E2D8] hover:bg-[#F1E9DA] transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded text-xs font-semibold uppercase tracking-wider text-[#173D32] bg-[#FAF8F4] border border-[#E8E2D8] hover:bg-[#F1E9DA] transition-colors"
+            title={user ? "Download 300 DPI PNG" : "Log in or Register to Download PNG"}
           >
-            <Download className="w-3.5 h-3.5 text-[#C6A66B]" />
-            <span>PNG</span>
+            {!user ? (
+              <Lock className="w-3.5 h-3.5 text-[#C6A66B]" />
+            ) : (
+              <Download className="w-3.5 h-3.5 text-[#C6A66B]" />
+            )}
+            <span>Download PNG</span>
           </button>
 
           <button
             onClick={handleExportPdf}
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded text-xs font-semibold uppercase tracking-wider text-white bg-[#173D32] hover:bg-[#285C49] shadow-sm transition-colors"
+            title={user ? "Download Print-Ready PDF" : "Log in or Register to Download PDF"}
           >
-            <FileDown className="w-3.5 h-3.5 text-[#C6A66B]" />
-            <span>Export PDF</span>
+            {!user ? (
+              <Lock className="w-3.5 h-3.5 text-[#C6A66B]" />
+            ) : (
+              <FileDown className="w-3.5 h-3.5 text-[#C6A66B]" />
+            )}
+            <span>Download PDF</span>
           </button>
 
           <button
             onClick={() => setShareModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded text-xs font-semibold uppercase tracking-wider text-[#173D32] bg-[#FAF8F4] border border-[#E8E2D8] hover:bg-[#F1E9DA] transition-colors"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded text-xs font-semibold uppercase tracking-wider text-[#173D32] bg-[#FAF8F4] border border-[#E8E2D8] hover:bg-[#F1E9DA] transition-colors"
           >
             <Share2 className="w-3.5 h-3.5 text-[#C6A66B]" />
             <span>Share</span>
@@ -1323,6 +1433,244 @@ export default function InvitationEditor({ invitationId }) {
                 Done
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* AUTH GATE MODAL: MUST LOG IN OR REGISTER BEFORE DOWNLOADING FINAL CARD */}
+      {authGateModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 sm:p-8 border border-[#E8E2D8] shadow-2xl space-y-5 animate-in zoom-in-95 duration-200">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-xl bg-[#173D32] flex items-center justify-center text-[#C6A66B] shadow-md shrink-0">
+                  <Lock className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="font-sans text-[10px] font-bold uppercase tracking-widest text-[#9A7C43] block">
+                    Authentication Required
+                  </span>
+                  <h3 className="font-serif text-xl sm:text-2xl text-[#173D32]">
+                    Log In or Register to Download
+                  </h3>
+                </div>
+              </div>
+              <button
+                onClick={() => setAuthGateModalOpen(false)}
+                className="p-1 text-[#77766F] hover:text-[#173D32]"
+              >
+                ✕
+              </button>
+            </div>
+
+            <p className="font-sans text-xs text-[#5A5D56] leading-relaxed">
+              To download your final high-resolution card (
+              <strong className="text-[#173D32] uppercase">
+                {pendingDownloadFormat}
+              </strong>
+              ) and save it permanently to your User Dashboard, please sign in or create a free account. Your card design is safely saved!
+            </p>
+
+            {/* Where user wants to go after login/register */}
+            <div className="space-y-2 bg-[#FAF8F4] p-3.5 rounded-xl border border-[#E8E2D8]">
+              <label className="font-sans text-[10px] font-bold uppercase tracking-wider text-[#9A7C43] block">
+                After Login / Registration, Redirect Me To:
+              </label>
+              <div className="space-y-1.5">
+                {[
+                  {
+                    id: "return-download",
+                    label: `Return Here & Auto-Download ${pendingDownloadFormat.toUpperCase()}`,
+                    target: `/editor/${invitationId}?download=${pendingDownloadFormat}`,
+                  },
+                  {
+                    id: "dashboard",
+                    label: "Go to My User Dashboard",
+                    target: "/dashboard",
+                  },
+                  {
+                    id: "templates",
+                    label: "Explore 108+ Ready Templates",
+                    target: "/templates",
+                  },
+                ].map((opt) => (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    onClick={() => setAuthRedirectChoice(opt.id)}
+                    className={`w-full text-left px-3 py-2 rounded-lg border text-xs flex items-center justify-between transition-all ${
+                      authRedirectChoice === opt.id
+                        ? "bg-white border-[#173D32] text-[#173D32] font-semibold shadow-2xs"
+                        : "bg-transparent border-transparent text-[#6E6D66] hover:bg-white/60"
+                    }`}
+                  >
+                    <span>{opt.label}</span>
+                    {authRedirectChoice === opt.id && (
+                      <CheckCircle2 className="w-4 h-4 text-[#173D32]" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Login & Register Action Buttons */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  persistCurrentCardLocally(design, title, status);
+                  const redirectUrl =
+                    authRedirectChoice === "dashboard"
+                      ? "/dashboard"
+                      : authRedirectChoice === "templates"
+                      ? "/templates"
+                      : `/editor/${invitationId}?download=${pendingDownloadFormat}`;
+                  router.push(
+                    `/login?redirect=${encodeURIComponent(
+                      redirectUrl
+                    )}&reason=download`
+                  );
+                }}
+                className="w-full py-3 px-4 rounded-xl bg-[#173D32] hover:bg-[#285C49] text-white font-sans text-xs font-bold uppercase tracking-wider shadow-md flex items-center justify-center gap-2 transition-all"
+              >
+                <LogIn className="w-4 h-4 text-[#C6A66B]" />
+                <span>Log In</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  persistCurrentCardLocally(design, title, status);
+                  const redirectUrl =
+                    authRedirectChoice === "dashboard"
+                      ? "/dashboard"
+                      : authRedirectChoice === "templates"
+                      ? "/templates"
+                      : `/editor/${invitationId}?download=${pendingDownloadFormat}`;
+                  router.push(
+                    `/register?redirect=${encodeURIComponent(
+                      redirectUrl
+                    )}&reason=download`
+                  );
+                }}
+                className="w-full py-3 px-4 rounded-xl bg-[#FAF8F4] hover:bg-[#F1E9DA] text-[#173D32] border border-[#C6A66B] font-sans text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all"
+              >
+                <UserPlus className="w-4 h-4 text-[#9A7C43]" />
+                <span>Register</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* POST-DOWNLOAD REDIRECT MODAL: WHERE DO YOU WANT TO GO NEXT? */}
+      {postDownloadModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 sm:p-8 border border-[#E8E2D8] shadow-2xl space-y-5 animate-in zoom-in-95 duration-200">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-xl bg-[#173D32] flex items-center justify-center text-[#C6A66B] shadow-md shrink-0">
+                  <CheckCircle2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="font-sans text-[10px] font-bold uppercase tracking-widest text-[#285C49] block">
+                    Card Export Complete
+                  </span>
+                  <h3 className="font-serif text-2xl text-[#173D32]">
+                    Where Would You Like to Go?
+                  </h3>
+                </div>
+              </div>
+              <button
+                onClick={() => setPostDownloadModalOpen(false)}
+                className="p-1 text-[#77766F] hover:text-[#173D32]"
+              >
+                ✕
+              </button>
+            </div>
+
+            <p className="font-sans text-xs text-[#5A5D56] leading-relaxed">
+              Your final card has been downloaded and saved to your account. Choose where you would like to go next:
+            </p>
+
+            <div className="space-y-2">
+              <Link
+                href="/dashboard"
+                className="w-full p-3.5 rounded-xl bg-[#173D32] hover:bg-[#285C49] text-white flex items-center justify-between transition-all shadow-sm"
+              >
+                <div className="flex items-center gap-3">
+                  <LayoutDashboard className="w-4 h-4 text-[#C6A66B]" />
+                  <div>
+                    <span className="text-xs font-bold block">
+                      Go to My User Dashboard
+                    </span>
+                    <span className="text-[10px] text-[#D8E2DC] block">
+                      View profile, stats & all saved cards
+                    </span>
+                  </div>
+                </div>
+                <ArrowRight className="w-4 h-4 text-[#C6A66B]" />
+              </Link>
+
+              <Link
+                href="/dashboard/invitations"
+                className="w-full p-3 rounded-xl bg-[#FAF8F4] hover:bg-[#F1E9DA] text-[#173D32] border border-[#E8E2D8] flex items-center justify-between transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <FileDown className="w-4 h-4 text-[#C6A66B]" />
+                  <div>
+                    <span className="text-xs font-semibold block">
+                      My Saved Invitations Library
+                    </span>
+                    <span className="text-[10px] text-[#77766F] block">
+                      Manage, duplicate & share your cards
+                    </span>
+                  </div>
+                </div>
+                <ArrowRight className="w-4 h-4 text-[#77766F]" />
+              </Link>
+
+              <Link
+                href="/templates"
+                className="w-full p-3 rounded-xl bg-[#FAF8F4] hover:bg-[#F1E9DA] text-[#173D32] border border-[#E8E2D8] flex items-center justify-between transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <Compass className="w-4 h-4 text-[#C6A66B]" />
+                  <div>
+                    <span className="text-xs font-semibold block">
+                      Browse 108+ Ready Templates
+                    </span>
+                    <span className="text-[10px] text-[#77766F] block">
+                      Explore more wedding, Holud & birthday cards
+                    </span>
+                  </div>
+                </div>
+                <ArrowRight className="w-4 h-4 text-[#77766F]" />
+              </Link>
+
+              <Link
+                href="/"
+                className="w-full p-3 rounded-xl bg-[#FAF8F4] hover:bg-[#F1E9DA] text-[#173D32] border border-[#E8E2D8] flex items-center justify-between transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <Home className="w-4 h-4 text-[#C6A66B]" />
+                  <div>
+                    <span className="text-xs font-semibold block">
+                      Return to Home Page
+                    </span>
+                  </div>
+                </div>
+                <ArrowRight className="w-4 h-4 text-[#77766F]" />
+              </Link>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setPostDownloadModalOpen(false)}
+              className="w-full py-2.5 rounded-lg border border-[#E8E2D8] text-xs font-semibold text-[#77766F] hover:text-[#173D32] hover:bg-[#FAF8F4] transition-colors"
+            >
+              Stay in Card Editor
+            </button>
           </div>
         </div>
       )}

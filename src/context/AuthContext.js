@@ -13,6 +13,7 @@ import {
   isFirebaseConfigured,
 } from "@/lib/firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
+import { claimGuestInvitationsForUser } from "@/lib/localInvitations";
 
 const AuthContext = createContext(null);
 
@@ -24,41 +25,45 @@ export function AuthProvider({ children }) {
   const [isDemo, setIsDemo] = useState(false);
 
   useEffect(() => {
-    // Check if demo user is stored in localStorage
-    if (typeof window !== "undefined") {
-      const storedDemo = localStorage.getItem(DEMO_USER_KEY);
-      if (storedDemo) {
-        try {
-          const parsed = JSON.parse(storedDemo);
-          setUser(parsed);
-          setIsDemo(true);
-          setLoading(false);
-          return;
-        } catch {
-          // ignore
+    if (!isFirebaseConfigured || !auth) {
+      if (typeof window !== "undefined") {
+        const storedDemo = localStorage.getItem(DEMO_USER_KEY);
+        if (storedDemo) {
+          try {
+            setUser(JSON.parse(storedDemo));
+            setIsDemo(true);
+          } catch {
+            // ignore
+          }
         }
       }
-    }
-
-    if (!isFirebaseConfigured || !auth) {
       setLoading(false);
       return;
     }
 
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
+        if (typeof window !== "undefined") {
+          localStorage.removeItem(DEMO_USER_KEY);
+        }
         const token = await firebaseUser.getIdToken();
         const userData = {
           uid: firebaseUser.uid,
           email: firebaseUser.email,
-          displayName: firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "Guest",
+          displayName:
+            firebaseUser.displayName ||
+            firebaseUser.email?.split("@")[0] ||
+            "Wedly Member",
           photoURL: firebaseUser.photoURL || null,
           token,
         };
         setUser(userData);
         setIsDemo(false);
 
-        // Sync with backend profile
+        // Claim any guest cards created before login/registration
+        const claimed = claimGuestInvitationsForUser(firebaseUser.uid);
+
+        // Sync with backend profile and sync claimed invitations
         try {
           await fetch("/api/auth/sync-profile", {
             method: "POST",
@@ -72,14 +77,39 @@ export function AuthProvider({ children }) {
               avatarUrl: userData.photoURL,
             }),
           });
+
+          for (const inv of claimed.slice(0, 10)) {
+            if (inv && inv.design_json) {
+              await fetch("/api/invitations", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(inv),
+              }).catch(() => {});
+            }
+          }
         } catch (e) {
           console.warn("Profile sync warning:", e);
         }
       } else {
-        // If not demo user, clear state
-        const storedDemo = localStorage.getItem(DEMO_USER_KEY);
-        if (!storedDemo) {
+        // Check if demo user is explicitly active
+        const storedDemo =
+          typeof window !== "undefined"
+            ? localStorage.getItem(DEMO_USER_KEY)
+            : null;
+        if (storedDemo) {
+          try {
+            setUser(JSON.parse(storedDemo));
+            setIsDemo(true);
+          } catch {
+            setUser(null);
+            setIsDemo(false);
+          }
+        } else {
           setUser(null);
+          setIsDemo(false);
         }
       }
       setLoading(false);
@@ -89,15 +119,31 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = async (email, password) => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(DEMO_USER_KEY);
+    }
     if (!isFirebaseConfigured || !auth) {
-      // Demo login
       return enableDemoUser(email);
     }
     const cred = await signInWithEmailAndPassword(auth, email, password);
-    return cred.user;
+    const token = await cred.user.getIdToken();
+    const userData = {
+      uid: cred.user.uid,
+      email: cred.user.email,
+      displayName:
+        cred.user.displayName || cred.user.email?.split("@")[0] || "Wedly Member",
+      photoURL: cred.user.photoURL || null,
+      token,
+    };
+    setUser(userData);
+    setIsDemo(false);
+    return userData;
   };
 
   const register = async (email, password, displayName) => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(DEMO_USER_KEY);
+    }
     if (!isFirebaseConfigured || !auth) {
       return enableDemoUser(email, displayName);
     }
@@ -105,15 +151,39 @@ export function AuthProvider({ children }) {
     if (displayName && cred.user) {
       await updateProfile(cred.user, { displayName });
     }
-    return cred.user;
+    const token = await cred.user.getIdToken(true);
+    const userData = {
+      uid: cred.user.uid,
+      email: cred.user.email,
+      displayName: displayName || cred.user.email?.split("@")[0] || "Wedly Member",
+      photoURL: cred.user.photoURL || null,
+      token,
+    };
+    setUser(userData);
+    setIsDemo(false);
+    return userData;
   };
 
   const loginWithGoogle = async () => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(DEMO_USER_KEY);
+    }
     if (!isFirebaseConfigured || !auth) {
       return enableDemoUser("google.user@example.com", "Google Demo User");
     }
     const cred = await signInWithPopup(auth, googleProvider);
-    return cred.user;
+    const token = await cred.user.getIdToken();
+    const userData = {
+      uid: cred.user.uid,
+      email: cred.user.email,
+      displayName:
+        cred.user.displayName || cred.user.email?.split("@")[0] || "Wedly Member",
+      photoURL: cred.user.photoURL || null,
+      token,
+    };
+    setUser(userData);
+    setIsDemo(false);
+    return userData;
   };
 
   const logout = async () => {
@@ -132,6 +202,15 @@ export function AuthProvider({ children }) {
       return true;
     }
     return sendPasswordResetEmail(auth, email);
+  };
+
+  const updateUserProfile = async (newDisplayName) => {
+    if (auth && auth.currentUser && newDisplayName) {
+      await updateProfile(auth.currentUser, { displayName: newDisplayName });
+    }
+    setUser((prev) =>
+      prev ? { ...prev, displayName: newDisplayName } : prev
+    );
   };
 
   const enableDemoUser = (customEmail = null, customName = null) => {
@@ -173,6 +252,7 @@ export function AuthProvider({ children }) {
         loginWithGoogle,
         logout,
         resetPassword,
+        updateUserProfile,
         enableDemoUser,
         getIdToken,
       }}

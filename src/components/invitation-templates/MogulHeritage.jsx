@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { MughalArchMotif, WaxSeal } from "./Decorations";
+import { MughalArchMotif, OrnamentalDivider, WaxSeal } from "./Decorations";
 import { hasBengali, getSafeTextStyle, isDarkBg } from "@/lib/typography";
 
 export default function MogulHeritage({ design }) {
@@ -9,14 +9,14 @@ export default function MogulHeritage({ design }) {
   const isBangla = language === "bn";
   const isBilingual = language === "bilingual";
 
-  const cardBg = palette?.cardBg || "#FCFAF6";
+  const cardBg = palette?.cardBg || "#420B13";
   const isDark = isDarkBg(cardBg);
 
-  const primaryColor = palette?.primary || (isDark ? "#F7EEDB" : "#4A0E17");
-  const textColor = palette?.textPrimary || (isDark ? "#FFFDF8" : primaryColor);
-  const secondaryColor = palette?.secondary || (isDark ? "#E5C072" : "#7A1C2A");
-  const accentColor = palette?.accent || "#D4AF37";
-  const textMuted = palette?.textMuted || (isDark ? "#D6C7B8" : "#6D585B");
+  const primaryColor = palette?.primary || (isDark ? "#FDE68A" : "#4A0E17");
+  const textColor = palette?.textPrimary || (isDark ? "#FFFDF5" : primaryColor);
+  const secondaryColor = palette?.secondary || (isDark ? "#F59E0B" : "#7A1C2A");
+  const accentColor = palette?.accent || "#E5C158";
+  const textMuted = palette?.textMuted || (isDark ? "#E2D3BE" : "#6D585B");
 
   const isIslamic = culturalStyle === "islamic";
   const isHindu = culturalStyle === "hindu";
@@ -26,95 +26,97 @@ export default function MogulHeritage({ design }) {
 
   return (
     <div
-      className="relative w-full h-full flex flex-col justify-between p-6 sm:p-8 select-none overflow-hidden transition-all duration-300"
+      className="relative w-full h-full flex flex-col justify-between p-6 sm:p-7 select-none overflow-hidden transition-all duration-300"
       style={{
         backgroundColor: cardBg,
         backgroundImage: isDark
           ? `
-            radial-gradient(ellipse at 50% 15%, ${accentColor}30 0%, transparent 60%),
-            radial-gradient(ellipse at 50% 85%, rgba(0,0,0,0.5) 0%, transparent 65%)
+            radial-gradient(ellipse at 50% 14%, ${accentColor}38 0%, transparent 62%),
+            radial-gradient(circle at 50% 50%, ${secondaryColor}18 0%, transparent 55%),
+            radial-gradient(ellipse at 50% 90%, rgba(0,0,0,0.6) 0%, transparent 65%)
           `
           : `
-            radial-gradient(ellipse at 50% 15%, ${accentColor}22 0%, transparent 60%),
-            radial-gradient(ellipse at 50% 85%, ${primaryColor}14 0%, transparent 65%)
+            radial-gradient(ellipse at 50% 14%, ${accentColor}26 0%, transparent 62%),
+            radial-gradient(ellipse at 50% 90%, ${primaryColor}16 0%, transparent 65%)
           `,
         boxShadow: `
-          0 28px 65px -15px rgba(0,0,0,0.4),
-          inset 0 0 0 1px ${accentColor}55,
-          inset 0 0 60px ${accentColor}12
+          0 28px 65px -15px rgba(0,0,0,0.45),
+          inset 0 0 0 1px ${accentColor}65,
+          inset 0 0 65px ${accentColor}16
         `,
       }}
     >
-      {/* Mughal Jaali Lattice Subtle Watermark Background */}
+      {/* Mughal Jaali Lattice Geometric Watermark */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-[0.04]"
+        className="absolute inset-0 pointer-events-none opacity-[0.055]"
         style={{
           backgroundImage: `
-            radial-gradient(circle at 50% 50%, ${isDark ? "#FFF" : primaryColor} 1.5px, transparent 1.5px),
-            linear-gradient(45deg, transparent 48%, ${isDark ? "#FFF" : primaryColor} 49%, ${isDark ? "#FFF" : primaryColor} 51%, transparent 52%),
-            linear-gradient(-45deg, transparent 48%, ${isDark ? "#FFF" : primaryColor} 49%, ${isDark ? "#FFF" : primaryColor} 51%, transparent 52%)
+            radial-gradient(circle at 50% 50%, ${accentColor} 1.5px, transparent 1.5px),
+            linear-gradient(45deg, transparent 47%, ${accentColor} 48%, ${accentColor} 52%, transparent 53%),
+            linear-gradient(-45deg, transparent 47%, ${accentColor} 48%, ${accentColor} 52%, transparent 53%)
           `,
-          backgroundSize: "24px 24px, 24px 24px, 24px 24px",
+          backgroundSize: "26px 26px",
         }}
       />
 
-      {/* Mughal Outer & Inner Ornate Borders */}
+      {/* Full-Height Mughal Shahi Jharokha Arch Sanctuary Frame */}
       <div
-        className="absolute inset-2 sm:inset-3 pointer-events-none rounded-[3px]"
+        className="absolute inset-2.5 sm:inset-3 pointer-events-none rounded-[3px]"
         style={{
-          border: `1.5px solid ${accentColor}80`,
-          boxShadow: `inset 0 0 0 2px ${primaryColor}15, 0 0 10px ${accentColor}25`,
+          border: `1.8px solid ${accentColor}90`,
+          boxShadow: `inset 0 0 0 2px ${primaryColor}15, 0 0 14px ${accentColor}25`,
         }}
       />
       <div
-        className="absolute inset-3.5 sm:inset-4.5 pointer-events-none rounded-[2px]"
+        className="absolute inset-4 sm:inset-4.5 pointer-events-none rounded-t-[90px] rounded-b-[4px]"
         style={{
-          border: `0.75px dashed ${accentColor}85`,
+          border: `1px solid ${accentColor}75`,
+          background: isDark
+            ? `linear-gradient(180deg, ${accentColor}12 0%, transparent 35%, rgba(0,0,0,0.2) 100%)`
+            : `linear-gradient(180deg, ${accentColor}10 0%, transparent 40%)`,
         }}
       />
       <div
-        className="absolute inset-5 sm:inset-6 pointer-events-none rounded-[1px]"
+        className="absolute inset-5 sm:inset-5.5 pointer-events-none rounded-t-[84px] rounded-b-[2px]"
         style={{
-          border: `0.5px solid ${accentColor}35`,
+          border: `0.75px dashed ${accentColor}65`,
         }}
       />
 
-      {/* Mughal Jaali Corner Insets & L-Brackets */}
+      {/* Ornate Spandrel Medallions in Top Left & Right Corners */}
       <div
-        className="absolute top-3 left-3 w-7 h-7 pointer-events-none border-t-2 border-l-2"
-        style={{ borderColor: accentColor }}
+        className="absolute top-4 left-4 w-5 h-5 rounded-full border flex items-center justify-center pointer-events-none"
+        style={{ borderColor: accentColor, backgroundColor: `${accentColor}25` }}
       >
-        <div className="w-1.5 h-1.5 m-0.5 rounded-full" style={{ backgroundColor: accentColor }} />
+        <div className="w-2 h-2 rotate-45" style={{ backgroundColor: accentColor }} />
       </div>
       <div
-        className="absolute top-3 right-3 w-7 h-7 pointer-events-none border-t-2 border-r-2"
-        style={{ borderColor: accentColor }}
+        className="absolute top-4 right-4 w-5 h-5 rounded-full border flex items-center justify-center pointer-events-none"
+        style={{ borderColor: accentColor, backgroundColor: `${accentColor}25` }}
       >
-        <div className="w-1.5 h-1.5 m-0.5 ml-auto rounded-full" style={{ backgroundColor: accentColor }} />
-      </div>
-      <div
-        className="absolute bottom-3 left-3 w-7 h-7 pointer-events-none border-b-2 border-l-2"
-        style={{ borderColor: accentColor }}
-      >
-        <div className="w-1.5 h-1.5 m-0.5 mt-auto rounded-full" style={{ backgroundColor: accentColor }} />
-      </div>
-      <div
-        className="absolute bottom-3 right-3 w-7 h-7 pointer-events-none border-b-2 border-r-2"
-        style={{ borderColor: accentColor }}
-      >
-        <div className="w-1.5 h-1.5 m-0.5 mt-auto ml-auto rounded-full" style={{ backgroundColor: accentColor }} />
+        <div className="w-2 h-2 rotate-45" style={{ backgroundColor: accentColor }} />
       </div>
 
-      {/* TOP HEADER: MUGHAL ARCH & SACRED/BLESSING BANNER */}
-      <div className="relative z-10 flex flex-col items-center text-center pt-1.5 space-y-1">
-        <MughalArchMotif color={accentColor} className="mb-0.5" />
+      {/* Bottom Corner L-Brackets */}
+      <div
+        className="absolute bottom-3.5 left-3.5 w-6 h-6 pointer-events-none border-b-2 border-l-2"
+        style={{ borderColor: accentColor }}
+      />
+      <div
+        className="absolute bottom-3.5 right-3.5 w-6 h-6 pointer-events-none border-b-2 border-r-2"
+        style={{ borderColor: accentColor }}
+      />
+
+      {/* TOP HEADER: MUGHAL DARBAR ARCH & SACRED BLESSING */}
+      <div className="relative z-10 flex flex-col items-center text-center pt-1 space-y-0.5">
+        <MughalArchMotif color={accentColor} className="mb-0.5 drop-shadow-xs" />
 
         {isIslamic ? (
           <span
             className="text-xs sm:text-sm font-semibold tracking-wide drop-shadow-xs"
             style={{ color: isDark ? accentColor : primaryColor, fontFamily: "var(--font-noto-serif-bengali), serif" }}
           >
-            بِسْمِ اللَّهِ الرَّحْمَٰনِ الرَّحِيمِ
+            بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
           </span>
         ) : isHindu ? (
           <span
@@ -124,21 +126,17 @@ export default function MogulHeritage({ design }) {
             ॥ শ্রী শ্রী প্রজাপতয়ে নমঃ ॥
           </span>
         ) : (
-          <div className="flex items-center gap-2">
-            <span className="w-5 h-[1px]" style={{ background: `linear-gradient(90deg, transparent, ${accentColor})` }} />
-            <span
-              className="text-[10px] sm:text-[11px] font-semibold"
-              style={getSafeTextStyle(content?.title || "মাঙ্গলিক শুভ পরিণয়", {
-                isSerif: true,
-                color: isDark ? accentColor : primaryColor,
-                tracking: "0.22em",
-                uppercase: true,
-              })}
-            >
-              {content?.title || (hasBengali(brideName) ? "মাঙ্গলিক শুভ পরিণয়" : "ROYAL WEDDING INVITATION")}
-            </span>
-            <span className="w-5 h-[1px]" style={{ background: `linear-gradient(90deg, ${accentColor}, transparent)` }} />
-          </div>
+          <span
+            className="text-[10px] sm:text-[11px] font-bold px-2"
+            style={getSafeTextStyle(content?.title || "মাঙ্গলিক শুভ পরিণয়", {
+              isSerif: true,
+              color: isDark ? accentColor : primaryColor,
+              tracking: "0.2em",
+              uppercase: true,
+            })}
+          >
+            {content?.title || (hasBengali(brideName) ? "মাঙ্গলিক শুভ পরিণয়" : "ROYAL SHAHI INVITATION")}
+          </span>
         )}
 
         {content?.subtitle && (
@@ -155,12 +153,12 @@ export default function MogulHeritage({ design }) {
         )}
       </div>
 
-      {/* CENTER: COUPLE NAMES & ROYAL KNOT */}
-      <div className="relative z-10 flex flex-col items-center text-center my-auto py-2">
+      {/* CENTER: COUPLE NAMES & SHAHI KNOT */}
+      <div className="relative z-10 flex flex-col items-center text-center my-auto py-1">
         {groomName ? (
           <div className="w-full flex flex-col items-center">
             <h1
-              className="text-3xl sm:text-4xl md:text-[42px] leading-[1.15] font-medium drop-shadow-xs"
+              className="text-3xl sm:text-4xl md:text-[40px] leading-[1.15] font-semibold drop-shadow-sm"
               style={getSafeTextStyle(brideName, {
                 isSerif: true,
                 color: textColor,
@@ -170,18 +168,19 @@ export default function MogulHeritage({ design }) {
               {brideName}
             </h1>
 
-            {/* Royal Gold Filigree Divider */}
-            <div className="flex items-center justify-center gap-2.5 my-2 w-full max-w-[210px]">
+            {/* Shahi Royal Medallion Divider */}
+            <div className="flex items-center justify-center gap-2 my-2 w-full max-w-[210px]">
               <span className="h-[1px] flex-1" style={{ background: `linear-gradient(90deg, transparent, ${accentColor})` }} />
+              <div className="w-1.5 h-1.5 rotate-45" style={{ backgroundColor: accentColor }} />
               <div
-                className="w-6 h-6 rounded-full flex items-center justify-center border"
+                className="px-3 py-0.5 rounded-full border flex items-center justify-center shadow-2xs"
                 style={{
                   borderColor: accentColor,
-                  background: `radial-gradient(circle, ${accentColor}25 0%, transparent 80%)`,
+                  background: `radial-gradient(circle, ${accentColor}30 0%, transparent 85%)`,
                 }}
               >
                 <span
-                  className="text-base sm:text-lg font-medium"
+                  className="text-sm sm:text-base font-semibold"
                   style={getSafeTextStyle(hasBengali(brideName) || isBangla ? "ও" : "&", {
                     isSerif: true,
                     color: accentColor,
@@ -191,11 +190,12 @@ export default function MogulHeritage({ design }) {
                   {hasBengali(brideName) || isBangla ? "ও" : "&"}
                 </span>
               </div>
+              <div className="w-1.5 h-1.5 rotate-45" style={{ backgroundColor: accentColor }} />
               <span className="h-[1px] flex-1" style={{ background: `linear-gradient(90deg, ${accentColor}, transparent)` }} />
             </div>
 
             <h1
-              className="text-3xl sm:text-4xl md:text-[42px] leading-[1.15] font-medium drop-shadow-xs"
+              className="text-3xl sm:text-4xl md:text-[40px] leading-[1.15] font-semibold drop-shadow-sm"
               style={getSafeTextStyle(groomName, {
                 isSerif: true,
                 color: textColor,
@@ -208,7 +208,7 @@ export default function MogulHeritage({ design }) {
         ) : (
           <div className="w-full flex flex-col items-center">
             <h1
-              className="text-3xl sm:text-4xl md:text-[40px] leading-[1.15] font-medium drop-shadow-xs"
+              className="text-3xl sm:text-4xl md:text-[40px] leading-[1.15] font-semibold drop-shadow-sm"
               style={getSafeTextStyle(brideName, {
                 isSerif: true,
                 color: textColor,
@@ -219,13 +219,17 @@ export default function MogulHeritage({ design }) {
             </h1>
             {content?.eventMilestone && (
               <span
-                className="mt-2 text-xs sm:text-sm font-semibold"
-                style={getSafeTextStyle(content.eventMilestone, {
-                  isSerif: false,
-                  color: accentColor,
-                  tracking: "0.22em",
-                  uppercase: true,
-                })}
+                className="mt-2 px-3 py-0.5 rounded-full text-xs font-semibold border"
+                style={{
+                  ...getSafeTextStyle(content.eventMilestone, {
+                    isSerif: false,
+                    color: accentColor,
+                    tracking: "0.2em",
+                    uppercase: true,
+                  }),
+                  borderColor: `${accentColor}65`,
+                  backgroundColor: `${accentColor}15`,
+                }}
               >
                 {content.eventMilestone}
               </span>
@@ -233,10 +237,10 @@ export default function MogulHeritage({ design }) {
           </div>
         )}
 
-        {/* Bilingual Bengali Sub-Names (if bilingual) */}
+        {/* Bilingual Bengali Sub-Names */}
         {isBilingual && content?.bilingualBrideName && (
           <div
-            className="mt-2 text-sm font-medium"
+            className="mt-1.5 text-sm font-medium"
             style={getSafeTextStyle(content.bilingualBrideName, {
               isSerif: true,
               color: isDark ? accentColor : secondaryColor,
@@ -247,9 +251,11 @@ export default function MogulHeritage({ design }) {
           </div>
         )}
 
+        <OrnamentalDivider color={accentColor} className="my-1.5 opacity-85" />
+
         {/* Invitation Message */}
         <p
-          className="mt-3 text-[11px] sm:text-[12px] max-w-xs leading-relaxed text-center px-2"
+          className="text-[11px] sm:text-[12px] max-w-[260px] leading-relaxed text-center px-2"
           style={getSafeTextStyle(
             content?.message ||
               "আমাদের এই আনন্দঘন শুভলগ্নে আপনাদের সানন্দ উপস্থিতি ও প্রাণঢালা আশীর্বাদ একান্তভাবে কামনা করছি।",
@@ -264,17 +270,17 @@ export default function MogulHeritage({ design }) {
         </p>
       </div>
 
-      {/* BOTTOM LOGISTICS: DATE, TIME & VENUE */}
+      {/* BOTTOM LOGISTICS: SHAHI FARMAN DATE BANNER & VENUE */}
       <div className="relative z-10 flex flex-col items-center text-center space-y-2 pb-1">
-        {/* Date & Time Badge */}
+        {/* Shahi Scroll Date & Time Badge */}
         <div
-          className="inline-flex items-center px-4 py-1.5 rounded-full text-[11px] sm:text-[12px] font-medium shadow-xs"
+          className="inline-flex items-center px-4 py-1.5 rounded-full text-[11px] sm:text-[12px] font-semibold shadow-sm"
           style={{
             background: isDark
-              ? `linear-gradient(135deg, ${accentColor}25 0%, rgba(255,255,255,0.06) 50%, ${accentColor}25 100%)`
-              : `linear-gradient(135deg, ${accentColor}25 0%, ${cardBg} 50%, ${accentColor}25 100%)`,
-            border: `1.2px solid ${accentColor}75`,
-            boxShadow: `0 2px 10px ${accentColor}25`,
+              ? `linear-gradient(90deg, ${accentColor}30 0%, ${accentColor}15 50%, ${accentColor}30 100%)`
+              : `linear-gradient(90deg, ${accentColor}28 0%, ${cardBg} 50%, ${accentColor}28 100%)`,
+            border: `1.5px solid ${accentColor}`,
+            boxShadow: `0 2px 12px ${accentColor}30`,
             color: isDark ? "#FFFFFF" : textColor,
           }}
         >
@@ -282,7 +288,7 @@ export default function MogulHeritage({ design }) {
             style={getSafeTextStyle(content?.weddingDate || "শুক্রবার • ১২ই ডিসেম্বর ২০২৭", {
               isSerif: false,
               color: isDark ? "#FFFFFF" : textColor,
-              tracking: hasBengali(content?.weddingDate) ? "0px" : "0.1em",
+              tracking: hasBengali(content?.weddingDate) ? "0px" : "0.08em",
               uppercase: !hasBengali(content?.weddingDate),
             })}
           >
@@ -290,7 +296,7 @@ export default function MogulHeritage({ design }) {
           </span>
           {content?.weddingTime && (
             <>
-              <span className="mx-2 opacity-50" style={{ color: accentColor }}>•</span>
+              <span className="mx-2 opacity-75" style={{ color: accentColor }}>❖</span>
               <span
                 style={getSafeTextStyle(content.weddingTime, {
                   isSerif: false,
@@ -304,9 +310,9 @@ export default function MogulHeritage({ design }) {
         </div>
 
         {/* Venue */}
-        <div className="space-y-0.5 pt-0.5">
+        <div className="space-y-0.5">
           <p
-            className="text-base sm:text-lg font-medium leading-snug drop-shadow-xs"
+            className="text-base sm:text-[17px] font-semibold leading-snug drop-shadow-xs"
             style={getSafeTextStyle(content?.venue || "গ্র্যান্ড বলরুম, প্যান প্যাসিফিক সোনারগাঁও", {
               isSerif: true,
               color: textColor,
@@ -320,7 +326,7 @@ export default function MogulHeritage({ design }) {
               style={getSafeTextStyle(content.city, {
                 isSerif: false,
                 color: textMuted,
-                tracking: hasBengali(content.city) ? "0px" : "0.16em",
+                tracking: hasBengali(content.city) ? "0px" : "0.15em",
                 uppercase: !hasBengali(content.city),
               })}
             >
@@ -331,14 +337,14 @@ export default function MogulHeritage({ design }) {
 
         {/* Wax Seal / Monogram */}
         {decorations?.hasWaxSeal !== false && (
-          <div className="pt-1">
+          <div className="pt-0.5">
             <WaxSeal
               monogram={
                 decorations?.monogram ||
                 `${brideName?.[0] || "ন"}&${groomName?.[0] || "ফ"}`
               }
               color={accentColor}
-              size={44}
+              size={42}
             />
           </div>
         )}
@@ -346,7 +352,7 @@ export default function MogulHeritage({ design }) {
         {/* RSVP Details */}
         {content?.rsvpDetails && (
           <p
-            className="text-[10px] sm:text-[11px] pt-0.5"
+            className="text-[10px] sm:text-[11px]"
             style={getSafeTextStyle(content.rsvpDetails, {
               isSerif: false,
               color: textMuted,

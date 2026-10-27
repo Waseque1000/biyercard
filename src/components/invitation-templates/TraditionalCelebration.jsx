@@ -1,7 +1,13 @@
 "use client";
 
 import React from "react";
-import { TraditionalMandala, IslamicArchBorder, CornerFlourish, WaxSeal } from "./Decorations";
+import {
+  TraditionalMandala,
+  IslamicArchBorder,
+  KolkaCornerMotif,
+  OrnamentalDivider,
+  WaxSeal,
+} from "./Decorations";
 import { hasBengali, getSafeTextStyle, isDarkBg } from "@/lib/typography";
 
 export default function TraditionalCelebration({ design }) {
@@ -9,14 +15,14 @@ export default function TraditionalCelebration({ design }) {
   const isBangla = language === "bn";
   const isBilingual = language === "bilingual" || language === "bn";
 
-  const cardBg = palette?.cardBg || "#FAF7F3";
+  const cardBg = palette?.cardBg || "#520D17";
   const isDark = isDarkBg(cardBg);
 
   const primaryColor = palette?.primary || (isDark ? "#FEF3C7" : "#5A1827");
-  const textColor = palette?.textPrimary || (isDark ? "#FFFDF8" : primaryColor);
-  const secondaryColor = palette?.secondary || (isDark ? "#FACC15" : "#83283B");
-  const accentColor = palette?.accent || "#D4AF37";
-  const textMuted = palette?.textMuted || (isDark ? "#DFD4C8" : "#7A6367");
+  const textColor = palette?.textPrimary || (isDark ? "#FFFDF9" : primaryColor);
+  const secondaryColor = palette?.secondary || (isDark ? "#F59E0B" : "#83283B");
+  const accentColor = palette?.accent || "#E5BF56";
+  const textMuted = palette?.textMuted || (isDark ? "#ECCACF" : "#7A6367");
 
   const isIslamic = culturalStyle === "islamic";
   const isHindu = culturalStyle === "hindu";
@@ -26,139 +32,101 @@ export default function TraditionalCelebration({ design }) {
 
   return (
     <div
-      className="relative w-full h-full flex flex-col justify-between p-6 sm:p-8 select-none overflow-hidden transition-all duration-300"
+      className="relative w-full h-full flex flex-col justify-between p-6 sm:p-7 select-none overflow-hidden transition-all duration-300"
       style={{
         backgroundColor: cardBg,
         backgroundImage: isDark
           ? `
-            radial-gradient(ellipse at 50% 12%, ${accentColor}30 0%, transparent 60%),
-            radial-gradient(ellipse at 50% 88%, rgba(0,0,0,0.5) 0%, transparent 60%)
+            radial-gradient(ellipse at 50% 10%, ${accentColor}38 0%, transparent 58%),
+            radial-gradient(circle at 50% 50%, ${secondaryColor}16 0%, transparent 60%),
+            radial-gradient(ellipse at 50% 90%, rgba(0,0,0,0.55) 0%, transparent 65%)
           `
           : `
-            radial-gradient(ellipse at 50% 12%, ${accentColor}22 0%, transparent 60%),
-            radial-gradient(ellipse at 50% 88%, ${primaryColor}14 0%, transparent 60%)
+            radial-gradient(ellipse at 50% 10%, ${accentColor}26 0%, transparent 58%),
+            radial-gradient(ellipse at 50% 90%, ${primaryColor}15 0%, transparent 65%)
           `,
         boxShadow: `
-          0 28px 65px -15px rgba(0,0,0,0.4),
-          inset 0 0 0 1px ${accentColor}55,
-          inset 0 0 50px ${accentColor}0e
+          0 28px 65px -15px rgba(0,0,0,0.45),
+          inset 0 0 0 1px ${accentColor}65,
+          inset 0 0 55px ${accentColor}14
         `,
       }}
     >
-      {/* Traditional Rangoli / Mandala Subtle Watermark Pattern */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.04]"
-        style={{
-          backgroundImage: `
-            radial-gradient(circle at 50% 50%, ${isDark ? "#FFF" : primaryColor} 1.5px, transparent 1.5px),
-            radial-gradient(circle at 0% 0%, ${accentColor} 2px, transparent 2px),
-            radial-gradient(circle at 100% 100%, ${accentColor} 2px, transparent 2px)
-          `,
-          backgroundSize: "28px 28px, 56px 56px, 56px 56px",
-        }}
-      />
+      {/* Center Giant Alpona Mandala Watermark behind text */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-[0.09]">
+        <TraditionalMandala color={accentColor} size={230} />
+      </div>
 
-      {/* Decorative Ornate Frame */}
+      {/* Decorative Alpona & Kolka Double Frame */}
       <div
-        className="absolute inset-2 sm:inset-3 pointer-events-none rounded-[2px]"
+        className="absolute inset-2 sm:inset-3 pointer-events-none rounded-[3px]"
         style={{
-          border: `1.5px solid ${accentColor}80`,
-          boxShadow: `inset 0 0 0 1.5px ${primaryColor}15, 0 0 10px ${accentColor}25`,
+          border: `2px solid ${accentColor}90`,
+          boxShadow: `inset 0 0 0 2px ${primaryColor}15, 0 0 12px ${accentColor}25`,
         }}
       />
       <div
         className="absolute inset-3.5 sm:inset-4.5 pointer-events-none rounded-[2px]"
         style={{
-          border: `0.75px dashed ${accentColor}85`,
+          border: `1px dashed ${accentColor}85`,
         }}
       />
 
-      {/* Corner Flourishes */}
-      <CornerFlourish
-        className="absolute top-3.5 left-3.5 pointer-events-none drop-shadow-xs"
+      {/* Bengali Paisley / Kolka Corner Flourishes */}
+      <KolkaCornerMotif
+        className="absolute top-3 left-3 pointer-events-none drop-shadow-xs"
         color={accentColor}
-        size={36}
+        size={44}
       />
-      <CornerFlourish
-        className="absolute top-3.5 right-3.5 pointer-events-none drop-shadow-xs -scale-x-100"
+      <KolkaCornerMotif
+        className="absolute top-3 right-3 pointer-events-none drop-shadow-xs -scale-x-100"
         color={accentColor}
-        size={36}
+        size={44}
       />
-      <CornerFlourish
-        className="absolute bottom-3.5 left-3.5 pointer-events-none drop-shadow-xs -scale-y-100"
+      <KolkaCornerMotif
+        className="absolute bottom-3 left-3 pointer-events-none drop-shadow-xs -scale-y-100"
         color={accentColor}
-        size={36}
+        size={44}
       />
-      <CornerFlourish
-        className="absolute bottom-3.5 right-3.5 pointer-events-none drop-shadow-xs -scale-100"
+      <KolkaCornerMotif
+        className="absolute bottom-3 right-3 pointer-events-none drop-shadow-xs -scale-100"
         color={accentColor}
-        size={36}
+        size={44}
       />
 
-      {/* Islamic Arch Border or Traditional Mandala at Top */}
-      <div className="relative z-10 flex flex-col items-center text-center pt-1">
+      {/* Islamic Arch Border or Traditional Alpona Lotus Mandala at Top */}
+      <div className="relative z-10 flex flex-col items-center text-center pt-0.5">
         {isIslamic ? (
-          <IslamicArchBorder color={accentColor} className="opacity-95 h-7 mb-1" />
+          <IslamicArchBorder color={accentColor} className="opacity-95 h-8 mb-0.5" />
         ) : (
           <div className="flex justify-center mb-1">
-            <TraditionalMandala color={accentColor} size={46} className="drop-shadow-xs" />
+            <TraditionalMandala color={accentColor} size={50} className="drop-shadow-xs" />
           </div>
         )}
 
         {/* Sacred / Auspicious Blessing Header */}
         {isIslamic ? (
           <span
-            className="text-[13px] sm:text-[14px] font-semibold tracking-wide drop-shadow-xs"
+            className="text-[12px] sm:text-[13px] font-semibold tracking-wide drop-shadow-xs"
             style={{ color: isDark ? accentColor : primaryColor, fontFamily: "var(--font-noto-serif-bengali), Georgia, serif" }}
           >
-            بِسْمِ اللَّهِ الرَّحْمَٰনِ الرَّحِيمِ
+            بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
           </span>
         ) : isHindu ? (
           <span
-            className="text-[12px] sm:text-[13px] font-semibold"
+            className="text-[11px] sm:text-[12px] font-semibold"
             style={{ color: isDark ? accentColor : primaryColor, fontFamily: "var(--font-noto-serif-bengali), serif" }}
           >
             ॥ শ্রী শ্রী প্রজাপতয়ে নমঃ ॥
           </span>
-        ) : (
-          <div className="flex items-center gap-2">
-            <span className="w-6 h-[1px]" style={{ background: `linear-gradient(90deg, transparent, ${accentColor})` }} />
-            <span
-              className="text-[10px] sm:text-[11px] font-semibold"
-              style={getSafeTextStyle(
-                content?.cardPurpose === "birthday"
-                  ? "আনন্দঘন শুভ জন্মদিন"
-                  : content?.cardPurpose === "invitation"
-                  ? "আন্তরিক শুভ নিমন্ত্রণ"
-                  : content?.cardPurpose === "corporate"
-                  ? "সম্মানিত আমন্ত্রণ পত্র"
-                  : "মাঙ্গলিক শুভ পরিণয় উৎসব",
-                {
-                  isSerif: true,
-                  color: isDark ? accentColor : primaryColor,
-                  tracking: "0.22em",
-                  uppercase: true,
-                }
-              )}
-            >
-              {content?.cardPurpose === "birthday"
-                ? "আনন্দঘন শুভ জন্মদিন"
-                : content?.cardPurpose === "invitation"
-                ? "আন্তরিক শুভ নিমন্ত্রণ"
-                : content?.cardPurpose === "corporate"
-                ? "সম্মানিত আমন্ত্রণ পত্র"
-                : "মাঙ্গলিক শুভ পরিণয় উৎসব"}
-            </span>
-            <span className="w-6 h-[1px]" style={{ background: `linear-gradient(90deg, ${accentColor}, transparent)` }} />
-          </div>
-        )}
+        ) : null}
 
         <h3
-          className="text-xs sm:text-sm font-semibold pt-0.5"
+          className="text-xs sm:text-[13px] font-bold pt-0.5 px-2"
           style={getSafeTextStyle(content?.title || (isIslamic ? "নিকাহ ও ওলিমা অনুষ্ঠান" : "শুভ বিবাহ উৎসব"), {
             isSerif: true,
             color: accentColor,
-            tracking: "0.2em",
+            tracking: "0.18em",
             uppercase: true,
           })}
         >
@@ -167,7 +135,7 @@ export default function TraditionalCelebration({ design }) {
 
         {content?.subtitle && (
           <p
-            className="text-[11px] sm:text-[12px] max-w-xs"
+            className="text-[11px] sm:text-[12px] max-w-[260px]"
             style={getSafeTextStyle(content.subtitle, {
               isSerif: true,
               color: textMuted,
@@ -180,12 +148,12 @@ export default function TraditionalCelebration({ design }) {
       </div>
 
       {/* NAMES (COUPLE OR CELEBRANT) */}
-      <div className="relative z-10 flex flex-col items-center text-center my-auto py-2">
+      <div className="relative z-10 flex flex-col items-center text-center my-auto py-1">
         {content?.groomName ? (
           <div className="w-full flex flex-col items-center">
             <div className="space-y-0.5">
               <h1
-                className="text-3xl sm:text-4xl md:text-[40px] font-semibold leading-[1.15] drop-shadow-xs"
+                className="text-3xl sm:text-4xl md:text-[39px] font-semibold leading-[1.15] drop-shadow-sm"
                 style={getSafeTextStyle(brideName, {
                   isSerif: true,
                   color: textColor,
@@ -207,18 +175,19 @@ export default function TraditionalCelebration({ design }) {
               )}
             </div>
 
-            {/* Traditional Filigree Divider */}
-            <div className="my-2 flex items-center justify-center gap-2.5 w-full max-w-[200px]">
+            {/* Traditional Alpona Knot Divider */}
+            <div className="my-2 flex items-center justify-center gap-2 w-full max-w-[210px]">
               <span className="h-[1px] flex-1" style={{ background: `linear-gradient(90deg, transparent, ${accentColor})` }} />
+              <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accentColor }} />
               <div
-                className="w-6 h-6 rounded-full flex items-center justify-center border"
+                className="px-3 py-0.5 rounded-full flex items-center justify-center border shadow-2xs"
                 style={{
                   borderColor: accentColor,
-                  background: `radial-gradient(circle, ${accentColor}25 0%, transparent 80%)`,
+                  background: `radial-gradient(circle, ${accentColor}30 0%, transparent 85%)`,
                 }}
               >
                 <span
-                  className="text-base sm:text-lg font-medium"
+                  className="text-sm sm:text-base font-semibold"
                   style={getSafeTextStyle(hasBengali(brideName) || isBangla ? "ও" : "Weds", {
                     isSerif: true,
                     color: accentColor,
@@ -228,12 +197,13 @@ export default function TraditionalCelebration({ design }) {
                   {hasBengali(brideName) || isBangla ? "ও" : "Weds"}
                 </span>
               </div>
+              <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accentColor }} />
               <span className="h-[1px] flex-1" style={{ background: `linear-gradient(90deg, ${accentColor}, transparent)` }} />
             </div>
 
             <div className="space-y-0.5">
               <h1
-                className="text-3xl sm:text-4xl md:text-[40px] font-semibold leading-[1.15] drop-shadow-xs"
+                className="text-3xl sm:text-4xl md:text-[39px] font-semibold leading-[1.15] drop-shadow-sm"
                 style={getSafeTextStyle(groomName, {
                   isSerif: true,
                   color: textColor,
@@ -256,9 +226,9 @@ export default function TraditionalCelebration({ design }) {
             </div>
           </div>
         ) : (
-          <div className="space-y-1.5 my-2">
+          <div className="space-y-1.5 my-1">
             <h1
-              className="text-3xl sm:text-4xl md:text-[40px] font-semibold leading-[1.15] drop-shadow-xs"
+              className="text-3xl sm:text-4xl md:text-[39px] font-semibold leading-[1.15] drop-shadow-sm"
               style={getSafeTextStyle(brideName, {
                 isSerif: true,
                 color: textColor,
@@ -268,48 +238,28 @@ export default function TraditionalCelebration({ design }) {
             </h1>
             {content?.eventMilestone && (
               <span
-                className="block text-xs sm:text-sm font-semibold"
-                style={getSafeTextStyle(content.eventMilestone, {
-                  isSerif: false,
-                  color: accentColor,
-                  tracking: "0.22em",
-                  uppercase: true,
-                })}
+                className="inline-block px-3 py-0.5 rounded-full text-xs font-semibold border"
+                style={{
+                  ...getSafeTextStyle(content.eventMilestone, {
+                    isSerif: false,
+                    color: accentColor,
+                    tracking: "0.2em",
+                    uppercase: true,
+                  }),
+                  borderColor: `${accentColor}65`,
+                  backgroundColor: `${accentColor}15`,
+                }}
               >
                 {content.eventMilestone}
               </span>
             )}
-            {content?.brideParents && (
-              <p
-                className="text-[10px] sm:text-[11px]"
-                style={getSafeTextStyle(content.brideParents, {
-                  isSerif: false,
-                  color: textMuted,
-                  italic: !hasBengali(content.brideParents),
-                })}
-              >
-                {content.brideParents}
-              </p>
-            )}
           </div>
         )}
 
-        {/* Bilingual Bengali Names */}
-        {isBilingual && content?.bilingualBrideName && (
-          <div
-            className="mt-2 text-sm font-semibold"
-            style={getSafeTextStyle(content.bilingualBrideName, {
-              isSerif: true,
-              color: isDark ? accentColor : primaryColor,
-            })}
-          >
-            {content.bilingualBrideName}
-            {content?.bilingualGroomName ? ` ও ${content.bilingualGroomName}` : ""}
-          </div>
-        )}
+        <OrnamentalDivider color={accentColor} className="my-1.5 opacity-85" />
 
         <p
-          className="mt-3 text-[11px] sm:text-[12px] max-w-xs leading-relaxed text-center px-2"
+          className="text-[11px] sm:text-[12px] max-w-[260px] leading-relaxed text-center px-2"
           style={getSafeTextStyle(
             content?.message ||
               "আমাদের এই আনন্দঘন শুভলগ্নে আপনাদের সানন্দ উপস্থিতি ও প্রাণঢালা আশীর্বাদ একান্তভাবে কামনা করছি।",
@@ -322,31 +272,19 @@ export default function TraditionalCelebration({ design }) {
           {content?.message ||
             "আমাদের এই আনন্দঘন শুভলগ্নে আপনাদের সানন্দ উপস্থিতি ও প্রাণঢালা আশীর্বাদ একান্তভাবে কামনা করছি।"}
         </p>
-
-        {content?.bilingualMessage && (
-          <p
-            className="mt-1.5 text-[11px] sm:text-[12px] max-w-xs leading-relaxed text-center font-medium"
-            style={getSafeTextStyle(content.bilingualMessage, {
-              isSerif: false,
-              color: isDark ? accentColor : primaryColor,
-            })}
-          >
-            {content.bilingualMessage}
-          </p>
-        )}
       </div>
 
       {/* CEREMONIAL EVENT DETAILS */}
       <div className="relative z-10 flex flex-col items-center text-center space-y-2 pb-1">
-        {/* Date & Time Badge */}
+        {/* Auspicious Date & Time Plaque */}
         <div
-          className="inline-flex items-center px-4 py-1.5 rounded-full text-[11px] sm:text-[12px] font-medium shadow-xs"
+          className="inline-flex items-center px-4 py-1.5 rounded-full text-[11px] sm:text-[12px] font-semibold shadow-sm"
           style={{
             background: isDark
-              ? `linear-gradient(135deg, ${accentColor}25 0%, rgba(255,255,255,0.06) 50%, ${accentColor}25 100%)`
-              : `linear-gradient(135deg, ${accentColor}25 0%, ${cardBg} 50%, ${accentColor}25 100%)`,
-            border: `1.2px solid ${accentColor}75`,
-            boxShadow: `0 2px 10px ${accentColor}25`,
+              ? `linear-gradient(135deg, ${accentColor}30 0%, rgba(255,255,255,0.08) 50%, ${accentColor}30 100%)`
+              : `linear-gradient(135deg, ${accentColor}28 0%, ${cardBg} 50%, ${accentColor}28 100%)`,
+            border: `1.5px solid ${accentColor}`,
+            boxShadow: `0 2px 12px ${accentColor}25`,
             color: isDark ? "#FFFFFF" : textColor,
           }}
         >
@@ -362,7 +300,7 @@ export default function TraditionalCelebration({ design }) {
           </span>
           {content?.weddingTime && (
             <>
-              <span className="mx-2 opacity-50" style={{ color: accentColor }}>•</span>
+              <span className="mx-2 opacity-75" style={{ color: accentColor }}>•</span>
               <span
                 style={getSafeTextStyle(content.weddingTime, {
                   isSerif: false,
@@ -377,7 +315,7 @@ export default function TraditionalCelebration({ design }) {
 
         <div>
           <p
-            className="text-base sm:text-lg font-medium leading-snug drop-shadow-xs"
+            className="text-base sm:text-[17px] font-semibold leading-snug drop-shadow-xs"
             style={getSafeTextStyle(content?.venue || "গ্র্যান্ড বলরুম, র্যাডিসন ব্লু", {
               isSerif: true,
               color: textColor,
@@ -402,21 +340,21 @@ export default function TraditionalCelebration({ design }) {
 
         {/* Wax Seal Monogram */}
         {decorations?.hasWaxSeal !== false && (
-          <div className="pt-1">
+          <div className="pt-0.5">
             <WaxSeal
               monogram={
                 decorations?.monogram ||
                 `${brideName?.[0] || "ন"}&${groomName?.[0] || "ত"}`
               }
               color={accentColor}
-              size={44}
+              size={42}
             />
           </div>
         )}
 
         {content?.rsvpDetails && (
           <p
-            className="text-[10px] sm:text-[11px] pt-0.5"
+            className="text-[10px] sm:text-[11px]"
             style={getSafeTextStyle(content.rsvpDetails, {
               isSerif: false,
               color: textMuted,

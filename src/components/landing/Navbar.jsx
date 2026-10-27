@@ -71,14 +71,15 @@ export default function Navbar() {
         </nav>
 
         {/* Right CTA / Auth Controls */}
-        <div className="hidden sm:flex items-center gap-4">
+        <div className="hidden sm:flex items-center gap-3">
           {user ? (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               <Link
                 href="/dashboard"
-                className="text-xs font-semibold uppercase tracking-wider text-[#173D32] hover:text-[#285C49] px-3 py-2 border border-[#E8E2D8] rounded bg-white hover:bg-[#F1E9DA] transition-colors"
+                className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#173D32] hover:text-[#285C49] px-3.5 py-2 border border-[#E8E2D8] rounded bg-white hover:bg-[#F1E9DA] transition-colors shadow-2xs"
               >
-                Dashboard
+                <User className="w-3.5 h-3.5 text-[#C6A66B]" />
+                <span>Dashboard</span>
               </Link>
               <button
                 onClick={logout}
@@ -89,12 +90,20 @@ export default function Navbar() {
               </button>
             </div>
           ) : (
-            <Link
-              href="/login"
-              className="text-sm font-medium text-[#77766F] hover:text-[#173D32] transition-colors px-2 py-1"
-            >
-              Sign In
-            </Link>
+            <div className="flex items-center gap-2">
+              <Link
+                href="/login"
+                className="text-xs font-semibold uppercase tracking-wider text-[#173D32] hover:text-[#285C49] transition-colors px-3 py-2 rounded border border-transparent hover:border-[#E8E2D8]"
+              >
+                Log In
+              </Link>
+              <Link
+                href="/register"
+                className="text-xs font-semibold uppercase tracking-wider text-[#173D32] bg-white hover:bg-[#F1E9DA] border border-[#E8E2D8] transition-colors px-3.5 py-2 rounded shadow-2xs"
+              >
+                Register
+              </Link>
+            </div>
           )}
 
           <Link
@@ -174,7 +183,7 @@ export default function Navbar() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="text-sm font-semibold text-[#173D32]"
                 >
-                  My Dashboard ({user.displayName || "User"})
+                  My Dashboard ({user.displayName || user.email || "User"})
                 </Link>
                 <button
                   onClick={() => {
@@ -187,13 +196,22 @@ export default function Navbar() {
                 </button>
               </>
             ) : (
-              <Link
-                href="/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-sm font-medium text-[#173D32]"
-              >
-                Sign In
-              </Link>
+              <div className="flex items-center gap-3">
+                <Link
+                  href="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex-1 text-center py-2.5 rounded border border-[#E8E2D8] bg-white text-xs font-bold uppercase tracking-wider text-[#173D32]"
+                >
+                  Log In
+                </Link>
+                <Link
+                  href="/register"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex-1 text-center py-2.5 rounded border border-[#C6A66B] bg-[#F1E9DA] text-xs font-bold uppercase tracking-wider text-[#173D32]"
+                >
+                  Register
+                </Link>
+              </div>
             )}
 
             <Link

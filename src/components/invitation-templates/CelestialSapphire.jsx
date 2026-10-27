@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { StarlightCluster, WaxSeal } from "./Decorations";
+import { StarlightCluster, OrnamentalDivider, WaxSeal } from "./Decorations";
 import { hasBengali, getSafeTextStyle } from "@/lib/typography";
 
 export default function CelestialSapphire({ design }) {
@@ -9,105 +9,114 @@ export default function CelestialSapphire({ design }) {
   const isBangla = language === "bn";
   const isBilingual = language === "bilingual";
 
-  const primaryColor = palette?.primary || "#F8EBD4"; // Gilded Starlight
-  const accentColor = palette?.accent || "#E5C072"; // Polished Celestial Gold
-  const cardBg = palette?.cardBg || "#0C1728"; // Deep Sapphire Midnight
-  const textMuted = palette?.textMuted || "#A8BDD4"; // Starlight Mist
+  const primaryColor = palette?.primary || "#F8EBD4";
+  const accentColor = palette?.accent || "#E5C072";
+  const cardBg = palette?.cardBg || "#0A1526";
+  const textMuted = palette?.textMuted || "#B0C4DE";
 
   const brideName = content?.brideName || "Zoya Rahman";
   const groomName = content?.groomName || "Aryan Khan";
 
   return (
     <div
-      className="relative w-full h-full flex flex-col justify-between p-6 sm:p-8 select-none overflow-hidden transition-all duration-300"
+      className="relative w-full h-full flex flex-col justify-between p-6 sm:p-7 select-none overflow-hidden transition-all duration-300"
       style={{
         backgroundColor: cardBg,
         backgroundImage: `
-          radial-gradient(ellipse at 50% 25%, #1B355A 0%, ${cardBg} 65%, #060B14 100%),
-          radial-gradient(circle at 20% 80%, rgba(229, 192, 114, 0.08) 0%, transparent 40%)
+          radial-gradient(ellipse at 50% 18%, #1E3F6E 0%, ${cardBg} 62%, #050A12 100%),
+          radial-gradient(circle at 50% 48%, rgba(229, 192, 114, 0.14) 0%, transparent 55%)
         `,
         boxShadow: `
-          0 28px 65px -15px rgba(5, 11, 20, 0.7),
-          inset 0 0 0 1px ${accentColor}40,
-          inset 0 0 70px rgba(0, 0, 0, 0.75)
+          0 28px 65px -15px rgba(5, 11, 20, 0.75),
+          inset 0 0 0 1px ${accentColor}55,
+          inset 0 0 70px rgba(0, 0, 0, 0.7)
         `,
       }}
     >
-      {/* Delicate Constellation Stardust Background Highlights */}
+      {/* Luminous Constellation Stardust Field */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-30"
+        className="absolute inset-0 pointer-events-none opacity-45"
         style={{
           backgroundImage: `
-            radial-gradient(circle at 18% 14%, rgba(229, 192, 114, 0.6) 1px, transparent 1px),
-            radial-gradient(circle at 82% 22%, rgba(248, 235, 212, 0.6) 1.2px, transparent 1.2px),
-            radial-gradient(circle at 35% 82%, rgba(229, 192, 114, 0.5) 1px, transparent 1px),
-            radial-gradient(circle at 74% 78%, rgba(248, 235, 212, 0.6) 1px, transparent 1px),
-            radial-gradient(circle at 50% 50%, rgba(229, 192, 114, 0.3) 0.8px, transparent 0.8px),
-            radial-gradient(circle at 88% 60%, rgba(229, 192, 114, 0.4) 1px, transparent 1px),
-            radial-gradient(circle at 12% 65%, rgba(248, 235, 212, 0.4) 1px, transparent 1px)
+            radial-gradient(circle at 18% 14%, rgba(229, 192, 114, 0.85) 1.2px, transparent 1.2px),
+            radial-gradient(circle at 82% 22%, rgba(255, 255, 255, 0.8) 1.4px, transparent 1.4px),
+            radial-gradient(circle at 28% 76%, rgba(229, 192, 114, 0.7) 1.1px, transparent 1.1px),
+            radial-gradient(circle at 76% 74%, rgba(248, 235, 212, 0.75) 1.2px, transparent 1.2px),
+            radial-gradient(circle at 50% 50%, rgba(229, 192, 114, 0.45) 1px, transparent 1px),
+            radial-gradient(circle at 88% 55%, rgba(229, 192, 114, 0.6) 1.1px, transparent 1.1px),
+            radial-gradient(circle at 14% 58%, rgba(255, 255, 255, 0.6) 1.1px, transparent 1.1px)
           `,
-          backgroundSize: "80px 80px, 90px 90px, 75px 75px, 85px 85px, 60px 60px, 95px 95px, 70px 70px",
+          backgroundSize: "75px 75px, 90px 90px, 70px 70px, 85px 85px, 60px 60px, 95px 95px, 68px 68px",
         }}
       />
 
-      {/* Gold Leaf Dual Celestial Borders */}
+      {/* Celestial Observatory Arch Frame */}
       <div
-        className="absolute inset-2 sm:inset-3 pointer-events-none rounded-[3px]"
+        className="absolute inset-2.5 sm:inset-3 pointer-events-none rounded-[3px]"
         style={{
-          border: `1px solid ${accentColor}40`,
+          border: `1px solid ${accentColor}50`,
         }}
       />
       <div
-        className="absolute inset-3.5 sm:inset-4.5 pointer-events-none rounded-[2px]"
+        className="absolute inset-4 sm:inset-4.5 pointer-events-none rounded-t-[135px] rounded-b-[3px]"
         style={{
-          border: `1.5px solid ${accentColor}85`,
-          boxShadow: `inset 0 0 25px rgba(229, 192, 114, 0.12), 0 0 10px rgba(229, 192, 114, 0.15)`,
+          border: `1.6px solid ${accentColor}90`,
+          boxShadow: `inset 0 0 28px rgba(229, 192, 114, 0.16), 0 0 14px rgba(229, 192, 114, 0.2)`,
         }}
       />
       <div
-        className="absolute inset-5 sm:inset-6 pointer-events-none rounded-[1px]"
+        className="absolute inset-5 sm:inset-5.5 pointer-events-none rounded-t-[128px] rounded-b-[2px]"
         style={{
-          border: `0.5px dashed ${accentColor}50`,
+          border: `0.75px dashed ${accentColor}55`,
+        }}
+      />
+
+      {/* Central Astral Orbit Ring Behind Names */}
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-52 h-52 rounded-full pointer-events-none opacity-25"
+        style={{
+          border: `1px solid ${accentColor}`,
+          boxShadow: `0 0 35px ${accentColor}30`,
         }}
       />
 
       {/* Glowing Corner Starlight Nodes */}
       <div
-        className="absolute top-3 left-3 w-2 h-2 rounded-full pointer-events-none"
+        className="absolute top-3.5 left-3.5 w-2 h-2 rotate-45 pointer-events-none"
         style={{ backgroundColor: accentColor, boxShadow: `0 0 10px ${accentColor}, 0 0 4px #FFFFFF` }}
       />
       <div
-        className="absolute top-3 right-3 w-2 h-2 rounded-full pointer-events-none"
+        className="absolute top-3.5 right-3.5 w-2 h-2 rotate-45 pointer-events-none"
         style={{ backgroundColor: accentColor, boxShadow: `0 0 10px ${accentColor}, 0 0 4px #FFFFFF` }}
       />
       <div
-        className="absolute bottom-3 left-3 w-2 h-2 rounded-full pointer-events-none"
+        className="absolute bottom-3.5 left-3.5 w-2 h-2 rotate-45 pointer-events-none"
         style={{ backgroundColor: accentColor, boxShadow: `0 0 10px ${accentColor}, 0 0 4px #FFFFFF` }}
       />
       <div
-        className="absolute bottom-3 right-3 w-2 h-2 rounded-full pointer-events-none"
+        className="absolute bottom-3.5 right-3.5 w-2 h-2 rotate-45 pointer-events-none"
         style={{ backgroundColor: accentColor, boxShadow: `0 0 10px ${accentColor}, 0 0 4px #FFFFFF` }}
       />
 
-      {/* TOP HEADER: STARLIGHT CLUSTER */}
-      <div className="relative z-10 flex flex-col items-center text-center pt-2 space-y-1">
-        <StarlightCluster color={accentColor} className="mb-0.5" />
+      {/* TOP HEADER: HANGING CRESCENT MOON & STARLIGHT CLUSTER */}
+      <div className="relative z-10 flex flex-col items-center text-center pt-1.5 space-y-1">
+        <StarlightCluster color={accentColor} className="mb-0.5 drop-shadow-sm" />
 
         <span
-          className="text-[10px] sm:text-[11px] font-semibold"
+          className="text-[10px] sm:text-[11px] font-bold px-2"
           style={getSafeTextStyle(content?.title || "UNDER THE STARS", {
             isSerif: false,
             color: accentColor,
-            tracking: "0.26em",
+            tracking: "0.24em",
             uppercase: true,
           })}
         >
-          {content?.title || (hasBengali(brideName) ? "তারাভরা সন্ধ্যার শুভ নিমন্ত্রণ" : "UNDER THE STARS • CELEBRATION")}
+          {content?.title || (hasBengali(brideName) ? "তারাভরা সন্ধ্যার শুভ নিমন্ত্রণ" : "UNDER THE CANOPY OF STARS")}
         </span>
 
         {content?.subtitle && (
           <p
-            className="text-[11px] sm:text-[12px] max-w-xs"
+            className="text-[11px] sm:text-[12px] max-w-[250px]"
             style={getSafeTextStyle(content.subtitle, {
               isSerif: true,
               color: textMuted,
@@ -120,22 +129,22 @@ export default function CelestialSapphire({ design }) {
       </div>
 
       {/* CENTER COUPLE / CELEBRANT */}
-      <div className="relative z-10 flex flex-col items-center text-center my-auto py-2">
+      <div className="relative z-10 flex flex-col items-center text-center my-auto py-1">
         {groomName ? (
           <div className="w-full flex flex-col items-center">
             <h1
-              className="text-3xl sm:text-4xl md:text-[42px] leading-[1.15] font-normal drop-shadow-md"
+              className="text-3xl sm:text-4xl md:text-[40px] leading-[1.15] font-normal drop-shadow-md"
               style={getSafeTextStyle(brideName, {
                 isSerif: true,
                 color: primaryColor,
-                fontWeight: hasBengali(brideName) ? 600 : 400,
+                fontWeight: hasBengali(brideName) ? 600 : 500,
               })}
             >
               {brideName}
             </h1>
 
-            {/* Glowing Golden Ring Divider */}
-            <div className="flex items-center justify-center gap-3 my-2 sm:my-2.5 w-full max-w-[200px]">
+            {/* Glowing Golden Star Ring Divider */}
+            <div className="flex items-center justify-center gap-3 my-2 w-full max-w-[205px]">
               <span
                 className="h-[1px] flex-1"
                 style={{
@@ -145,13 +154,13 @@ export default function CelestialSapphire({ design }) {
               <div
                 className="w-7 h-7 rounded-full flex items-center justify-center"
                 style={{
-                  border: `1px solid ${accentColor}80`,
-                  background: `radial-gradient(circle, ${accentColor}25 0%, transparent 70%)`,
-                  boxShadow: `0 0 10px ${accentColor}30`,
+                  border: `1.2px solid ${accentColor}`,
+                  background: `radial-gradient(circle, ${accentColor}35 0%, transparent 75%)`,
+                  boxShadow: `0 0 12px ${accentColor}40`,
                 }}
               >
                 <span
-                  className="text-base sm:text-lg font-light leading-none"
+                  className="text-base sm:text-lg font-medium leading-none"
                   style={getSafeTextStyle(hasBengali(brideName) || isBangla ? "ও" : "&", {
                     isSerif: true,
                     color: accentColor,
@@ -170,11 +179,11 @@ export default function CelestialSapphire({ design }) {
             </div>
 
             <h1
-              className="text-3xl sm:text-4xl md:text-[42px] leading-[1.15] font-normal drop-shadow-md"
+              className="text-3xl sm:text-4xl md:text-[40px] leading-[1.15] font-normal drop-shadow-md"
               style={getSafeTextStyle(groomName, {
                 isSerif: true,
                 color: primaryColor,
-                fontWeight: hasBengali(groomName) ? 600 : 400,
+                fontWeight: hasBengali(groomName) ? 600 : 500,
               })}
             >
               {groomName}
@@ -187,20 +196,24 @@ export default function CelestialSapphire({ design }) {
               style={getSafeTextStyle(brideName, {
                 isSerif: true,
                 color: primaryColor,
-                fontWeight: hasBengali(brideName) ? 600 : 400,
+                fontWeight: hasBengali(brideName) ? 600 : 500,
               })}
             >
               {brideName}
             </h1>
             {content?.eventMilestone && (
               <span
-                className="mt-2 text-xs sm:text-sm font-semibold"
-                style={getSafeTextStyle(content.eventMilestone, {
-                  isSerif: false,
-                  color: accentColor,
-                  tracking: "0.22em",
-                  uppercase: true,
-                })}
+                className="mt-2 px-3 py-0.5 rounded-full text-xs font-semibold border"
+                style={{
+                  ...getSafeTextStyle(content.eventMilestone, {
+                    isSerif: false,
+                    color: accentColor,
+                    tracking: "0.2em",
+                    uppercase: true,
+                  }),
+                  borderColor: `${accentColor}65`,
+                  backgroundColor: `${accentColor}15`,
+                }}
               >
                 {content.eventMilestone}
               </span>
@@ -208,23 +221,11 @@ export default function CelestialSapphire({ design }) {
           </div>
         )}
 
-        {/* Bilingual Bengali Sub-Names (if bilingual) */}
-        {isBilingual && content?.bilingualBrideName && (
-          <div
-            className="mt-2 text-sm font-medium"
-            style={getSafeTextStyle(content.bilingualBrideName, {
-              isSerif: true,
-              color: accentColor,
-            })}
-          >
-            {content.bilingualBrideName}
-            {content?.bilingualGroomName ? ` ও ${content.bilingualGroomName}` : ""}
-          </div>
-        )}
+        <OrnamentalDivider color={accentColor} className="my-1.5 opacity-80" />
 
         {/* Invitation Message */}
         <p
-          className="mt-3.5 text-[11px] sm:text-[12px] max-w-xs leading-relaxed text-center px-2"
+          className="text-[11px] sm:text-[12px] max-w-[260px] leading-relaxed text-center px-2"
           style={getSafeTextStyle(
             content?.message ||
               "Request the joy of your presence under a canopy of stars as we celebrate love and friendship.",
@@ -237,30 +238,17 @@ export default function CelestialSapphire({ design }) {
           {content?.message ||
             "Request the joy of your presence under a canopy of stars as we celebrate love and friendship."}
         </p>
-
-        {isBilingual && content?.bilingualMessage && (
-          <p
-            className="mt-1.5 text-[11px] sm:text-[12px] max-w-xs leading-relaxed text-center"
-            style={getSafeTextStyle(content.bilingualMessage, {
-              isSerif: false,
-              color: primaryColor,
-              italic: !hasBengali(content.bilingualMessage),
-            })}
-          >
-            {content.bilingualMessage}
-          </p>
-        )}
       </div>
 
       {/* BOTTOM LOGISTICS */}
       <div className="relative z-10 flex flex-col items-center text-center space-y-2 pb-1">
-        {/* Date & Time pill */}
+        {/* Date & Time Astral Capsule */}
         <div
-          className="inline-flex items-center px-4 py-1.5 rounded-full text-[11px] sm:text-[12px] font-medium shadow-xs"
+          className="inline-flex items-center px-4 py-1.5 rounded-full text-[11px] sm:text-[12px] font-semibold shadow-sm"
           style={{
-            background: "rgba(229, 192, 114, 0.12)",
-            border: `1.2px solid ${accentColor}70`,
-            boxShadow: `0 0 14px ${accentColor}25`,
+            background: `linear-gradient(135deg, rgba(229, 192, 114, 0.24) 0%, rgba(12, 23, 40, 0.7) 50%, rgba(229, 192, 114, 0.24) 100%)`,
+            border: `1.4px solid ${accentColor}`,
+            boxShadow: `0 0 18px ${accentColor}30`,
             color: primaryColor,
           }}
         >
@@ -268,7 +256,7 @@ export default function CelestialSapphire({ design }) {
             style={getSafeTextStyle(content?.weddingDate || "Saturday • October 23, 2027", {
               isSerif: false,
               color: primaryColor,
-              tracking: hasBengali(content?.weddingDate) ? "0px" : "0.1em",
+              tracking: hasBengali(content?.weddingDate) ? "0px" : "0.08em",
               uppercase: !hasBengali(content?.weddingDate),
             })}
           >
@@ -276,11 +264,11 @@ export default function CelestialSapphire({ design }) {
           </span>
           {content?.weddingTime && (
             <>
-              <span className="mx-2 opacity-50" style={{ color: accentColor }}>•</span>
+              <span className="mx-2" style={{ color: accentColor }}>✦</span>
               <span
                 style={getSafeTextStyle(content.weddingTime, {
                   isSerif: false,
-                  color: primaryColor,
+                  color: accentColor,
                 })}
               >
                 {content.weddingTime}
@@ -290,9 +278,9 @@ export default function CelestialSapphire({ design }) {
         </div>
 
         {/* Venue */}
-        <div className="space-y-0.5 pt-0.5">
+        <div className="space-y-0.5">
           <p
-            className="text-base sm:text-lg font-medium leading-snug drop-shadow-xs"
+            className="text-base sm:text-[17px] font-semibold leading-snug drop-shadow-xs"
             style={getSafeTextStyle(content?.venue || "The Starlight Observatory Pavilion", {
               isSerif: true,
               color: primaryColor,
@@ -317,14 +305,14 @@ export default function CelestialSapphire({ design }) {
 
         {/* Wax Seal Monogram */}
         {decorations?.hasWaxSeal !== false && (
-          <div className="pt-1">
+          <div className="pt-0.5">
             <WaxSeal
               monogram={
                 decorations?.monogram ||
                 `${brideName?.[0] || "Z"}&${groomName?.[0] || "A"}`
               }
               color={accentColor}
-              size={44}
+              size={42}
             />
           </div>
         )}
@@ -332,7 +320,7 @@ export default function CelestialSapphire({ design }) {
         {/* RSVP Details */}
         {content?.rsvpDetails && (
           <p
-            className="text-[10px] sm:text-[11px] pt-0.5"
+            className="text-[10px] sm:text-[11px]"
             style={getSafeTextStyle(content.rsvpDetails, {
               isSerif: false,
               color: textMuted,

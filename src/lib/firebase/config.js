@@ -10,37 +10,38 @@ import {
   updateProfile,
 } from "firebase/auth";
 
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "mock-api-key",
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "wedly-ai.firebaseapp.com",
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "wedly-ai",
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:123456789:web:abcdef123456",
+  apiKey: "AIzaSyCV7elG24fbloYKNJZsCumT-_BFIyEOt3Q",
+  authDomain: "carstore-c7d9e.firebaseapp.com",
+  projectId: "carstore-c7d9e",
+  storageBucket: "carstore-c7d9e.firebasestorage.app",
+  messagingSenderId: "500691255661",
+  appId: "1:500691255661:web:3a8a36e1a02008d9265a64",
 };
 
-export const isFirebaseConfigured = Boolean(
-  process.env.NEXT_PUBLIC_FIREBASE_API_KEY &&
-    process.env.NEXT_PUBLIC_FIREBASE_API_KEY !== "mock-api-key"
-);
+export const isFirebaseConfigured = true;
 
-// Initialize Firebase only on client or if configured
+// Initialize Firebase
 let app;
 let auth;
 let googleProvider;
 
-if (typeof window !== "undefined") {
-  try {
-    app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+try {
+  app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+  if (typeof window !== "undefined") {
     auth = getAuth(app);
     googleProvider = new GoogleAuthProvider();
-  } catch (error) {
-    console.warn("Firebase initialization skipped or failed:", error.message);
   }
+} catch (error) {
+  console.warn("Firebase initialization skipped or failed:", error.message);
 }
 
 export {
   app,
   auth,
   googleProvider,
+  firebaseConfig,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signInWithPopup,

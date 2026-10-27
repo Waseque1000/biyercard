@@ -18,9 +18,23 @@ import {
   Plus,
   Heart,
   TrendingUp,
+  Download,
+  Lock,
+  Compass,
+  Home,
+  Settings,
+  UserCheck,
+  LogIn,
+  UserPlus,
 } from "lucide-react";
 import InvitationRenderer from "@/components/invitation-templates/InvitationRenderer";
 import { exportInvitationAsPdf } from "@/lib/exportUtils";
+import {
+  getLocalInvitations,
+  deleteLocalInvitation,
+  saveLocalInvitation,
+  mergeInvitationsLists,
+} from "@/lib/localInvitations";
 import { toast } from "sonner";
 
 export default function DashboardOverview() {
@@ -30,6 +44,7 @@ export default function DashboardOverview() {
   const [loading, setLoading] = useState(true);
 
   const fetchInvitations = async () => {
+    const localCards = getLocalInvitations(user?.uid || null);
     try {
       const token = await getIdToken();
       const res = await fetch("/api/invitations", {
@@ -37,71 +52,87 @@ export default function DashboardOverview() {
       });
       if (res.ok) {
         const json = await res.json();
-        setInvitations(json.data || []);
+        setInvitations(mergeInvitationsLists(json.data || [], localCards));
+        return;
       }
     } catch (e) {
       console.warn("Failed to fetch dashboard invitations:", e);
     } finally {
       setLoading(false);
     }
+    setInvitations(localCards);
   };
 
   useEffect(() => {
     fetchInvitations();
-  }, []);
+  }, [user]);
 
   const handleDelete = async (id, e) => {
     e.stopPropagation();
     if (!confirm("Are you sure you want to delete this invitation?")) return;
 
+    deleteLocalInvitation(id);
     try {
       const token = await getIdToken();
-      const res = await fetch(`/api/invitations/${id}`, {
+      await fetch(`/api/invitations/${id}`, {
         method: "DELETE",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
-      if (res.ok) {
-        toast.success("Invitation deleted");
-        fetchInvitations();
-      }
     } catch (err) {
-      toast.error("Delete failed: " + err.message);
+      // ignore remote error if local deleted
     }
+    toast.success("Invitation deleted");
+    fetchInvitations();
   };
 
   const handleDuplicate = async (inv, e) => {
     e.stopPropagation();
+    const copyId = crypto.randomUUID();
+    const copyPayload = {
+      id: copyId,
+      title: `${inv.title} (Copy)`,
+      bride_name: inv.bride_name,
+      groom_name: inv.groom_name,
+      wedding_date: inv.wedding_date,
+      venue: inv.venue,
+      invitation_message: inv.invitation_message,
+      language: inv.language,
+      design_style: inv.design_style,
+      theme: inv.theme,
+      color_palette: inv.color_palette,
+      design_json: inv.design_json,
+      status: "draft",
+    };
+    saveLocalInvitation(copyPayload, user?.uid || null);
     try {
       const token = await getIdToken();
-      const res = await fetch("/api/invitations", {
+      await fetch("/api/invitations", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          title: `${inv.title} (Copy)`,
-          bride_name: inv.bride_name,
-          groom_name: inv.groom_name,
-          wedding_date: inv.wedding_date,
-          venue: inv.venue,
-          invitation_message: inv.invitation_message,
-          language: inv.language,
-          design_style: inv.design_style,
-          theme: inv.theme,
-          color_palette: inv.color_palette,
-          design_json: inv.design_json,
-          status: "draft",
-        }),
+        body: JSON.stringify(copyPayload),
       });
-
-      if (res.ok) {
-        toast.success("Invitation duplicated!");
-        fetchInvitations();
-      }
     } catch (err) {
-      toast.error("Duplicate failed");
+      // saved locally
     }
+    toast.success("Invitation duplicated!");
+    fetchInvitations();
+  };
+
+  const handleDownloadFromDashboard = (inv, e) => {
+    e.stopPropagation();
+    if (!user) {
+      toast.info("Please Log In or Register to download your final card.");
+      router.push(
+        `/login?redirect=${encodeURIComponent(
+          `/editor/${inv.id}?download=pdf`
+        )}&reason=download`
+      );
+      return;
+    }
+    router.push(`/editor/${inv.id}?download=pdf`);
   };
 
   const handleCopyLink = (id, e) => {
@@ -115,40 +146,123 @@ export default function DashboardOverview() {
   const draftCount = invitations.filter((i) => i.status !== "published").length;
 
   return (
-    <div className="space-y-10 max-w-7xl mx-auto">
+    <div className="space-y-8 max-w-7xl mx-auto">
+      {/* Guest Sign-In Prompt Banner (if not authenticated) */}
+      {!user && (
+        <div className="p-4 sm:p-5 rounded-xl bg-[#173D32] text-[#FAF8F4] border border-[#C6A66B]/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-md">
+          <div className="space-y-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#C6A66B] block">
+              Firebase Account Required for Card Downloads
+            </span>
+            <p className="text-xs text-[#D8E2DC]">
+              Log in or register a free account to permanently sync your cards across devices and unlock 300 DPI PNG & PDF downloads.
+            </p>
+          </div>
+          <div className="flex items-center gap-2.5 shrink-0">
+            <Link
+              href="/login?redirect=/dashboard"
+              className="px-4 py-2 rounded-lg bg-white text-[#173D32] text-xs font-bold uppercase tracking-wider hover:bg-[#FAF8F4] transition-colors flex items-center gap-1.5"
+            >
+              <LogIn className="w-3.5 h-3.5 text-[#173D32]" />
+              <span>Log In</span>
+            </Link>
+            <Link
+              href="/register?redirect=/dashboard"
+              className="px-4 py-2 rounded-lg bg-[#C6A66B] text-[#173D32] text-xs font-bold uppercase tracking-wider hover:bg-[#b59356] transition-colors flex items-center gap-1.5"
+            >
+              <UserPlus className="w-3.5 h-3.5 text-[#173D32]" />
+              <span>Register</span>
+            </Link>
+          </div>
+        </div>
+      )}
+
       {/* Welcome & Solemnity Header */}
       <section className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-2">
         <div className="space-y-2 max-w-2xl">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F1E9DA] text-[#9A7C43] font-sans text-[10px] font-bold uppercase tracking-wider border border-[#E8E2D8]">
               <span className="w-1.5 h-1.5 rounded-full bg-[#173D32] animate-pulse" />
-              Solemnity Countdown
+              {user ? "Firebase Verified Account" : "Guest Preview Mode"}
             </span>
-            <span className="text-xs text-[#173D32] font-semibold flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5 text-[#C6A66B]" />
-              <span>142 Days Until Your Wedding Day</span>
-            </span>
+            {user?.email && (
+              <span className="text-xs text-[#173D32] font-semibold flex items-center gap-1">
+                <UserCheck className="w-3.5 h-3.5 text-[#285C49]" />
+                <span>{user.email}</span>
+              </span>
+            )}
           </div>
 
           <h1 className="font-serif text-3xl sm:text-4xl text-[#173D32] tracking-tight">
             Welcome back,{" "}
             <span className="italic font-normal">
-              {user?.displayName || "Sophia & David"}
+              {user?.displayName || user?.email?.split("@")[0] || "Guest Creator"}
             </span>
           </h1>
 
           <p className="font-sans text-sm text-[#77766F] leading-relaxed">
-            Your bespoke stationery atelier is synchronized. Your active suites are proofed with letterpress foil simulations and real-time RSVP portals.
+            Manage your bespoke invitations, customize ready templates, and download print-ready 300 DPI PNG & PDF masters from your personal dashboard.
           </p>
         </div>
 
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex flex-wrap items-center gap-3 shrink-0">
+          <Link
+            href="/templates"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded bg-white hover:bg-[#F1E9DA] text-[#173D32] border border-[#E8E2D8] text-xs font-semibold uppercase tracking-wider shadow-xs transition-all"
+          >
+            <Compass className="w-3.5 h-3.5 text-[#C6A66B]" />
+            <span>108+ Templates</span>
+          </Link>
           <Link
             href="/create"
             className="inline-flex items-center gap-2 px-6 py-3 rounded bg-[#173D32] hover:bg-[#285C49] text-white text-xs font-semibold uppercase tracking-wider shadow-md transition-all hover:-translate-y-0.5"
           >
             <Sparkles className="w-3.5 h-3.5 text-[#C6A66B]" />
-            <span>Create New Invitation</span>
+            <span>Create New Card</span>
+          </Link>
+        </div>
+      </section>
+
+      {/* Quick Destination Bar: Where user wants to go */}
+      <section className="bg-white p-4 rounded-xl border border-[#E8E2D8] shadow-xs flex flex-wrap items-center justify-between gap-3">
+        <span className="font-sans text-xs font-bold uppercase tracking-wider text-[#9A7C43]">
+          Quick Navigation (কোথায় যেতে চান?):
+        </span>
+        <div className="flex flex-wrap items-center gap-2">
+          <Link
+            href="/templates"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#FAF8F4] hover:bg-[#F1E9DA] text-xs font-semibold text-[#173D32] border border-[#E8E2D8] transition-colors"
+          >
+            <Compass className="w-3.5 h-3.5 text-[#C6A66B]" />
+            <span>Browse 108+ Templates</span>
+          </Link>
+          <Link
+            href="/create"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#FAF8F4] hover:bg-[#F1E9DA] text-xs font-semibold text-[#173D32] border border-[#E8E2D8] transition-colors"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-[#C6A66B]" />
+            <span>AI Card Wizard</span>
+          </Link>
+          <Link
+            href="/dashboard/invitations"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#FAF8F4] hover:bg-[#F1E9DA] text-xs font-semibold text-[#173D32] border border-[#E8E2D8] transition-colors"
+          >
+            <FileDown className="w-3.5 h-3.5 text-[#C6A66B]" />
+            <span>All My Cards ({invitations.length})</span>
+          </Link>
+          <Link
+            href="/dashboard/settings"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#FAF8F4] hover:bg-[#F1E9DA] text-xs font-semibold text-[#173D32] border border-[#E8E2D8] transition-colors"
+          >
+            <Settings className="w-3.5 h-3.5 text-[#C6A66B]" />
+            <span>Account Settings</span>
+          </Link>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#FAF8F4] hover:bg-[#F1E9DA] text-xs font-semibold text-[#173D32] border border-[#E8E2D8] transition-colors"
+          >
+            <Home className="w-3.5 h-3.5 text-[#C6A66B]" />
+            <span>Home Page</span>
           </Link>
         </div>
       </section>
@@ -354,15 +468,31 @@ export default function DashboardOverview() {
                   </div>
 
                   {/* Action Bar */}
-                  <div className="pt-4 mt-3 border-t border-[#FAF8F4] flex items-center justify-between">
-                    <Link
-                      href={`/editor/${inv.id}`}
-                      onClick={(e) => e.stopPropagation()}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded bg-[#173D32] hover:bg-[#285C49] text-white font-sans text-xs font-semibold uppercase tracking-wider transition-colors"
-                    >
-                      <Edit className="w-3 h-3 text-[#C6A66B]" />
-                      <span>Edit Studio</span>
-                    </Link>
+                  <div className="pt-4 mt-3 border-t border-[#FAF8F4] flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5">
+                      <Link
+                        href={`/editor/${inv.id}`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded bg-[#173D32] hover:bg-[#285C49] text-white font-sans text-[11px] font-semibold uppercase tracking-wider transition-colors"
+                      >
+                        <Edit className="w-3 h-3 text-[#C6A66B]" />
+                        <span>Edit</span>
+                      </Link>
+
+                      <button
+                        type="button"
+                        onClick={(e) => handleDownloadFromDashboard(inv, e)}
+                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded bg-[#FAF8F4] hover:bg-[#F1E9DA] text-[#173D32] border border-[#E8E2D8] font-sans text-[11px] font-semibold uppercase tracking-wider transition-colors"
+                        title={user ? "Download Final Card PDF" : "Log in to Download Card"}
+                      >
+                        {!user ? (
+                          <Lock className="w-3 h-3 text-[#C6A66B]" />
+                        ) : (
+                          <Download className="w-3 h-3 text-[#C6A66B]" />
+                        )}
+                        <span>Download</span>
+                      </button>
+                    </div>
 
                     <div className="flex items-center gap-1 text-[#77766F]">
                       <button

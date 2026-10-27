@@ -28,10 +28,10 @@ export default function DashboardLayout({ children }) {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   const navItems = [
-    { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
-    { label: "Create Invitation", href: "/create", icon: Sparkles },
+    { label: "Dashboard Overview", href: "/dashboard", icon: LayoutDashboard },
     { label: "My Invitations", href: "/dashboard/invitations", icon: Mail },
-    { label: "Explore Designs", href: "/#featured-collection", icon: Compass },
+    { label: "Create Invitation", href: "/create", icon: Sparkles },
+    { label: "108+ Ready Templates", href: "/templates", icon: Compass },
     { label: "Favorites", href: "/dashboard/invitations?tab=favorites", icon: Bookmark },
   ];
 
@@ -153,38 +153,63 @@ export default function DashboardLayout({ children }) {
           </div>
 
           {/* User Profile & Logout */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <Link
+              href="/templates"
+              className="hidden lg:inline-flex items-center gap-1.5 px-3.5 py-2 rounded bg-[#FAF8F4] hover:bg-[#F1E9DA] text-[#173D32] border border-[#E8E2D8] text-xs font-semibold uppercase tracking-wider transition-colors"
+            >
+              <Compass className="w-3.5 h-3.5 text-[#C6A66B]" />
+              <span>108+ Templates</span>
+            </Link>
+
             <Link
               href="/create"
               className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded bg-[#173D32] hover:bg-[#285C49] text-white text-xs font-semibold uppercase tracking-wider shadow-sm transition-colors"
             >
               <Sparkles className="w-3.5 h-3.5 text-[#C6A66B]" />
-              <span>New Invitation</span>
+              <span>New Card</span>
             </Link>
 
-            <div className="flex items-center gap-3 pl-3 border-l border-[#E8E2D8]">
-              <div className="w-8 h-8 rounded-full bg-[#173D32] text-[#FAF8F4] font-serif font-bold flex items-center justify-center text-xs shadow-sm">
-                {user?.displayName?.[0] || "U"}
+            {user ? (
+              <div className="flex items-center gap-3 pl-3 border-l border-[#E8E2D8]">
+                <div className="w-8 h-8 rounded-full bg-[#173D32] text-[#FAF8F4] font-serif font-bold flex items-center justify-center text-xs shadow-sm uppercase">
+                  {user.displayName?.[0] || user.email?.[0] || "U"}
+                </div>
+                <div className="hidden sm:flex flex-col text-left">
+                  <span className="font-sans text-xs font-bold text-[#173D32] leading-tight">
+                    {user.displayName || user.email?.split("@")[0] || "Member"}
+                  </span>
+                  <span className="font-sans text-[10px] text-[#77766F] leading-tight truncate max-w-[140px]">
+                    {user.email || "Verified Account"}
+                  </span>
+                </div>
+                <button
+                  onClick={async () => {
+                    await logout();
+                    router.push("/");
+                  }}
+                  className="p-1.5 text-[#77766F] hover:text-red-700 transition-colors"
+                  title="Log Out"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
               </div>
-              <div className="hidden sm:flex flex-col text-left">
-                <span className="font-sans text-xs font-bold text-[#173D32] leading-tight">
-                  {user?.displayName || "Wedding Couple"}
-                </span>
-                <span className="font-sans text-[10px] text-[#77766F] leading-tight">
-                  Artisan Tier
-                </span>
+            ) : (
+              <div className="flex items-center gap-2 pl-3 border-l border-[#E8E2D8]">
+                <Link
+                  href="/login?redirect=/dashboard"
+                  className="px-3 py-1.5 rounded border border-[#E8E2D8] bg-white hover:bg-[#FAF8F4] text-xs font-semibold text-[#173D32]"
+                >
+                  Log In
+                </Link>
+                <Link
+                  href="/register?redirect=/dashboard"
+                  className="px-3 py-1.5 rounded bg-[#C6A66B] hover:bg-[#b59356] text-xs font-bold text-[#173D32]"
+                >
+                  Register
+                </Link>
               </div>
-              <button
-                onClick={async () => {
-                  await logout();
-                  router.push("/");
-                }}
-                className="p-1.5 text-[#77766F] hover:text-red-700 transition-colors"
-                title="Log Out"
-              >
-                <LogOut className="w-4 h-4" />
-              </button>
-            </div>
+            )}
           </div>
         </header>
 
